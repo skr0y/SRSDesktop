@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SRSDesktop"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="SRS" Height="507" Width="350">
+	<Grid>
+		<Button Content="Reviews (322)" Margin="76,127,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="24" HorizontalAlignment="Center"/>
+		<Slider HorizontalAlignment="Left" Margin="76,172,0,0" VerticalAlignment="Top" Width="200" AutoToolTipPlacement="TopLeft" Value="10"/>
+		<Slider HorizontalAlignment="Left" Margin="76,288,0,0" VerticalAlignment="Top" Width="200" Value="10"/>
+		<Button Content="Lessons (228)" HorizontalAlignment="Center" Margin="76,243,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="24"/>
+		<Button Content="Statistics" HorizontalAlignment="Left" Margin="177,400,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="24"/>
+		<Label Content="Level 10" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="24"/>
+		<Button Content="Database" HorizontalAlignment="Left" Margin="8,400,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="24"/>
+	</Grid>
 </Window>

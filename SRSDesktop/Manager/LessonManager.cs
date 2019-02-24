@@ -8,27 +8,35 @@ namespace SRSDesktop.Manager
 {
 	public class LessonManager : Manager
 	{
-		public LessonManager(string path) : base(path)
+		public LessonManager(string resourcesPath) : base(resourcesPath)
 		{
 		}
 
-		public override HashSet<Item> GetForLevel(int count = 0, int? level = null, ManagerOptions options = ManagerOptions.Default)
+		protected override Func<Item, bool> Selector => item => item.UserSpecific == null;
+
+		public override HashSet<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default)
 		{
-			var result = GetAll().Where(item => item.UserSpecific.UnlockedDate == null && (!level.HasValue || item.Level == level.Value));
+			IEnumerable<Item> result = Load();
 
-			if ((options & ManagerOptions.Older) != 0)
+			if (options != ManagerOptions.Default)
 			{
-				result = result.OrderBy(item => item.Level);
+				switch (options)
+				{
+					case ManagerOptions.Older:
+						result = result.OrderBy(item => item.Level);
+						break;
+					case ManagerOptions.Recent:
+						result = result.OrderByDescending(item => item.Level);
+						break;
+					case ManagerOptions.Shuffle:
+						result = result.Shuffle();
+						break;
+				}
 			}
 
-			if ((options & ManagerOptions.Recent) != 0)
+			if (count > 0)
 			{
-				result = result.OrderByDescending(item => item.Level);
-			}
-
-			if ((options & ManagerOptions.Shuffle) != 0)
-			{
-				throw new NotImplementedException("Shuffle is not implemented");
+				result = result.Take(count);
 			}
 
 			return new HashSet<Item>(result);

@@ -1,14 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-using SRSDesktop.Manager;
+﻿using System.Windows;
 
 namespace SRSDesktop
 {
 	public partial class MainWindow : Window
 	{
-		private const string path = @"/Resources/";
-
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -17,11 +12,82 @@ namespace SRSDesktop
 
 		private void LoadData()
 		{
-			var projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
-			var fullPath = projectDirectory + path;
+			if (sliderLessons != null)
+			{
+				sliderLessons.Maximum = SRS.LessonManager.Count;
+				sliderLessons.Value = 20;
+			}
 
-			var lessonManager = new LessonManager(fullPath);
-			var reviewManager = new ReviewManager(fullPath);
+			if (sliderReviews != null)
+			{
+				sliderReviews.Maximum = SRS.ReviewManager.Count;
+				sliderReviews.Value = sliderReviews.Maximum;
+			}
+
+			if (progressBar != null)
+			{
+				var total = SRS.LessonManager.TotalCount;
+				var learned = total - SRS.LessonManager.Count;
+				progressBar.Value = (double)learned / total * 100;
+			}
+		}
+
+		private void ReviewsButtonClick(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void SliderReviewsValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			if (buttonReviews != null)
+			{
+				buttonReviews.Content = $"Reviews ({e.NewValue})";
+			}
+		}
+
+		private void LessonsButtonClick(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void SliderLessonsValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			if (buttonLessons != null)
+			{
+				buttonLessons.Content = $"Lessons ({e.NewValue})";
+			}
+		}
+
+		private void ButtonDecReviewsSliderClick(object sender, RoutedEventArgs e)
+		{
+			if (sliderReviews != null)
+			{
+				sliderReviews.Value--;
+			}
+		}
+
+		private void ButtonIncReviewsSliderClick(object sender, RoutedEventArgs e)
+		{
+			if (sliderReviews != null)
+			{
+				sliderReviews.Value++;
+			}
+		}
+
+		private void ButtonDecLessonsSliderClick(object sender, RoutedEventArgs e)
+		{
+			if (sliderLessons != null)
+			{
+				sliderLessons.Value--;
+			}
+		}
+
+		private void ButtonIncLessonsSliderClick(object sender, RoutedEventArgs e)
+		{
+			if (sliderLessons != null)
+			{
+				sliderLessons.Value++;
+			}
 		}
 	}
 }

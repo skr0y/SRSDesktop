@@ -3,6 +3,7 @@
 	public enum ReadingType
 	{
 		Onyomi,
-		Kunyomi
+		Kunyomi,
+		Nanori
 	}
 }

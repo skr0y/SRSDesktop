@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:System="clr-namespace:System;assembly=mscorlib"
-        xmlns:Manager="clr-namespace:SRSDesktop.Manager" x:Class="SRSDesktop.MainWindow"
+        xmlns:Manager="clr-namespace:SRSDesktop.Manager" 
+		x:Class="SRSDesktop.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="SRS" Height="500" Width="355">
+        Title="SRS" Height="500" Width="360" ResizeMode="CanMinimize">
 	<Window.Resources>
 		<ObjectDataProvider x:Key="managerOptions" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
 			<ObjectDataProvider.MethodParameters>
@@ -21,14 +22,15 @@
 		<Button x:Name="buttonLessons" Content="Lessons" Margin="76,166,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="18" Click="LessonsButtonClick" Padding="0"/>
 		<Button x:Name="buttonStats" Content="Statistics" HorizontalAlignment="Left" Margin="182,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
 		<Button x:Name="buttonDatabase" Content="Database" HorizontalAlignment="Left" Margin="10,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
-		<ComboBox x:Name="comboReviews" HorizontalAlignment="Left" Margin="76,82,0,0" VerticalAlignment="Top" Width="200" 
+		<ComboBox x:Name="comboReviews" HorizontalAlignment="Left" Margin="77,82,0,0" VerticalAlignment="Top" Width="200" 
 				  ItemsSource="{Binding Source={StaticResource managerOptions}}" SelectedIndex="0"/>
-		<ComboBox x:Name="comboLessons" HorizontalAlignment="Left" Margin="76,211,0,0" VerticalAlignment="Top" Width="200"
+		<ComboBox x:Name="comboLessons" HorizontalAlignment="Left" Margin="77,211,0,0" VerticalAlignment="Top" Width="200"
 				  ItemsSource="{Binding Source={StaticResource managerOptions}}" SelectedIndex="0"/>
 		<ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="10" Margin="10,406,0,0" VerticalAlignment="Top" Width="322"/>
 		<Button x:Name="buttonDecReviewsSlider" Content="-" HorizontalAlignment="Left" Margin="71,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonDecReviewsSliderClick"/>
 		<Button x:Name="buttonIncReviewsSlider" Content="+" HorizontalAlignment="Left" Margin="261,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonIncReviewsSliderClick"/>
 		<Button x:Name="buttonDecLessonsSlider" Content="-" HorizontalAlignment="Left" Margin="71,238,0,0" VerticalAlignment="Top" Width="20" Click="ButtonDecLessonsSliderClick"/>
 		<Button x:Name="buttonIncLessonsSlider" Content="+" HorizontalAlignment="Left" Margin="261,238,0,0" VerticalAlignment="Top" Width="20" Click="ButtonIncLessonsSliderClick"/>
+		<Button x:Name="buttonUpdate" Content="Q" HorizontalAlignment="Left" Margin="302,10,0,0" VerticalAlignment="Top" Width="30" Height="30" FontFamily="Wingdings 3" FontSize="20" Click="ButtonUpdateClick"/>
 	</Grid>
 </Window>

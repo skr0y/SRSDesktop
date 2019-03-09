@@ -1,6 +1,7 @@
-﻿using System.Windows;
+﻿using SRSDesktop.Manager;
+using System.Windows;
 
-namespace SRSDesktop
+namespace SRSDesktop.Windows
 {
 	public partial class MainWindow : Window
 	{
@@ -12,6 +13,9 @@ namespace SRSDesktop
 
 		private void LoadData()
 		{
+			SRS.LessonManager.Update();
+			SRS.ReviewManager.Update();
+
 			if (sliderLessons != null)
 			{
 				sliderLessons.Maximum = SRS.LessonManager.Count;
@@ -28,13 +32,33 @@ namespace SRSDesktop
 			{
 				var total = SRS.LessonManager.TotalCount;
 				var learned = total - SRS.LessonManager.Count;
+
 				progressBar.Value = (double)learned / total * 100;
 			}
 		}
 
+		#region Controls
+
 		private void ReviewsButtonClick(object sender, RoutedEventArgs e)
 		{
+			var items = SRS.ReviewManager.Get((int)sliderReviews.Value, (ManagerOptions)comboReviews.SelectedValue);
+			var reviewWindow = new ItemsWindow(items, ItemsWindowMode.Review);
 
+			if (reviewWindow.ShowDialog() == true)
+			{
+				SRS.ReviewManager.Save(items);
+			}
+		}
+
+		private void LessonsButtonClick(object sender, RoutedEventArgs e)
+		{
+			var items = SRS.LessonManager.Get((int)sliderLessons.Value, (ManagerOptions)comboLessons.SelectedValue);
+			var lessonWindow = new ItemsWindow(items, ItemsWindowMode.Lesson);
+
+			if (lessonWindow.ShowDialog() == true)
+			{
+				SRS.LessonManager.Save(items);
+			}
 		}
 
 		private void SliderReviewsValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -43,11 +67,6 @@ namespace SRSDesktop
 			{
 				buttonReviews.Content = $"Reviews ({e.NewValue})";
 			}
-		}
-
-		private void LessonsButtonClick(object sender, RoutedEventArgs e)
-		{
-
 		}
 
 		private void SliderLessonsValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -89,5 +108,12 @@ namespace SRSDesktop
 				sliderLessons.Value++;
 			}
 		}
+
+		private void ButtonUpdateClick(object sender, RoutedEventArgs e)
+		{
+			LoadData();
+		}
+
+		#endregion
 	}
 }

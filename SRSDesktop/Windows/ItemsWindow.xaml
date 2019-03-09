@@ -1,0 +1,37 @@
+﻿<Window x:Class="SRSDesktop.Windows.ItemsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Lessons" Height="400" Width="600" ResizeMode="CanMinimize">
+	<Grid>
+		<Label x:Name="labelCharacter" Content="字" HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top" FontSize="72"/>
+		<Label x:Name="labelMeaningInput" Content="Meaning" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top"/>
+		<Label x:Name="labelReadingInput" Content="Reading" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top"/>
+		<TextBox x:Name="textBoxMeaningInput" HorizontalAlignment="Left" Height="23" Margin="10,181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
+		<TextBox x:Name="textBoxReadingInput" HorizontalAlignment="Left" Height="23" Margin="10,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
+		<Button x:Name="buttonAnswer" Content="Answer" HorizontalAlignment="Left" Margin="10,268,0,0" VerticalAlignment="Top" Width="180" Height="50" Background="#FFDDFFDD" FontSize="18" Click="ButtonAnswerClick"/>
+		<Button x:Name="buttonSkip" Content="Skip" HorizontalAlignment="Left" Margin="10,323,0,0" VerticalAlignment="Top" Width="180" Background="#FFFFDDDD" Height="30" FontSize="16" Click="ButtonSkipClick"/>
+		<Label x:Name="labelMeaning" Content="Meaning" HorizontalAlignment="Left" Margin="217,12,0,0" VerticalAlignment="Top"/>
+		<Label x:Name="labelReading" Content="Reading" HorizontalAlignment="Left" Margin="217,43,0,0" VerticalAlignment="Top"/>
+		<Label x:Name="labelExamples" Content="Examples" HorizontalAlignment="Left" Margin="217,74,0,0" VerticalAlignment="Top"/>
+		<TextBlock x:Name="textBlockMeaning" HorizontalAlignment="Left" Margin="283,17,0,0" TextWrapping="Wrap" Text="MeaningText" VerticalAlignment="Top"/>
+		<TextBlock x:Name="textBlockReading" HorizontalAlignment="Left" Margin="283,48,0,0" TextWrapping="Wrap" Text="ReadingText" VerticalAlignment="Top"/>
+		<TextBlock x:Name="textBlockExamples" HorizontalAlignment="Left" Margin="283,79,0,0" TextWrapping="Wrap" Text="ExamplesText" VerticalAlignment="Top"/>
+		<Label x:Name="labelMeaningHints" Content="Meaning hints" HorizontalAlignment="Left" Margin="217,130,0,0" VerticalAlignment="Top"/>
+		<Label x:Name="labelReadingHints" Content="Reading hints" HorizontalAlignment="Left" Margin="217,230,0,0" VerticalAlignment="Top"/>
+		<Button x:Name="buttonBad" Content="Bad" HorizontalAlignment="Left" Margin="217,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFFFDDDD" Click="ButtonBadClick"/>
+		<Button x:Name="buttonOkay" Content="Okay" HorizontalAlignment="Left" Margin="347,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFFFFFDD" Click="ButtonOkayClick"/>
+		<Button x:Name="buttonGood" Content="Good" HorizontalAlignment="Left" Margin="412,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFDDDDFF" Click="ButtonGoodClick"/>
+		<Button x:Name="buttonEasy" Content="Easy" HorizontalAlignment="Left" Margin="477,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFDDFFDD" Click="ButtonEasyClick"/>
+		<Button x:Name="buttonAgain" Content="Again" HorizontalAlignment="Left" Margin="282,333,0,0" VerticalAlignment="Top" Width="60" Click="ButtonAgainClick"/>
+		<ScrollViewer HorizontalAlignment="Left" Height="64" Margin="217,161,0,0" VerticalAlignment="Top" Width="365" VerticalScrollBarVisibility="Auto">
+			<TextBlock x:Name="textBlockMeaningHints" HorizontalAlignment="Left" TextWrapping="Wrap" Text="MeaningHintsText" VerticalAlignment="Top"/>
+		</ScrollViewer>
+		<ScrollViewer HorizontalAlignment="Left" Height="62" Margin="217,261,0,0" VerticalAlignment="Top" Width="365" VerticalScrollBarVisibility="Auto">
+			<TextBlock x:Name="textBlockReadingHints" HorizontalAlignment="Left" TextWrapping="Wrap" Text="ReadingHintsText" VerticalAlignment="Top"/>
+		</ScrollViewer>
+
+	</Grid>
+</Window>

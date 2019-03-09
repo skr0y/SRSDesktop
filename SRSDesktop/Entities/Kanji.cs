@@ -1,4 +1,6 @@
-﻿namespace SRSDesktop.Entities
+﻿using Newtonsoft.Json;
+
+namespace SRSDesktop.Entities
 {
 	public class Kanji : Item
 	{
@@ -13,5 +15,31 @@
 
 		public string MeaningMnemonic { get; set; }
 		public string MeaningHint { get; set; }
+
+		[JsonIgnore]
+		public string Reading
+		{
+			get
+			{
+				var result = $"Important: {ImportantReading}.";
+
+				if (Onyomi != null)
+				{
+					result += $" Onyomi: {Onyomi}";
+				}
+
+				if (Kunyomi != null)
+				{
+					result += $" Kunyomi: {Kunyomi}";
+				}
+
+				if (Nanori != null)
+				{
+					result += $" Nanori: {Nanori}";
+				}
+
+				return result;
+			}
+		}
 	}
 }

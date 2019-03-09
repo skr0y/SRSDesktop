@@ -12,7 +12,7 @@ namespace SRSDesktop.Manager
 		{
 		}
 
-		protected override Func<Item, bool> Selector => item => item.UserSpecific != null && item.UserSpecific.AvailableDate <= DateTime.Now;
+		protected override Func<Item, bool> Selector => item => item.UserSpecific != null && item.UserSpecific.Burned == false && item.UserSpecific.AvailableDate <= DateTime.Now;
 
 		public override HashSet<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default)
 		{

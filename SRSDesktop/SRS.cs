@@ -10,7 +10,6 @@ namespace SRSDesktop
 
 		public static LessonManager LessonManager { get; private set; }
 		public static ReviewManager ReviewManager { get; private set; }
-		public static int TotalCount { get; }
 
 		static SRS()
 		{

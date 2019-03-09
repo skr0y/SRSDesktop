@@ -23,13 +23,29 @@ namespace SRSDesktop.Manager
 		protected Manager(string resourcesPath)
 		{
 			this.resourcesPath = resourcesPath;
-
-			Load();
 		}
 
-		public HashSet<Item> Load()
+		public abstract HashSet<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default);
+
+		public void Update()
 		{
-			if (Cache != null && Cache.Any())
+			Load(true);
+		}
+
+		public bool Save(HashSet<Item> items)
+		{
+			Json.WriteJson(resourcesPath + radicalFile, items.Where(item => item is Radical).Cast<Radical>().ToArray());
+			Json.WriteJson(resourcesPath + kanjiFile, items.Where(item => item is Kanji).Cast<Kanji>().ToArray());
+			Json.WriteJson(resourcesPath + vocabFile, items.Where(item => item is Vocab).Cast<Vocab>().ToArray());
+
+			Cache = items;
+
+			return true;
+		}
+
+		protected HashSet<Item> Load(bool forceUpdate = false)
+		{
+			if (!forceUpdate && Cache != null && Cache.Count > 0)
 			{
 				return Cache;
 			}
@@ -47,24 +63,6 @@ namespace SRSDesktop.Manager
 			Cache = result;
 
 			return result;
-		}
-
-		public abstract HashSet<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default);
-
-		public bool Save(HashSet<Item> items)
-		{
-			if (items == Cache)
-			{
-				return true;
-			}
-
-			Json.WriteJson(resourcesPath + radicalFile, items.Where(item => item is Radical).Cast<Radical>().ToArray());
-			Json.WriteJson(resourcesPath + kanjiFile, items.Where(item => item is Kanji).Cast<Kanji>().ToArray());
-			Json.WriteJson(resourcesPath + vocabFile, items.Where(item => item is Vocab).Cast<Vocab>().ToArray());
-
-			Cache = items;
-
-			return true;
 		}
 	}
 }

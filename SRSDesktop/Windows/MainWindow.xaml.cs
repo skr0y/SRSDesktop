@@ -46,7 +46,7 @@ namespace SRSDesktop.Windows
 
 			if (reviewWindow.ShowDialog() == true)
 			{
-				//SRS.ReviewManager.Save(items);
+				SRS.ReviewManager.Save(items);
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace SRSDesktop.Windows
 
 			if (lessonWindow.ShowDialog() == true)
 			{
-				//SRS.LessonManager.Save(items);
+				SRS.LessonManager.Save(items);
 			}
 		}
 

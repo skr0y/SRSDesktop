@@ -12,7 +12,7 @@ namespace SRSDesktop.Utils
 
 		public static void WriteJson<T>(string path, T obj)
 		{
-			File.WriteAllText(path, JsonConvert.SerializeObject(obj));
+			File.WriteAllText(path, JsonConvert.SerializeObject(obj, Formatting.Indented));
 		}
 	}
 }

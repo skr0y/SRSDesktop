@@ -34,6 +34,10 @@ namespace SRSDesktop.Entities
 		public int? ReadingMaxStreak { get; set; }
 		public int? ReadingCurrentStreak { get; set; }
 
+		public string MeaningNote { get; set; }
+		public string ReadingNote { get; set; }
+		public string[] UserSynonyms { get; set; }
+
 		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime UnlockedDate { get; set; }
 		[JsonConverter(typeof(UnixDateTimeConverter))]

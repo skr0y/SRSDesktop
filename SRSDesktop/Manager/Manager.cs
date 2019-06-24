@@ -12,7 +12,7 @@ namespace SRSDesktop.Manager
 		protected const string KanjiFile = "kanji.json";
 		protected const string VocabFile = "vocabulary.json";
 
-		public int Count => Cache.Count;
+		public int Count { get; private set; }
 		public int TotalCount { get; private set; }
 
 		protected List<Item> Cache { get; set; }
@@ -32,13 +32,11 @@ namespace SRSDesktop.Manager
 			Load(true);
 		}
 
-		public bool Save(List<Item> items)
+		public bool Save()
 		{
-			Json.WriteJson(resourcesPath + RadicalFile, items.OfType<Radical>().ToArray());
-			Json.WriteJson(resourcesPath + KanjiFile, items.OfType<Kanji>().ToArray());
-			Json.WriteJson(resourcesPath + VocabFile, items.OfType<Vocab>().ToArray());
-
-			Cache = items;
+			Json.WriteJson(resourcesPath + RadicalFile, Cache.OfType<Radical>().ToArray());
+			Json.WriteJson(resourcesPath + KanjiFile, Cache.OfType<Kanji>().ToArray());
+			Json.WriteJson(resourcesPath + VocabFile, Cache.OfType<Vocab>().ToArray());
 
 			return true;
 		}
@@ -47,7 +45,7 @@ namespace SRSDesktop.Manager
 		{
 			if (!forceUpdate && Cache != null && Cache.Count > 0)
 			{
-				return Cache;
+				return Cache.Where(Selector).ToList();
 			}
 
 			Cache = null;
@@ -68,11 +66,11 @@ namespace SRSDesktop.Manager
 			result.AddRange(kanjis);
 			result.AddRange(vocabs);
 
+			Cache = result;
 			TotalCount = result.Count;
 
 			result = result.Where(Selector).ToList();
-
-			Cache = result;
+			Count = result.Count;
 
 			return result;
 		}

@@ -14,7 +14,7 @@ namespace SRSDesktop.Manager
 
 		protected override Func<Item, bool> Selector => item => item.UserSpecific == null;
 
-		public override HashSet<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default)
+		public override List<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default)
 		{
 			IEnumerable<Item> result = Load();
 
@@ -39,7 +39,7 @@ namespace SRSDesktop.Manager
 				result = result.Take(count);
 			}
 
-			return new HashSet<Item>(result);
+			return result.ToList();
 		}
 	}
 }

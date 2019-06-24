@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace SRSDesktop.Entities
 {
@@ -8,5 +9,8 @@ namespace SRSDesktop.Entities
 		public string Character { get; set; }
 		public string Meaning { get; set; }
 		public UserSpecific UserSpecific { get; set; }
+
+		[JsonIgnore]
+		public string[] Meanings => Meaning.Split(new string[] { ", " }, StringSplitOptions.None);
 	}
 }

@@ -4,34 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Lessons" Height="400" Width="600" ResizeMode="CanMinimize">
+        Title="Lessons" Height="640" Width="1280" ResizeMode="CanMinimize">
 	<Grid>
-		<Label x:Name="labelCharacter" Content="字" HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top" FontSize="72"/>
-		<Label x:Name="labelMeaningInput" Content="Meaning" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top"/>
-		<Label x:Name="labelReadingInput" Content="Reading" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top"/>
-		<TextBox x:Name="textBoxMeaningInput" HorizontalAlignment="Left" Height="23" Margin="10,181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
-		<TextBox x:Name="textBoxReadingInput" HorizontalAlignment="Left" Height="23" Margin="10,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
-		<Button x:Name="buttonAnswer" Content="Answer" HorizontalAlignment="Left" Margin="10,268,0,0" VerticalAlignment="Top" Width="180" Height="50" Background="#FFDDFFDD" FontSize="18" Click="ButtonAnswerClick"/>
-		<Button x:Name="buttonSkip" Content="Skip" HorizontalAlignment="Left" Margin="10,323,0,0" VerticalAlignment="Top" Width="180" Background="#FFFFDDDD" Height="30" FontSize="16" Click="ButtonSkipClick"/>
-		<Label x:Name="labelMeaning" Content="Meaning" HorizontalAlignment="Left" Margin="217,12,0,0" VerticalAlignment="Top"/>
-		<Label x:Name="labelReading" Content="Reading" HorizontalAlignment="Left" Margin="217,43,0,0" VerticalAlignment="Top"/>
-		<Label x:Name="labelExamples" Content="Examples" HorizontalAlignment="Left" Margin="217,74,0,0" VerticalAlignment="Top"/>
-		<TextBlock x:Name="textBlockMeaning" HorizontalAlignment="Left" Margin="283,17,0,0" TextWrapping="Wrap" Text="MeaningText" VerticalAlignment="Top"/>
-		<TextBlock x:Name="textBlockReading" HorizontalAlignment="Left" Margin="283,48,0,0" TextWrapping="Wrap" Text="ReadingText" VerticalAlignment="Top"/>
-		<TextBlock x:Name="textBlockExamples" HorizontalAlignment="Left" Margin="283,79,0,0" TextWrapping="Wrap" Text="ExamplesText" VerticalAlignment="Top"/>
-		<Label x:Name="labelMeaningHints" Content="Meaning hints" HorizontalAlignment="Left" Margin="217,130,0,0" VerticalAlignment="Top"/>
-		<Label x:Name="labelReadingHints" Content="Reading hints" HorizontalAlignment="Left" Margin="217,230,0,0" VerticalAlignment="Top"/>
-		<Button x:Name="buttonBad" Content="Bad" HorizontalAlignment="Left" Margin="217,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFFFDDDD" Click="ButtonBadClick"/>
-		<Button x:Name="buttonOkay" Content="Okay" HorizontalAlignment="Left" Margin="347,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFFFFFDD" Click="ButtonOkayClick"/>
-		<Button x:Name="buttonGood" Content="Good" HorizontalAlignment="Left" Margin="412,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFDDDDFF" Click="ButtonGoodClick"/>
-		<Button x:Name="buttonEasy" Content="Easy" HorizontalAlignment="Left" Margin="477,333,0,0" VerticalAlignment="Top" Width="60" Background="#FFDDFFDD" Click="ButtonEasyClick"/>
-		<Button x:Name="buttonAgain" Content="Again" HorizontalAlignment="Left" Margin="282,333,0,0" VerticalAlignment="Top" Width="60" Click="ButtonAgainClick"/>
-		<ScrollViewer HorizontalAlignment="Left" Height="64" Margin="217,161,0,0" VerticalAlignment="Top" Width="365" VerticalScrollBarVisibility="Auto">
-			<TextBlock x:Name="textBlockMeaningHints" HorizontalAlignment="Left" TextWrapping="Wrap" Text="MeaningHintsText" VerticalAlignment="Top"/>
+		<Rectangle x:Name="rectItem" HorizontalAlignment="Left" Height="611" VerticalAlignment="Top" Width="223"/>
+		<Rectangle x:Name="rectAnswer" HorizontalAlignment="Left" Height="611" Margin="223,0,0,0" VerticalAlignment="Top" Width="1041"/>
+		<Label x:Name="labelMeaningInput" Content="Meaning" HorizontalAlignment="Left" Margin="10,305,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="labelReadingInput" Content="Reading" HorizontalAlignment="Left" Margin="10,403,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<TextBox x:Name="textBoxMeaningInput" HorizontalAlignment="Left" Height="36" Margin="10,343,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="18"/>
+		<TextBox x:Name="textBoxReadingInput" HorizontalAlignment="Left" Height="36" Margin="10,441,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="18"/>
+		<Button x:Name="buttonAnswer" Content="Answer" HorizontalAlignment="Left" Margin="10,499,0,0" VerticalAlignment="Top" Width="200" Height="50" Background="#FFDDFFDD" FontSize="18" Click="ButtonAnswerClick"/>
+		<Button x:Name="buttonSkip" Content="Skip" HorizontalAlignment="Left" Margin="10,554,0,0" VerticalAlignment="Top" Width="200" Background="#FFFFDDDD" Height="30" FontSize="18" Click="ButtonSkipClick"/>
+		<Button x:Name="buttonBad" Content="Bad" HorizontalAlignment="Left" Margin="334,554,0,0" VerticalAlignment="Top" Width="94" Background="#FFFFDDDD" Click="ButtonBadClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonOkay" Content="Okay" HorizontalAlignment="Left" Margin="538,554,0,0" VerticalAlignment="Top" Width="96" Background="#FFFFFFDD" Click="ButtonOkayClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonGood" Content="Good" HorizontalAlignment="Left" Margin="641,554,0,0" VerticalAlignment="Top" Width="95" Background="#FFDDDDFF" Click="ButtonGoodClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonEasy" Content="Easy" HorizontalAlignment="Left" Margin="744,554,0,0" VerticalAlignment="Top" Width="94" Background="#FFDDFFDD" Click="ButtonEasyClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonAgain" Content="Again" HorizontalAlignment="Left" Margin="436,554,0,0" VerticalAlignment="Top" Width="95" Click="ButtonAgainClick" FontSize="18" Height="30"/>
+		<Image x:Name="imageCharacter" HorizontalAlignment="Left" Height="200" Margin="10,82,0,0" VerticalAlignment="Top" Width="200"/>
+		<TextBlock x:Name="textBlockCharacter" HorizontalAlignment="Center" Text="字" VerticalAlignment="Top" Height="200" Width="200" FontSize="150" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" Margin="10,82,1064,0" TextAlignment="Center" MouseDown="CharacterClick"/>
+		<ScrollViewer x:Name="scrollViewer" HorizontalAlignment="Left" Height="539" Margin="228,10,0,0" VerticalAlignment="Top" Width="1036" VerticalScrollBarVisibility="Auto" >
+			<TextBlock x:Name="textBlockInfo" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Info" VerticalAlignment="Top" FontSize="18"/>
 		</ScrollViewer>
-		<ScrollViewer HorizontalAlignment="Left" Height="62" Margin="217,261,0,0" VerticalAlignment="Top" Width="365" VerticalScrollBarVisibility="Auto">
-			<TextBlock x:Name="textBlockReadingHints" HorizontalAlignment="Left" TextWrapping="Wrap" Text="ReadingHintsText" VerticalAlignment="Top"/>
-		</ScrollViewer>
-
+		<Label x:Name="labelItemLvlText" Content="Item lvl: " HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" FontSize="18" Foreground="#FF555555"/>
+		<Label x:Name="labelUserLvlText" Content="User lvl: " HorizontalAlignment="Left" Margin="108,11,0,0" VerticalAlignment="Top" FontSize="18" Foreground="#FF555555"/>
+		<Label x:Name="labelItemLvl" Content="XX" HorizontalAlignment="Left" Margin="77,11,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="labelUserLvl" Content="XX" HorizontalAlignment="Left" Margin="179,11,0,0" VerticalAlignment="Top" FontSize="18"/>
 	</Grid>
 </Window>

@@ -8,7 +8,7 @@ namespace SRSDesktop.Entities
 	public class UserSpecific
 	{
 		[JsonIgnore]
-		public static List<Tuple<SrsLevel, TimeSpan>> SrsLevelToTimeSpan = new List<Tuple<SrsLevel, TimeSpan>>()
+		private static List<Tuple<SrsLevel, TimeSpan>> SrsLevelToTimeSpan = new List<Tuple<SrsLevel, TimeSpan>>()
 		{
 			new Tuple<SrsLevel, TimeSpan>(SrsLevel.Apprentice, new TimeSpan(4, 0, 0)),
 			new Tuple<SrsLevel, TimeSpan>(SrsLevel.Apprentice, new TimeSpan(8, 0, 0)),
@@ -43,11 +43,11 @@ namespace SRSDesktop.Entities
 
 		public bool Burned { get; set; }
 
-		public void SetLevel(int newLevel)
+		public void AddLevel(int levelChange)
 		{
 			var now = DateTime.Now;
 
-			SrsNumeric = Math.Max(1, Math.Min(newLevel, SrsLevelToTimeSpan.Count));
+			SrsNumeric = Math.Max(1, Math.Min(SrsNumeric + levelChange, SrsLevelToTimeSpan.Count));
 			Srs = SrsLevelToTimeSpan[SrsNumeric - 1].Item1;
 			AvailableDate = now + SrsLevelToTimeSpan[SrsNumeric - 1].Item2;
 

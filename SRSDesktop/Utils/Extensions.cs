@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SRSDesktop.Utils
 {
-	public static class IEnumerableExtensions
+	public static class Extensions
 	{
 		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
 		{

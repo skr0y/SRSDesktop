@@ -17,6 +17,9 @@ namespace SRSDesktop.Entities
 		public string MeaningHint { get; set; }
 
 		[JsonIgnore]
+		public string Examples { get; set; }
+
+		[JsonIgnore]
 		public string Reading
 		{
 			get

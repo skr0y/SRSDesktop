@@ -18,8 +18,8 @@ namespace SRSDesktop.Windows
 		private readonly Brush radicalBrush = (Brush)(new BrushConverter().ConvertFrom("#FFE9F4FF"));
 		private readonly Brush kanjiBrush = (Brush)(new BrushConverter().ConvertFrom("#FFFF9BFF"));
 		private readonly Brush vocabBrush = (Brush)(new BrushConverter().ConvertFrom("#FFC79BFF"));
-		private readonly Brush correctBrush = (Brush)(new BrushConverter().ConvertFrom("#FFF4FFF4"));
-		private readonly Brush wrongBrush = (Brush)(new BrushConverter().ConvertFrom("#FFFFF4F4"));
+		private readonly Brush correctBrush = (Brush)(new BrushConverter().ConvertFrom("#FFEEFFEE"));
+		private readonly Brush wrongBrush = (Brush)(new BrushConverter().ConvertFrom("#FFFFEEEE"));
 		private readonly Brush clearBrush = (Brush)(new BrushConverter().ConvertFrom("#FFFFFFFF"));
 
 		private VorbisWaveReader VorbisWaveReader;
@@ -42,9 +42,11 @@ namespace SRSDesktop.Windows
 			switch (Mode)
 			{
 				case ItemsWindowMode.Lesson:
+					Title = "Lessons";
 					DisplayAnswer();
 					break;
 				case ItemsWindowMode.Review:
+					Title = "Reviews";
 					WaitForInput();
 					break;
 				case ItemsWindowMode.View:
@@ -74,13 +76,15 @@ namespace SRSDesktop.Windows
 			labelItemLvl.Content = CurrentItem.Level;
 			labelUserLvl.Content = CurrentItem.UserSpecific.SrsNumeric;
 
-			textBlockCharacter.Text = CurrentItem.Character;
-			textBlockCharacter.FontSize = 150 / CurrentItem.Character.Length;
-
 			if (CurrentItem.Character == null && CurrentItem is Radical radical)
 			{
 				var uri = new Uri(Utils.Utils.GetResourcesPath() + radical.Image, UriKind.Absolute);
 				imageCharacter.Source = new BitmapImage(uri);
+			}
+			else
+			{
+				textBlockCharacter.Text = CurrentItem.Character;
+				textBlockCharacter.FontSize = 150 / CurrentItem.Character.Length;
 			}
 		}
 
@@ -89,7 +93,7 @@ namespace SRSDesktop.Windows
 			EnableAnswerControls();
 			DisableInputControls();
 			FillAnswerTextBlock(CurrentItem);
-			SetAnswerBackgroudColor(IsCorrectAnswer());
+			SetAnswerBackground();
 		}
 
 		private void AcceptAnswer(int levelChange)
@@ -113,25 +117,12 @@ namespace SRSDesktop.Windows
 			WaitForInput();
 		}
 
-		private bool IsCorrectAnswer()
-		{
-			//if (CurrentItem is Kanji kanji && !textBoxReadingInput.Text.Equals(kanji.Reading, StringComparison.InvariantCultureIgnoreCase))
-			//	return false;
-			//else if (CurrentItem is Vocab vocab && !textBoxReadingInput.Text.Equals(vocab.Kana, StringComparison.InvariantCultureIgnoreCase))
-			//	return false;
-
-			if (!CurrentItem.Meanings.Contains(textBoxMeaningInput.Text, StringComparer.InvariantCultureIgnoreCase))
-				return false;
-
-			return true;
-		}
-
 		#region Controls
 
 		private void EnableInputControls()
 		{
 			textBoxMeaningInput.IsEnabled = true;
-			textBoxReadingInput.IsEnabled = true;
+			textBoxReadingInput.IsEnabled = true && !(CurrentItem is Radical);
 			buttonAnswer.IsEnabled = true;
 			buttonSkip.IsEnabled = true;
 		}
@@ -164,6 +155,7 @@ namespace SRSDesktop.Windows
 
 		private void ClearInputControls()
 		{
+			textBlockCharacter.Text = "";
 			textBoxMeaningInput.Text = "";
 			textBoxReadingInput.Text = "";
 		}
@@ -185,29 +177,35 @@ namespace SRSDesktop.Windows
 
 			if (item is Radical radical)
 			{
+				runs = GenerateRuns("Meaning", radical.Meaning);
+				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Mnemonic", radical.Mnemonic);
 				textBlockInfo.Inlines.AddRange(runs);
 			}
 			else if (item is Kanji kanji)
 			{
-				runs = GenerateRuns("Examples", kanji.Examples);
-				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Meaning hints", kanji.MeaningMnemonic + Environment.NewLine + kanji.MeaningHint);
+				runs = GenerateRuns("Meaning", kanji.Meaning);
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading", kanji.Reading);
 				textBlockInfo.Inlines.AddRange(runs);
+				runs = GenerateRuns("Meaning hints", kanji.MeaningMnemonic + Environment.NewLine + kanji.MeaningHint);
+				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading hints", kanji.ReadingMnemonic + Environment.NewLine + kanji.ReadingHint);
+				textBlockInfo.Inlines.AddRange(runs);
+				runs = GenerateRuns("Examples", kanji.Examples);
 				textBlockInfo.Inlines.AddRange(runs);
 			}
 			else if (item is Vocab vocab)
 			{
-				runs = GenerateRuns("Context sentences", string.Join(Environment.NewLine, vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
-				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Meaning explanation", vocab.MeaningExplanation);
+				runs = GenerateRuns("Meaning", vocab.Meaning);
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading", vocab.Kana);
 				textBlockInfo.Inlines.AddRange(runs);
+				runs = GenerateRuns("Meaning explanation", vocab.MeaningExplanation);
+				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading explanation", vocab.ReadingExplanation);
+				textBlockInfo.Inlines.AddRange(runs);
+				runs = GenerateRuns("Context sentences", string.Join(Environment.NewLine, vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
 				textBlockInfo.Inlines.AddRange(runs);
 			}
 
@@ -230,14 +228,25 @@ namespace SRSDesktop.Windows
 				rectItem.Fill = vocabBrush;
 		}
 
-		private void SetAnswerBackgroudColor(bool correct)
+		private void SetAnswerBackground()
 		{
-			rectAnswer.Fill = correct ? correctBrush : wrongBrush;
+			var input = textBoxReadingInput.Text;
+			switch (CurrentItem)
+			{
+				case Kanji kanji:
+					textBoxReadingInput.Background = kanji.Readings.Contains(input, StringComparer.InvariantCultureIgnoreCase) ? correctBrush : wrongBrush;
+					break;
+				case Vocab vocab:
+					textBoxReadingInput.Background = vocab.Kana.Equals(input, StringComparison.InvariantCultureIgnoreCase) ? correctBrush : wrongBrush;
+					break;
+			}
+
+			textBoxMeaningInput.Background = CurrentItem.Meanings.Contains(textBoxMeaningInput.Text, StringComparer.InvariantCultureIgnoreCase) ? correctBrush : wrongBrush;
 		}
 
 		private void ClearAnswerBackgroundColor()
 		{
-			rectAnswer.Fill = clearBrush;
+			textBoxReadingInput.Background = clearBrush;
 		}
 
 		private void ButtonAnswerClick(object sender, RoutedEventArgs e)
@@ -281,6 +290,14 @@ namespace SRSDesktop.Windows
 			{
 				WaveOutEvent.Play();
 				VorbisWaveReader.Position = 0;
+			}
+		}
+
+		private void Window_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				DisplayAnswer();
 			}
 		}
 

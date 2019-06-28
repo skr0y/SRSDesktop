@@ -7,7 +7,9 @@
         xmlns:Manager="clr-namespace:SRSDesktop.Manager" 
 		x:Class="SRSDesktop.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="SRS" Height="500" Width="360" ResizeMode="CanMinimize">
+        Title="SRS" 
+		Height="500" Width="360" Left="500" Top="300"
+		ResizeMode="CanMinimize">
 	<Window.Resources>
 		<ObjectDataProvider x:Key="managerOptions" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
 			<ObjectDataProvider.MethodParameters>

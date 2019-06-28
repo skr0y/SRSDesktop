@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace SRSDesktop.Entities
 {
@@ -19,6 +20,10 @@ namespace SRSDesktop.Entities
 		[JsonIgnore]
 		public string Examples { get; set; }
 
+		[JsonIgnore]
+		public string[] Readings => new string[] { Onyomi, Kunyomi, Nanori };
+
+		[Obsolete]
 		[JsonIgnore]
 		public string Reading
 		{

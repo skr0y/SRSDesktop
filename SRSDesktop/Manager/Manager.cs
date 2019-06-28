@@ -58,7 +58,7 @@ namespace SRSDesktop.Manager
 
 			foreach (var kanji in kanjis)
 			{
-				var examples = vocabs.Where(v => v.Character.Contains(kanji.Character)).Select(v => v.Character).Take(3);
+				var examples = vocabs.Where(v => v.Character.Contains(kanji.Character)).Select(v => v.Character + " - " + v.Meanings[0]).Take(3);
 				kanji.Examples = string.Join(", ", examples);
 			}
 

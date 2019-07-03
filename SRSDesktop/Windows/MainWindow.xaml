@@ -11,9 +11,14 @@
 		Height="500" Width="360" Left="500" Top="300"
 		ResizeMode="CanMinimize">
 	<Window.Resources>
-		<ObjectDataProvider x:Key="managerOptions" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+		<ObjectDataProvider x:Key="orderByAvailability" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
 			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="Manager:ManagerOptions"/>
+				<x:Type TypeName="Manager:OrderByAvailability"/>
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+		<ObjectDataProvider x:Key="orderByType" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type TypeName="Manager:OrderByType"/>
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 	</Window.Resources>
@@ -24,10 +29,14 @@
 		<Button x:Name="buttonLessons" Content="Lessons" Margin="76,166,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="18" Click="LessonsButtonClick" Padding="0"/>
 		<Button x:Name="buttonStats" Content="Statistics" HorizontalAlignment="Left" Margin="182,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
 		<Button x:Name="buttonDatabase" Content="Database" HorizontalAlignment="Left" Margin="10,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
-		<ComboBox x:Name="comboReviews" HorizontalAlignment="Left" Margin="77,82,0,0" VerticalAlignment="Top" Width="200" 
-				  ItemsSource="{Binding Source={StaticResource managerOptions}}" SelectedIndex="0"/>
-		<ComboBox x:Name="comboLessons" HorizontalAlignment="Left" Margin="77,211,0,0" VerticalAlignment="Top" Width="200"
-				  ItemsSource="{Binding Source={StaticResource managerOptions}}" SelectedIndex="0"/>
+		<ComboBox x:Name="comboReviewsAvailability" HorizontalAlignment="Left" Margin="77,82,0,0" VerticalAlignment="Top" Width="95" 
+			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="0"/>
+		<ComboBox x:Name="comboReviewsType" HorizontalAlignment="Left" Margin="182,82,0,0" VerticalAlignment="Top" Width="95" 
+			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="0"/>
+		<ComboBox x:Name="comboLessonsAvailability" HorizontalAlignment="Left" Margin="77,211,0,0" VerticalAlignment="Top" Width="95"
+			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="0"/>
+		<ComboBox x:Name="comboLessonsType" HorizontalAlignment="Left" Margin="182,211,0,0" VerticalAlignment="Top" Width="95"
+			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="0"/>
 		<ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="10" Margin="10,406,0,0" VerticalAlignment="Top" Width="322"/>
 		<Button x:Name="buttonDecReviewsSlider" Content="-" HorizontalAlignment="Left" Margin="71,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonDecReviewsSliderClick"/>
 		<Button x:Name="buttonIncReviewsSlider" Content="+" HorizontalAlignment="Left" Margin="261,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonIncReviewsSliderClick"/>

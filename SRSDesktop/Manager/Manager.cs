@@ -18,14 +18,14 @@ namespace SRSDesktop.Manager
 		protected List<Item> Cache { get; set; }
 		protected abstract Func<Item, bool> Selector { get; }
 
-		private string resourcesPath;
+		private string ResourcesPath;
 
 		protected Manager(string resourcesPath)
 		{
-			this.resourcesPath = resourcesPath;
+			ResourcesPath = resourcesPath;
 		}
 
-		public abstract List<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default);
+		public abstract List<Item> Get(int count = 0, OrderByAvailability options = OrderByAvailability.Default, OrderByType orderByType = OrderByType.Default);
 
 		public void Update()
 		{
@@ -34,9 +34,9 @@ namespace SRSDesktop.Manager
 
 		public bool Save()
 		{
-			Json.WriteJson(resourcesPath + RadicalFile, Cache.OfType<Radical>().ToArray());
-			Json.WriteJson(resourcesPath + KanjiFile, Cache.OfType<Kanji>().ToArray());
-			Json.WriteJson(resourcesPath + VocabFile, Cache.OfType<Vocab>().ToArray());
+			Json.WriteJson(ResourcesPath + RadicalFile, Cache.OfType<Radical>().ToArray());
+			Json.WriteJson(ResourcesPath + KanjiFile, Cache.OfType<Kanji>().ToArray());
+			Json.WriteJson(ResourcesPath + VocabFile, Cache.OfType<Vocab>().ToArray());
 
 			return true;
 		}
@@ -52,9 +52,9 @@ namespace SRSDesktop.Manager
 
 			var result = new List<Item>();
 
-			var radicals = Json.ReadJson<Radical[]>(resourcesPath + RadicalFile);
-			var kanjis = Json.ReadJson<Kanji[]>(resourcesPath + KanjiFile);
-			var vocabs = Json.ReadJson<Vocab[]>(resourcesPath + VocabFile);
+			var radicals = Json.ReadJson<Radical[]>(ResourcesPath + RadicalFile);
+			var kanjis = Json.ReadJson<Kanji[]>(ResourcesPath + KanjiFile);
+			var vocabs = Json.ReadJson<Vocab[]>(ResourcesPath + VocabFile);
 
 			foreach (var kanji in kanjis)
 			{

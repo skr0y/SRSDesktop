@@ -28,6 +28,7 @@ namespace SRSDesktop.Windows
 		private List<Item> Items { get; set; }
 		private Item CurrentItem { get; set; }
 		private ItemsWindowMode Mode { get; set; }
+		private State AppState { get; set; }
 
 		public ItemsWindow()
 		{
@@ -58,6 +59,8 @@ namespace SRSDesktop.Windows
 
 		private void WaitForInput()
 		{
+			AppState = State.AwaitInput;
+
 			if (Items.Count == 0)
 			{
 				DialogResult = true;
@@ -90,6 +93,8 @@ namespace SRSDesktop.Windows
 
 		private void DisplayAnswer()
 		{
+			AppState = State.DisplayAnswer;
+
 			EnableAnswerControls();
 			DisableInputControls();
 			FillAnswerTextBlock(CurrentItem);
@@ -98,7 +103,7 @@ namespace SRSDesktop.Windows
 
 		private void AcceptAnswer(int levelChange)
 		{
-			CurrentItem.UserSpecific.AddLevel(levelChange);
+			CurrentItem.UserSpecific.AddProgress(levelChange);
 
 			Items.Remove(CurrentItem);
 
@@ -117,11 +122,56 @@ namespace SRSDesktop.Windows
 			WaitForInput();
 		}
 
+		private void Answer()
+		{
+			DisplayAnswer();
+		}
+
+		private void Skip()
+		{
+			SkipAnswer();
+		}
+
+		private void AnswerAgain()
+		{
+			SkipAnswer(true);
+		}
+
+		private void AnswerBad()
+		{
+			AcceptAnswer(-1);
+		}
+
+		private void AnswerOkay()
+		{
+			AcceptAnswer(0);
+		}
+
+		private void AnswerGood()
+		{
+			AcceptAnswer(1);
+		}
+
+		private void AnswerEasy()
+		{
+			AcceptAnswer(2);
+		}
+
+		private void PlaySound()
+		{
+			if (WaveOutEvent != null)
+			{
+				WaveOutEvent.Play();
+				VorbisWaveReader.Position = 0;
+			}
+		}
+
 		#region Controls
 
 		private void EnableInputControls()
 		{
 			textBoxMeaningInput.IsEnabled = true;
+			textBoxMeaningInput.Focus();
 			textBoxReadingInput.IsEnabled = true && !(CurrentItem is Radical);
 			buttonAnswer.IsEnabled = true;
 			buttonSkip.IsEnabled = true;
@@ -156,6 +206,7 @@ namespace SRSDesktop.Windows
 		private void ClearInputControls()
 		{
 			textBlockCharacter.Text = "";
+			imageCharacter.Source = null;
 			textBoxMeaningInput.Text = "";
 			textBoxReadingInput.Text = "";
 		}
@@ -246,58 +297,88 @@ namespace SRSDesktop.Windows
 
 		private void ClearAnswerBackgroundColor()
 		{
-			textBoxReadingInput.Background = clearBrush;
+			textBoxMeaningInput.Background = textBoxReadingInput.Background = clearBrush;
 		}
 
 		private void ButtonAnswerClick(object sender, RoutedEventArgs e)
 		{
-			DisplayAnswer();
+			Answer();
 		}
 
 		private void ButtonSkipClick(object sender, RoutedEventArgs e)
 		{
-			SkipAnswer();
+			Skip();
 		}
 
 		private void ButtonAgainClick(object sender, RoutedEventArgs e)
 		{
-			SkipAnswer(true);
+			AnswerAgain();
 		}
 
 		private void ButtonBadClick(object sender, RoutedEventArgs e)
 		{
-			AcceptAnswer(-1);
+			AnswerBad();
 		}
 
 		private void ButtonOkayClick(object sender, RoutedEventArgs e)
 		{
-			AcceptAnswer(0);
+			AnswerOkay();
 		}
 
 		private void ButtonGoodClick(object sender, RoutedEventArgs e)
 		{
-			AcceptAnswer(1);
+			AnswerGood();
 		}
 
 		private void ButtonEasyClick(object sender, RoutedEventArgs e)
 		{
-			AcceptAnswer(2);
+			AnswerEasy();
 		}
 
 		private void CharacterClick(object sender, MouseButtonEventArgs e)
 		{
-			if (WaveOutEvent != null)
-			{
-				WaveOutEvent.Play();
-				VorbisWaveReader.Position = 0;
-			}
+			PlaySound();
 		}
 
-		private void Window_KeyDown(object sender, KeyEventArgs e)
+		private void WindowKeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.Key == Key.Enter)
+			if (AppState == State.AwaitInput)
 			{
-				DisplayAnswer();
+				if (e.Key == Key.Enter)
+				{
+					Answer();
+				}
+				else if (e.Key == Key.Escape)
+				{
+					Skip();
+				}
+			}
+			else if (AppState == State.DisplayAnswer)
+			{
+				if (e.Key == Key.Space)
+				{
+					PlaySound();
+				}
+				else if (e.Key == Key.D1)
+				{
+					AnswerBad();
+				}
+				else if (e.Key == Key.D2)
+				{
+					AnswerAgain();
+				}
+				else if (e.Key == Key.D3)
+				{
+					AnswerOkay();
+				}
+				else if (e.Key == Key.D4)
+				{
+					AnswerGood();
+				}
+				else if (e.Key == Key.D5)
+				{
+					AnswerEasy();
+				}
 			}
 		}
 
@@ -318,5 +399,13 @@ namespace SRSDesktop.Windows
 
 			return result;
 		}
+
+
+		private enum State
+		{
+			DisplayAnswer,
+			AwaitInput
+		}
 	}
+
 }

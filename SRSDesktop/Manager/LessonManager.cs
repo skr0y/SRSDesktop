@@ -14,22 +14,32 @@ namespace SRSDesktop.Manager
 
 		protected override Func<Item, bool> Selector => item => item.UserSpecific == null;
 
-		public override List<Item> Get(int count = 0, ManagerOptions options = ManagerOptions.Default)
+		public override List<Item> Get(int count = 0, OrderByAvailability orderByAvailability = OrderByAvailability.Default, OrderByType orderByType = OrderByType.Default)
 		{
 			IEnumerable<Item> result = Load();
 
-			if (options != ManagerOptions.Default)
+			if (orderByAvailability != OrderByAvailability.Default)
 			{
-				switch (options)
+				switch (orderByAvailability)
 				{
-					case ManagerOptions.Older:
+					case OrderByAvailability.Older:
 						result = result.OrderBy(item => item.Level);
 						break;
-					case ManagerOptions.Recent:
+					case OrderByAvailability.Recent:
 						result = result.OrderByDescending(item => item.Level);
 						break;
-					case ManagerOptions.Shuffle:
+					case OrderByAvailability.Shuffle:
 						result = result.Shuffle();
+						break;
+				}
+			}
+
+			if (orderByType != OrderByType.Default)
+			{
+				switch (orderByType)
+				{
+					case OrderByType.RadicalToVocab:
+						result = result.OrderBy(item => item is Radical ? 0 : item is Kanji ? 1 : 2);
 						break;
 				}
 			}

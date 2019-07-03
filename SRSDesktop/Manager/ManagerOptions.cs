@@ -1,10 +1,16 @@
 ﻿namespace SRSDesktop.Manager
 {
-	public enum ManagerOptions
+	public enum OrderByAvailability
 	{
 		Default,
 		Older,
 		Recent,
 		Shuffle
+	}
+
+	public enum OrderByType
+	{
+		Default,
+		RadicalToVocab
 	}
 }

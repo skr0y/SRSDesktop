@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Lessons" Height="640" Width="1280" ResizeMode="CanMinimize" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner">
+        Title="Lessons" Height="640" Width="1280" ResizeMode="CanMinimize" WindowStartupLocation="CenterOwner" KeyUp="WindowKeyUp">
 	<Grid>
 		<Rectangle x:Name="rectItem" HorizontalAlignment="Left" Height="611" VerticalAlignment="Top" Width="223"/>
 		<Rectangle x:Name="rectAnswer" HorizontalAlignment="Left" Height="611" Margin="223,0,0,0" VerticalAlignment="Top" Width="1041"/>
@@ -14,11 +14,11 @@
 		<TextBox x:Name="textBoxReadingInput" HorizontalAlignment="Left" Height="36" Margin="10,441,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="18"/>
 		<Button x:Name="buttonAnswer" Content="Answer" HorizontalAlignment="Left" Margin="10,499,0,0" VerticalAlignment="Top" Width="200" Height="50" Background="#FFDDFFDD" FontSize="18" Click="ButtonAnswerClick"/>
 		<Button x:Name="buttonSkip" Content="Skip" HorizontalAlignment="Left" Margin="10,554,0,0" VerticalAlignment="Top" Width="200" Background="#FFFFDDDD" Height="30" FontSize="18" Click="ButtonSkipClick"/>
-		<Button x:Name="buttonBad" Content="Bad" HorizontalAlignment="Left" Margin="334,554,0,0" VerticalAlignment="Top" Width="94" Background="#FFFFDDDD" Click="ButtonBadClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonOkay" Content="Okay" HorizontalAlignment="Left" Margin="538,554,0,0" VerticalAlignment="Top" Width="96" Background="#FFFFFFDD" Click="ButtonOkayClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonGood" Content="Good" HorizontalAlignment="Left" Margin="641,554,0,0" VerticalAlignment="Top" Width="95" Background="#FFDDDDFF" Click="ButtonGoodClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonEasy" Content="Easy" HorizontalAlignment="Left" Margin="744,554,0,0" VerticalAlignment="Top" Width="94" Background="#FFDDFFDD" Click="ButtonEasyClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonAgain" Content="Again" HorizontalAlignment="Left" Margin="436,554,0,0" VerticalAlignment="Top" Width="95" Click="ButtonAgainClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonBad" Content="[1] Bad" HorizontalAlignment="Left" Margin="334,554,0,0" VerticalAlignment="Top" Width="94" Background="#FFFFDDDD" Click="ButtonBadClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonAgain" Content="[2] Again" HorizontalAlignment="Left" Margin="436,554,0,0" VerticalAlignment="Top" Width="95" Click="ButtonAgainClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonOkay" Content="[3] Okay" HorizontalAlignment="Left" Margin="538,554,0,0" VerticalAlignment="Top" Width="96" Background="#FFFFFFDD" Click="ButtonOkayClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonGood" Content="[4] Good" HorizontalAlignment="Left" Margin="641,554,0,0" VerticalAlignment="Top" Width="95" Background="#FFDDDDFF" Click="ButtonGoodClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonEasy" Content="[5] Easy" HorizontalAlignment="Left" Margin="744,554,0,0" VerticalAlignment="Top" Width="94" Background="#FFDDFFDD" Click="ButtonEasyClick" FontSize="18" Height="30"/>
 		<Image x:Name="imageCharacter" HorizontalAlignment="Left" Height="200" Margin="10,82,0,0" VerticalAlignment="Top" Width="200"/>
 		<TextBlock x:Name="textBlockCharacter" HorizontalAlignment="Center" Text="字" VerticalAlignment="Top" Height="200" Width="200" FontSize="150" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" Margin="10,82,1064,0" TextAlignment="Center" MouseDown="CharacterClick"/>
 		<ScrollViewer x:Name="scrollViewer" HorizontalAlignment="Left" Height="539" Margin="228,10,0,0" VerticalAlignment="Top" Width="1036" VerticalScrollBarVisibility="Auto" >

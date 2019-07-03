@@ -41,7 +41,7 @@ namespace SRSDesktop.Windows
 
 		private void ReviewsButtonClick(object sender, RoutedEventArgs e)
 		{
-			var items = SRS.ReviewManager.Get((int)sliderReviews.Value, (ManagerOptions)comboReviews.SelectedValue);
+			var items = SRS.ReviewManager.Get((int)sliderReviews.Value, (OrderByAvailability)comboReviewsAvailability.SelectedValue, (OrderByType)comboReviewsType.SelectedValue);
 			var reviewWindow = new ItemsWindow(items, ItemsWindowMode.Review);
 
 			if (reviewWindow.ShowDialog() == true)
@@ -53,7 +53,7 @@ namespace SRSDesktop.Windows
 
 		private void LessonsButtonClick(object sender, RoutedEventArgs e)
 		{
-			var items = SRS.LessonManager.Get((int)sliderLessons.Value, (ManagerOptions)comboLessons.SelectedValue);
+			var items = SRS.LessonManager.Get((int)sliderLessons.Value, (OrderByAvailability)comboLessonsAvailability.SelectedValue, (OrderByType)comboLessonsType.SelectedValue);
 			var lessonWindow = new ItemsWindow(items, ItemsWindowMode.Lesson);
 
 			if (lessonWindow.ShowDialog() == true)

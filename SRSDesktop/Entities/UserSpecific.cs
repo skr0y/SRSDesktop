@@ -47,7 +47,7 @@ namespace SRSDesktop.Entities
 
 		public bool Burned { get; set; }
 
-		public void AddLevel(int levelChange)
+		public void AddProgress(int levelChange)
 		{
 			var now = DateTime.Now;
 

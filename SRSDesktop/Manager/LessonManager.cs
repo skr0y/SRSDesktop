@@ -14,11 +14,11 @@ namespace SRSDesktop.Manager
 
 		protected override Func<Item, bool> Selector => item => item.UserSpecific == null;
 
-		public override List<Item> Get(int count = 0, OrderByAvailability orderByAvailability = OrderByAvailability.Default, OrderByType orderByType = OrderByType.Default)
+		public override List<Item> Get(int count = 0, OrderByAvailability orderByAvailability = OrderByAvailability.None, OrderByType orderByType = OrderByType.None)
 		{
 			IEnumerable<Item> result = Load();
 
-			if (orderByAvailability != OrderByAvailability.Default)
+			if (orderByAvailability != OrderByAvailability.None)
 			{
 				switch (orderByAvailability)
 				{
@@ -34,7 +34,7 @@ namespace SRSDesktop.Manager
 				}
 			}
 
-			if (orderByType != OrderByType.Default)
+			if (orderByType != OrderByType.None)
 			{
 				switch (orderByType)
 				{

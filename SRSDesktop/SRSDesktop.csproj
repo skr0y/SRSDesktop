@@ -8,11 +8,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>SRSDesktop</RootNamespace>
     <AssemblyName>SRSDesktop</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -73,6 +77,10 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Utils\Json.cs" />
+    <Page Include="Windows\DetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ItemsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -93,6 +101,9 @@
     <Compile Include="Entities\SrsLevel.cs" />
     <Compile Include="Entities\UserSpecific.cs" />
     <Compile Include="Entities\Vocab.cs" />
+    <Compile Include="Windows\DetailsWindow.xaml.cs">
+      <DependentUpon>DetailsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ItemsWindow.xaml.cs">
       <DependentUpon>ItemsWindow.xaml</DependentUpon>
     </Compile>
@@ -5561,6 +5572,21 @@
     <Resource Include="Resources\Images\stick.png" />
     <Resource Include="Resources\Images\triceratops.png" />
     <Resource Include="Resources\Images\viking.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\boobs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\boob.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\hick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

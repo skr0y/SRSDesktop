@@ -2,7 +2,7 @@
 {
 	public enum OrderByAvailability
 	{
-		Default,
+		None,
 		Older,
 		Recent,
 		Shuffle
@@ -10,7 +10,8 @@
 
 	public enum OrderByType
 	{
-		Default,
-		RadicalToVocab
+		None,
+		RadicalToVocab,
+		AscLevel
 	}
 }

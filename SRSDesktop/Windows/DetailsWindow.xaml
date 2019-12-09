@@ -1,0 +1,20 @@
+﻿<Window x:Class="SRSDesktop.Windows.DetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SRSDesktop.Windows"
+        mc:Ignorable="d"
+        Title="DetailsWindow" Height="402.287" Width="481.913">
+	<Grid>
+		<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="380,10,0,0" VerticalAlignment="Top" Width="75" FontSize="16" Background="#FFCCE8CA" Click="BtnSaveClick"/>
+		<ComboBox x:Name="cbUserLevel" HorizontalAlignment="Left" Margin="187,8,0,0" VerticalAlignment="Top" Width="120" FontSize="16"/>
+		<CheckBox x:Name="chkResetTime" Content="Reset time" HorizontalAlignment="Left" Margin="213,40,0,0" VerticalAlignment="Top" FontSize="16"/>
+		<TextBox x:Name="tbMeaning" HorizontalAlignment="Left" Height="25" Margin="10,60,0,0" TextWrapping="Wrap" Text="Meaning" VerticalAlignment="Top" Width="120" FontSize="16"/>
+		<TextBox x:Name="tbMeaningExplanation" HorizontalAlignment="Left" Height="100" Margin="10,90,0,0" TextWrapping="Wrap" Text="Meaning explanation" VerticalAlignment="Top" Width="445" FontSize="16"/>
+		<TextBox x:Name="tbCharacter" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" Text="Character" VerticalAlignment="Top" Width="88" FontSize="16"/>
+		<TextBox x:Name="tbReading" HorizontalAlignment="Left" Height="25" Margin="10,219,0,0" TextWrapping="Wrap" Text="Reading" VerticalAlignment="Top" Width="120" FontSize="16"/>
+		<TextBox x:Name="tbReadingExplanation" HorizontalAlignment="Left" Height="100" Margin="10,249,0,0" TextWrapping="Wrap" Text="Reading explanation" VerticalAlignment="Top" Width="445" FontSize="16"/>
+
+	</Grid>
+</Window>

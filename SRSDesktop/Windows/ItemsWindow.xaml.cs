@@ -26,6 +26,7 @@ namespace SRSDesktop.Windows
 		private WaveOutEvent WaveOutEvent;
 
 		private List<Item> Items { get; set; }
+		private int TotalCount { get; set; }
 		private Item CurrentItem { get; set; }
 		private ItemsWindowMode Mode { get; set; }
 		private State AppState { get; set; }
@@ -38,16 +39,15 @@ namespace SRSDesktop.Windows
 		public ItemsWindow(List<Item> items, ItemsWindowMode mode) : this()
 		{
 			Items = items;
+			TotalCount = Items.Count;
 			Mode = mode;
 
 			switch (Mode)
 			{
 				case ItemsWindowMode.Lesson:
-					Title = "Lessons";
 					DisplayAnswer();
 					break;
 				case ItemsWindowMode.Review:
-					Title = "Reviews";
 					WaitForInput();
 					break;
 				case ItemsWindowMode.View:
@@ -59,6 +59,12 @@ namespace SRSDesktop.Windows
 
 		private void WaitForInput()
 		{
+			if (Mode == ItemsWindowMode.Lesson)
+			{
+				DisplayAnswer();
+				return;
+			}
+
 			AppState = State.AwaitInput;
 
 			if (Items.Count == 0)
@@ -69,20 +75,26 @@ namespace SRSDesktop.Windows
 
 			CurrentItem = Items.First();
 
+			SetWindowTitle();
 			EnableInputControls();
 			ClearInputControls();
 			DisableAnswerControls();
 			ClearAnswerTextBlocks();
 			SetItemBackgroundColor();
-			ClearAnswerBackgroundColor();
-
-			labelItemLvl.Content = CurrentItem.Level;
-			labelUserLvl.Content = CurrentItem.UserSpecific.SrsNumeric;
+			SetItemLvlInfo();
 
 			if (CurrentItem.Character == null && CurrentItem is Radical radical)
 			{
-				var uri = new Uri(Utils.Utils.GetResourcesPath() + radical.Image, UriKind.Absolute);
-				imageCharacter.Source = new BitmapImage(uri);
+				var imageUrl = Utils.Utils.GetResourcesPath() + radical.Image;
+				if (File.Exists(imageUrl))
+				{
+					var uri = new Uri(imageUrl, UriKind.Absolute);
+					imageCharacter.Source = new BitmapImage(uri);
+				}
+				else
+				{
+					MessageBox.Show(radical.Image + " has no image");
+				}
 			}
 			else
 			{
@@ -98,12 +110,16 @@ namespace SRSDesktop.Windows
 			EnableAnswerControls();
 			DisableInputControls();
 			FillAnswerTextBlock(CurrentItem);
-			SetAnswerBackground();
 		}
 
 		private void AcceptAnswer(int levelChange)
 		{
 			CurrentItem.UserSpecific.AddProgress(levelChange);
+
+			if (CurrentItem.UserSpecific.Burned)
+			{
+				MessageBox.Show("BURNED!");
+			}
 
 			Items.Remove(CurrentItem);
 
@@ -127,36 +143,6 @@ namespace SRSDesktop.Windows
 			DisplayAnswer();
 		}
 
-		private void Skip()
-		{
-			SkipAnswer();
-		}
-
-		private void AnswerAgain()
-		{
-			SkipAnswer(true);
-		}
-
-		private void AnswerBad()
-		{
-			AcceptAnswer(-1);
-		}
-
-		private void AnswerOkay()
-		{
-			AcceptAnswer(0);
-		}
-
-		private void AnswerGood()
-		{
-			AcceptAnswer(1);
-		}
-
-		private void AnswerEasy()
-		{
-			AcceptAnswer(2);
-		}
-
 		private void PlaySound()
 		{
 			if (WaveOutEvent != null)
@@ -168,30 +154,54 @@ namespace SRSDesktop.Windows
 
 		#region Controls
 
+		private void SetWindowTitle()
+		{
+			Title = $"{Mode.ToString()} [{TotalCount - Items.Count + 1}/{TotalCount}]";
+		}
+
 		private void EnableInputControls()
 		{
-			textBoxMeaningInput.IsEnabled = true;
-			textBoxMeaningInput.Focus();
-			textBoxReadingInput.IsEnabled = true && !(CurrentItem is Radical);
 			buttonAnswer.IsEnabled = true;
 			buttonSkip.IsEnabled = true;
 		}
 
 		private void DisableInputControls()
 		{
-			textBoxMeaningInput.IsEnabled = false;
-			textBoxReadingInput.IsEnabled = false;
 			buttonAnswer.IsEnabled = false;
 			buttonSkip.IsEnabled = false;
 		}
 
 		private void EnableAnswerControls()
 		{
-			buttonBad.IsEnabled = true;
+			if (Mode == ItemsWindowMode.Lesson)
+			{
+				buttonGood.IsEnabled = true;
+				buttonGood.Content = $"Next";
+
+				return;
+			}
+
+			var srsNumeric = CurrentItem.UserSpecific.SrsNumeric;
+
+			if (CurrentItem.UserSpecific.SrsNumeric > 1)
+			{
+				buttonBad.IsEnabled = true;
+				buttonBad.Content = $"Bad ({UserSpecific.GetLevelInfo(srsNumeric - 1).Item3})";
+			}
+
 			buttonAgain.IsEnabled = true;
+
 			buttonOkay.IsEnabled = true;
+			buttonOkay.Content = $"Okay ({UserSpecific.GetLevelInfo(srsNumeric).Item3})";
+
 			buttonGood.IsEnabled = true;
-			buttonEasy.IsEnabled = true;
+			buttonGood.Content = $"Good ({UserSpecific.GetLevelInfo(srsNumeric + 1).Item3})";
+
+			if (CurrentItem.UserSpecific.SrsNumeric < 7)
+			{
+				buttonEasy.IsEnabled = true;
+				buttonEasy.Content = $"Easy ({UserSpecific.GetLevelInfo(srsNumeric + 2).Item3})";
+			}
 		}
 
 		private void DisableAnswerControls()
@@ -207,8 +217,6 @@ namespace SRSDesktop.Windows
 		{
 			textBlockCharacter.Text = "";
 			imageCharacter.Source = null;
-			textBoxMeaningInput.Text = "";
-			textBoxReadingInput.Text = "";
 		}
 
 		private void ClearAnswerTextBlocks()
@@ -239,9 +247,9 @@ namespace SRSDesktop.Windows
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading", kanji.Reading);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Meaning hints", kanji.MeaningMnemonic + Environment.NewLine + kanji.MeaningHint);
+				runs = GenerateRuns("Meaning hints", kanji.MeaningMnemonic);// + Environment.NewLine + kanji.MeaningHint);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Reading hints", kanji.ReadingMnemonic + Environment.NewLine + kanji.ReadingHint);
+				runs = GenerateRuns("Reading hints", kanji.ReadingMnemonic);// + Environment.NewLine + kanji.ReadingHint);
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Examples", kanji.Examples);
 				textBlockInfo.Inlines.AddRange(runs);
@@ -256,17 +264,26 @@ namespace SRSDesktop.Windows
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading explanation", vocab.ReadingExplanation);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Context sentences", string.Join(Environment.NewLine, vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
+				runs = GenerateRuns("Context sentences", string.Join(Environment.NewLine + Environment.NewLine, vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
 				textBlockInfo.Inlines.AddRange(runs);
-			}
 
-			var soundPath = Utils.Utils.GetResourcesPath() + "Sound/" + item.Character + ".ogg";
-			if (File.Exists(soundPath))
-			{
-				VorbisWaveReader = new VorbisWaveReader(soundPath);
-				WaveOutEvent = new WaveOutEvent();
-				WaveOutEvent.Init(VorbisWaveReader);
+				var soundPath = Utils.Utils.GetResourcesPath() + "Sound/" + item.Character + ".ogg";
+				if (File.Exists(soundPath))
+				{
+					VorbisWaveReader = new VorbisWaveReader(soundPath);
+					WaveOutEvent = new WaveOutEvent();
+					WaveOutEvent.Init(VorbisWaveReader);
+					PlaySound();
+				}
 			}
+		}
+
+		private void SetItemLvlInfo()
+		{
+			labelItemLvl.Content = CurrentItem.Level;
+
+			var lvlInfo = UserSpecific.GetLevelInfo(CurrentItem.UserSpecific.SrsNumeric);
+			labelUserLvl.Content = lvlInfo.Item1.ToString() + " " + CurrentItem.UserSpecific.SrsNumeric;
 		}
 
 		private void SetItemBackgroundColor()
@@ -279,27 +296,6 @@ namespace SRSDesktop.Windows
 				rectItem.Fill = vocabBrush;
 		}
 
-		private void SetAnswerBackground()
-		{
-			var input = textBoxReadingInput.Text;
-			switch (CurrentItem)
-			{
-				case Kanji kanji:
-					textBoxReadingInput.Background = kanji.Readings.Contains(input, StringComparer.InvariantCultureIgnoreCase) ? correctBrush : wrongBrush;
-					break;
-				case Vocab vocab:
-					textBoxReadingInput.Background = vocab.Kana.Equals(input, StringComparison.InvariantCultureIgnoreCase) ? correctBrush : wrongBrush;
-					break;
-			}
-
-			textBoxMeaningInput.Background = CurrentItem.Meanings.Contains(textBoxMeaningInput.Text, StringComparer.InvariantCultureIgnoreCase) ? correctBrush : wrongBrush;
-		}
-
-		private void ClearAnswerBackgroundColor()
-		{
-			textBoxMeaningInput.Background = textBoxReadingInput.Background = clearBrush;
-		}
-
 		private void ButtonAnswerClick(object sender, RoutedEventArgs e)
 		{
 			Answer();
@@ -307,32 +303,32 @@ namespace SRSDesktop.Windows
 
 		private void ButtonSkipClick(object sender, RoutedEventArgs e)
 		{
-			Skip();
+			SkipAnswer();
 		}
 
 		private void ButtonAgainClick(object sender, RoutedEventArgs e)
 		{
-			AnswerAgain();
+			SkipAnswer(true);
 		}
 
 		private void ButtonBadClick(object sender, RoutedEventArgs e)
 		{
-			AnswerBad();
+			AcceptAnswer(-1);
 		}
 
 		private void ButtonOkayClick(object sender, RoutedEventArgs e)
 		{
-			AnswerOkay();
+			AcceptAnswer(0);
 		}
 
 		private void ButtonGoodClick(object sender, RoutedEventArgs e)
 		{
-			AnswerGood();
+			AcceptAnswer(1);
 		}
 
 		private void ButtonEasyClick(object sender, RoutedEventArgs e)
 		{
-			AnswerEasy();
+			AcceptAnswer(2);
 		}
 
 		private void CharacterClick(object sender, MouseButtonEventArgs e)
@@ -340,44 +336,28 @@ namespace SRSDesktop.Windows
 			PlaySound();
 		}
 
+		private void ButtonDetailsClick(object sender, RoutedEventArgs e)
+		{
+			var detailsWindow = new DetailsWindow(CurrentItem);
+
+			if (detailsWindow.ShowDialog() == true)
+			{
+				ClearAnswerTextBlocks();
+				FillAnswerTextBlock(CurrentItem);
+			}
+		}
+
 		private void WindowKeyUp(object sender, KeyEventArgs e)
 		{
-			if (AppState == State.AwaitInput)
+			if (e.Key == Key.Enter)
 			{
-				if (e.Key == Key.Enter)
+				if (AppState == State.AwaitInput)
 				{
 					Answer();
 				}
-				else if (e.Key == Key.Escape)
-				{
-					Skip();
-				}
-			}
-			else if (AppState == State.DisplayAnswer)
-			{
-				if (e.Key == Key.Space)
+				else if (AppState == State.DisplayAnswer)
 				{
 					PlaySound();
-				}
-				else if (e.Key == Key.D1)
-				{
-					AnswerBad();
-				}
-				else if (e.Key == Key.D2)
-				{
-					AnswerAgain();
-				}
-				else if (e.Key == Key.D3)
-				{
-					AnswerOkay();
-				}
-				else if (e.Key == Key.D4)
-				{
-					AnswerGood();
-				}
-				else if (e.Key == Key.D5)
-				{
-					AnswerEasy();
 				}
 			}
 		}

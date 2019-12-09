@@ -25,7 +25,7 @@ namespace SRSDesktop.Manager
 			ResourcesPath = resourcesPath;
 		}
 
-		public abstract List<Item> Get(int count = 0, OrderByAvailability options = OrderByAvailability.Default, OrderByType orderByType = OrderByType.Default);
+		public abstract List<Item> Get(int count = 0, OrderByAvailability options = OrderByAvailability.None, OrderByType orderByType = OrderByType.None);
 
 		public void Update()
 		{

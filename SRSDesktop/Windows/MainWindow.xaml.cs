@@ -1,4 +1,5 @@
 ﻿using SRSDesktop.Manager;
+using System;
 using System.Windows;
 
 namespace SRSDesktop.Windows
@@ -25,7 +26,7 @@ namespace SRSDesktop.Windows
 			if (sliderReviews != null)
 			{
 				sliderReviews.Maximum = SRS.ReviewManager.Count;
-				sliderReviews.Value = sliderReviews.Maximum;
+				sliderReviews.Value = Math.Min(50, sliderReviews.Maximum);
 			}
 
 			if (progressBar != null)

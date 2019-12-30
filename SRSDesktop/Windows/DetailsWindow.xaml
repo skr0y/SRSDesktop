@@ -5,16 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SRSDesktop.Windows"
         mc:Ignorable="d"
-        Title="DetailsWindow" Height="402.287" Width="481.913">
+        Title="DetailsWindow" Height="476" Width="648">
 	<Grid>
-		<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="380,10,0,0" VerticalAlignment="Top" Width="75" FontSize="16" Background="#FFCCE8CA" Click="BtnSaveClick"/>
-		<ComboBox x:Name="cbUserLevel" HorizontalAlignment="Left" Margin="187,8,0,0" VerticalAlignment="Top" Width="120" FontSize="16"/>
-		<CheckBox x:Name="chkResetTime" Content="Reset time" HorizontalAlignment="Left" Margin="213,40,0,0" VerticalAlignment="Top" FontSize="16"/>
-		<TextBox x:Name="tbMeaning" HorizontalAlignment="Left" Height="25" Margin="10,60,0,0" TextWrapping="Wrap" Text="Meaning" VerticalAlignment="Top" Width="120" FontSize="16"/>
-		<TextBox x:Name="tbMeaningExplanation" HorizontalAlignment="Left" Height="100" Margin="10,90,0,0" TextWrapping="Wrap" Text="Meaning explanation" VerticalAlignment="Top" Width="445" FontSize="16"/>
-		<TextBox x:Name="tbCharacter" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" Text="Character" VerticalAlignment="Top" Width="88" FontSize="16"/>
-		<TextBox x:Name="tbReading" HorizontalAlignment="Left" Height="25" Margin="10,219,0,0" TextWrapping="Wrap" Text="Reading" VerticalAlignment="Top" Width="120" FontSize="16"/>
-		<TextBox x:Name="tbReadingExplanation" HorizontalAlignment="Left" Height="100" Margin="10,249,0,0" TextWrapping="Wrap" Text="Reading explanation" VerticalAlignment="Top" Width="445" FontSize="16"/>
-
+		<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="507,10,0,0" VerticalAlignment="Top" Width="115" FontSize="18" Background="#FFCCE8CA" Click="BtnSaveClick" Height="69"/>
+		<ComboBox x:Name="cbUserLevel" HorizontalAlignment="Left" Margin="11,40,0,0" VerticalAlignment="Top" Width="180" FontSize="18"/>
+		<CheckBox x:Name="chkResetTime" Content="Reset time" HorizontalAlignment="Left" Margin="11,75,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<TextBox x:Name="tbMeaning" HorizontalAlignment="Left" Height="30" Margin="10,116,0,0" TextWrapping="Wrap" Text="Meaning" VerticalAlignment="Top" Width="612" FontSize="18"/>
+		<TextBox x:Name="tbMeaningExplanation" HorizontalAlignment="Left" Height="100" Margin="10,151,0,0" TextWrapping="Wrap" Text="Meaning explanation" VerticalAlignment="Top" Width="612" FontSize="18"/>
+		<TextBox x:Name="tbCharacter" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" Text="Character" VerticalAlignment="Top" Width="181" FontSize="18"/>
+		<TextBox x:Name="tbReading" HorizontalAlignment="Left" Height="30" Margin="10,256,0,0" TextWrapping="Wrap" Text="Reading" VerticalAlignment="Top" Width="612" FontSize="18"/>
+		<TextBox x:Name="tbOnyomiReading" HorizontalAlignment="Left" Height="30" Margin="88,256,0,0" TextWrapping="Wrap" Text="Onyomi" VerticalAlignment="Top" Width="121" FontSize="18" Visibility="Hidden"/>
+		<TextBox x:Name="tbKunyomiReading" HorizontalAlignment="Left" Height="30" Margin="298,256,0,0" TextWrapping="Wrap" Text="Kunyomi" VerticalAlignment="Top" Width="118" FontSize="18" Visibility="Hidden"/>
+		<TextBox x:Name="tbNanoriReading" HorizontalAlignment="Left" Height="30" Margin="489,256,0,0" TextWrapping="Wrap" Text="Nanori" VerticalAlignment="Top" Width="133" FontSize="18" Visibility="Hidden"/>
+		<TextBox x:Name="tbReadingExplanation" HorizontalAlignment="Left" Height="104" Margin="10,291,0,0" TextWrapping="Wrap" Text="Reading explanation" VerticalAlignment="Top" Width="612" FontSize="18"/>
+		<Label x:Name="lblTime" Content="-" HorizontalAlignment="Left" Margin="321,45,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="lblRelated" Content="Related: " HorizontalAlignment="Left" Margin="10,401,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Grid x:Name="grdRelated" HorizontalAlignment="Left" Height="30" Margin="88,401,0,0" VerticalAlignment="Top" Width="529"/>
+		<Label Content="Available:" HorizontalAlignment="Left" Margin="236,45,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label Content="Unlocked:" HorizontalAlignment="Left" Margin="232,11,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="lblOnyomi" Content="Onyomi:" HorizontalAlignment="Left" Margin="11,251,0,0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
+		<Label x:Name="lblKunyomi" Content="Kunyomi:" HorizontalAlignment="Left" Margin="214,251,0,0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
+		<Label x:Name="lblNanori" Content="Nanori:" HorizontalAlignment="Left" Margin="421,251,0,0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
+		<Label x:Name="lblUnlocked" Content="-" HorizontalAlignment="Left" Margin="321,11,0,0" VerticalAlignment="Top" FontSize="18"/>
 	</Grid>
 </Window>

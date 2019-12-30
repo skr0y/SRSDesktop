@@ -203,6 +203,8 @@ namespace SRSDesktop.Windows
 				buttonEasy.IsEnabled = true;
 				buttonEasy.Content = $"Easy ({UserSpecific.GetLevelInfo(srsNumeric + 2).Item3})";
 			}
+
+			buttonDetails.IsEnabled = true;
 		}
 
 		private void DisableAnswerControls()
@@ -212,6 +214,8 @@ namespace SRSDesktop.Windows
 			buttonOkay.IsEnabled = false;
 			buttonGood.IsEnabled = false;
 			buttonEasy.IsEnabled = false;
+
+			buttonDetails.IsEnabled = false;
 		}
 
 		private void ClearInputControls()
@@ -241,6 +245,8 @@ namespace SRSDesktop.Windows
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Mnemonic", radical.Mnemonic);
 				textBlockInfo.Inlines.AddRange(runs);
+				runs = GenerateRuns("Kanji examples", string.Join(", ", radical.Related.Take(3).Select(k => k.Character + " - " + k.Meanings[0])));
+				textBlockInfo.Inlines.AddRange(runs);
 			}
 			else if (item is Kanji kanji)
 			{
@@ -252,7 +258,7 @@ namespace SRSDesktop.Windows
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading hints", kanji.ReadingMnemonic);// + Environment.NewLine + kanji.ReadingHint);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Examples", kanji.Examples);
+				runs = GenerateRuns("Examples", string.Join(", ", kanji.Related.OfType<Vocab>().Take(3).Select(v => v.Character + " - " + v.Meanings[0])));
 				textBlockInfo.Inlines.AddRange(runs);
 			}
 			else if (item is Vocab vocab)

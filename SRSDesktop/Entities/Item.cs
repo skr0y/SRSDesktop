@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace SRSDesktop.Entities
 {
@@ -12,5 +13,8 @@ namespace SRSDesktop.Entities
 
 		[JsonIgnore]
 		public string[] Meanings => Meaning.Split(new string[] { ", " }, StringSplitOptions.None);
+
+		[JsonIgnore]
+		public List<Item> Related;
 	}
 }

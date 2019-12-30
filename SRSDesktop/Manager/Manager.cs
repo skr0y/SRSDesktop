@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
 
@@ -26,6 +27,11 @@ namespace SRSDesktop.Manager
 		}
 
 		public abstract List<Item> Get(int count = 0, OrderByAvailability options = OrderByAvailability.None, OrderByType orderByType = OrderByType.None);
+
+		public List<Item> GetAll()
+		{
+			return Cache;
+		}
 
 		public void Update()
 		{
@@ -56,10 +62,23 @@ namespace SRSDesktop.Manager
 			var kanjis = Json.ReadJson<Kanji[]>(ResourcesPath + KanjiFile);
 			var vocabs = Json.ReadJson<Vocab[]>(ResourcesPath + VocabFile);
 
+			foreach (var vocab in vocabs)
+			{
+				vocab.Related = vocab.Character.Where(chr => chr.IsKanji()).Select(chr => kanjis.First(k => k.Character == chr.ToString())).Cast<Item>().ToList();
+			}
+
 			foreach (var kanji in kanjis)
 			{
-				var examples = vocabs.Where(v => v.Character.Contains(kanji.Character)).Select(v => v.Character + " - " + v.Meanings[0]).Take(3);
-				kanji.Examples = string.Join(", ", examples);
+				var matches = Regex.Matches(kanji.MeaningMnemonic, @"\[.*?\]").Cast<Match>().Select(m => m.Value.Trim('[', ']').ToLower()).Distinct();
+				var related = matches.Select(m => radicals.FirstOrDefault(r => r.Meaning == m && r.Level <= kanji.Level)).Where(m => m != null).Cast<Item>().ToList();
+				related.AddRange(vocabs.Where(v => v.Related.Contains(kanji)));
+
+				kanji.Related = related;
+			}
+
+			foreach (var radical in radicals)
+			{
+				radical.Related = kanjis.Where(k => k.Related.Contains(radical)).Cast<Item>().ToList();
 			}
 
 			result.AddRange(radicals);

@@ -16,19 +16,18 @@ namespace SRSDesktop.Windows
 {
 	public partial class ItemsWindow : Window
 	{
-		private readonly Brush radicalBrush = (Brush)(new BrushConverter().ConvertFrom("#FFE9F4FF"));
-		private readonly Brush kanjiBrush = (Brush)(new BrushConverter().ConvertFrom("#FFFF9BFF"));
-		private readonly Brush vocabBrush = (Brush)(new BrushConverter().ConvertFrom("#FFC79BFF"));
-		private readonly Brush correctBrush = (Brush)(new BrushConverter().ConvertFrom("#FFEEFFEE"));
-		private readonly Brush wrongBrush = (Brush)(new BrushConverter().ConvertFrom("#FFFFEEEE"));
-		private readonly Brush clearBrush = (Brush)(new BrushConverter().ConvertFrom("#FFFFFFFF"));
+		private readonly Brush radicalBrush = (Brush)new BrushConverter().ConvertFrom("#FFE9F4FF");
+		private readonly Brush kanjiBrush = (Brush)new BrushConverter().ConvertFrom("#FFFF9BFF");
+		private readonly Brush vocabBrush = (Brush)new BrushConverter().ConvertFrom("#FFC79BFF");
 
 		private VorbisWaveReader VorbisWaveReader;
 		private WaveOutEvent WaveOutEvent;
 
 		private List<Item> Items { get; set; }
+		private Dictionary<Item, int> LevelChange { get; set; }
 		private int TotalCount { get; set; }
-		private Item CurrentItem { get; set; }
+		private int CurrentIndex { get; set; }
+		private Item CurrentItem => Items[CurrentIndex];
 		private ItemsWindowMode Mode { get; set; }
 		private State AppState { get; set; }
 
@@ -40,7 +39,9 @@ namespace SRSDesktop.Windows
 		public ItemsWindow(List<Item> items, ItemsWindowMode mode) : this()
 		{
 			Items = items;
+			LevelChange = new Dictionary<Item, int>();
 			TotalCount = Items.Count;
+			CurrentIndex = 0;
 			Mode = mode;
 
 			switch (Mode)
@@ -66,15 +67,19 @@ namespace SRSDesktop.Windows
 				return;
 			}
 
-			AppState = State.AwaitInput;
-
-			if (Items.Count == 0)
+			if (CurrentIndex >= Items.Count)
 			{
+				CompleteReviews();
+
+				var badItems = LevelChange.Where(i => i.Value < 0).Select(i => i.Key);
+				var goodItems = LevelChange.Where(i => i.Value >= 0).Select(i => i.Key);
+				new SummaryWindow(badItems, goodItems).ShowDialog();
+
 				DialogResult = true;
 				return;
 			}
 
-			CurrentItem = Items.First();
+			AppState = State.AwaitInput;
 
 			SetWindowTitle();
 			EnableInputControls();
@@ -115,26 +120,15 @@ namespace SRSDesktop.Windows
 
 		private void AcceptAnswer(int levelChange)
 		{
-			CurrentItem.UserSpecific.AddProgress(levelChange);
-
-			if (CurrentItem.UserSpecific.Burned)
-			{
-				MessageBox.Show("BURNED!");
-			}
-
-			Items.Remove(CurrentItem);
+			LevelChange.Add(CurrentItem, levelChange);
+			CurrentIndex++;
 
 			WaitForInput();
-		}
-
-		private void SkipAnswer(bool readd = false)
-		{
-			Items.Remove(CurrentItem);
-
-			if (readd)
-			{
-				Items.Add(CurrentItem);
 			}
+
+		private void SkipAnswer()
+		{
+			CurrentIndex++;
 
 			WaitForInput();
 		}
@@ -142,6 +136,19 @@ namespace SRSDesktop.Windows
 		private void Answer()
 		{
 			DisplayAnswer();
+		}
+
+		private void CompleteReviews()
+			{
+			foreach (var item in LevelChange)
+			{
+				if (item.Key.UserSpecific == null)
+				{
+					item.Key.UserSpecific = new UserSpecific();
+			}
+
+				item.Key.UserSpecific.AddProgress(item.Value);
+		}
 		}
 
 		private void PlaySound()
@@ -163,34 +170,32 @@ namespace SRSDesktop.Windows
 		private void EnableInputControls()
 		{
 			buttonAnswer.IsEnabled = true;
-			buttonSkip.IsEnabled = true;
+			buttonPrev.IsEnabled = CurrentIndex > 0;
 		}
 
 		private void DisableInputControls()
 		{
 			buttonAnswer.IsEnabled = false;
-			buttonSkip.IsEnabled = false;
+			buttonPrev.IsEnabled = CurrentIndex > 0;
 		}
 
 		private void EnableAnswerControls()
 		{
-			if (Mode == ItemsWindowMode.Lesson)
-			{
-				buttonGood.IsEnabled = true;
-				buttonGood.Content = $"Next";
-
-				return;
-			}
+			if (Mode != ItemsWindowMode.Review) return;
 
 			var srsNumeric = CurrentItem.UserSpecific.SrsNumeric;
+
+			if (CurrentItem.UserSpecific.SrsNumeric > 2)
+			{
+				buttonVeryBad.IsEnabled = true;
+				buttonVeryBad.Content = $"Very bad ({UserSpecific.GetLevelInfo(srsNumeric - 2).Item3})";
+			}
 
 			if (CurrentItem.UserSpecific.SrsNumeric > 1)
 			{
 				buttonBad.IsEnabled = true;
 				buttonBad.Content = $"Bad ({UserSpecific.GetLevelInfo(srsNumeric - 1).Item3})";
 			}
-
-			buttonAgain.IsEnabled = true;
 
 			buttonOkay.IsEnabled = true;
 			buttonOkay.Content = $"Okay ({UserSpecific.GetLevelInfo(srsNumeric).Item3})";
@@ -209,6 +214,7 @@ namespace SRSDesktop.Windows
 
 		private void DisableAnswerControls()
 		{
+			buttonVeryBad.IsEnabled = false;
 			buttonBad.IsEnabled = false;
 			buttonAgain.IsEnabled = false;
 			buttonOkay.IsEnabled = false;
@@ -252,7 +258,7 @@ namespace SRSDesktop.Windows
 			{
 				runs = GenerateRuns("Meaning", kanji.Meaning);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Reading", kanji.Reading);
+				runs = GenerateReadingRuns("Reading", kanji);
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Meaning hints", kanji.MeaningMnemonic);// + Environment.NewLine + kanji.MeaningHint);
 				textBlockInfo.Inlines.AddRange(runs);
@@ -313,9 +319,9 @@ namespace SRSDesktop.Windows
 			SkipAnswer();
 		}
 
-		private void ButtonAgainClick(object sender, RoutedEventArgs e)
+		private void ButtonVeryBadClick(object sender, RoutedEventArgs e)
 		{
-			SkipAnswer(true);
+			AcceptAnswer(-2);
 		}
 
 		private void ButtonBadClick(object sender, RoutedEventArgs e)
@@ -343,6 +349,15 @@ namespace SRSDesktop.Windows
 			PlaySound();
 		}
 
+		private void ButtonPrevClick(object sender, RoutedEventArgs e)
+		{
+			if (CurrentIndex > 0)
+			{
+				CurrentIndex--;
+				WaitForInput();
+			}
+		}
+
 		private void ButtonDetailsClick(object sender, RoutedEventArgs e)
 		{
 			var detailsWindow = new DetailsWindow(CurrentItem);
@@ -351,6 +366,7 @@ namespace SRSDesktop.Windows
 			{
 				ClearAnswerTextBlocks();
 				FillAnswerTextBlock(CurrentItem);
+				EnableAnswerControls();
 			}
 		}
 
@@ -375,14 +391,35 @@ namespace SRSDesktop.Windows
 		{
 			var result = new List<Run>();
 
-			label = label + Environment.NewLine;
-			text = text + Environment.NewLine + Environment.NewLine;
+			result.Add(new Run() { Text = label + Environment.NewLine, Foreground = Brushes.Gray });
+			result.Add(new Run(text + Environment.NewLine + Environment.NewLine));
 
-			var run = new Run(label);
-			run.Foreground = Brushes.Gray;
+			return result;
+		}
+
+		private List<Run> GenerateReadingRuns(string label, Kanji kanji)
+		{
+			var result = new List<Run>();
+
+			result.Add(new Run() { Text = label + Environment.NewLine, Foreground = Brushes.Gray });
+
+			if (kanji.Onyomi != null)
+			{
+				var run = new Run($"Onyomi: {kanji.Onyomi}  ");
+				if (kanji.ImportantReading != ReadingType.Onyomi) run.Foreground = Brushes.DarkGray;
+				result.Add(run);
+			}
+
+			if (kanji.Kunyomi != null)
+			{
+				var run = new Run($"Kunyomi: {kanji.Kunyomi}  ");
+				if (kanji.ImportantReading != ReadingType.Kunyomi) run.Foreground = Brushes.DarkGray;
 			result.Add(run);
+			}
 
-			result.Add(new Run(text));
+			if (kanji.Nanori != null) result.Add(new Run { Text = $"Nanori: {kanji.Nanori}", Foreground = Brushes.DarkGray });
+
+			result.Add(new Run(Environment.NewLine + Environment.NewLine));
 
 			return result;
 		}

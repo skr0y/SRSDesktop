@@ -1,4 +1,4 @@
-using SRSDesktop.Entities;
+﻿using SRSDesktop.Entities;
 using SRSDesktop.Util;
 using System;
 using System.Collections.Generic;

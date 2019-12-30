@@ -8,13 +8,13 @@
 	<Grid>
 		<Rectangle x:Name="rectItem" HorizontalAlignment="Left" Height="611" VerticalAlignment="Top" Width="223"/>
 		<Rectangle x:Name="rectAnswer" HorizontalAlignment="Left" Height="611" Margin="223,0,0,0" VerticalAlignment="Top" Width="1041"/>
-		<Button x:Name="buttonAnswer" Content="Answer" HorizontalAlignment="Left" Margin="10,499,0,0" VerticalAlignment="Top" Width="200" Height="50" Background="#FFDDFFDD" FontSize="18" Click="ButtonAnswerClick"/>
-		<Button x:Name="buttonSkip" Content="Skip" HorizontalAlignment="Left" Margin="10,554,0,0" VerticalAlignment="Top" Width="200" Background="#FFFFDDDD" Height="30" FontSize="18" Click="ButtonSkipClick"/>
-		<Button x:Name="buttonBad" Content="Bad" HorizontalAlignment="Left" Margin="334,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFFFDDDD" Click="ButtonBadClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonAgain" Content="Again" HorizontalAlignment="Left" Margin="457,554,0,0" VerticalAlignment="Top" Width="120" Click="ButtonAgainClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonOkay" Content="Okay" HorizontalAlignment="Left" Margin="582,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFFFFFDD" Click="ButtonOkayClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonGood" Content="Good" HorizontalAlignment="Left" Margin="706,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFDDDDFF" Click="ButtonGoodClick" FontSize="18" Height="30"/>
-		<Button x:Name="buttonEasy" Content="Easy" HorizontalAlignment="Left" Margin="831,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFDDFFDD" Click="ButtonEasyClick" FontSize="18" Height="30"/>
+		<Button x:Name="buttonAnswer" Content="Answer" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="200" Height="63" Background="#FFDDFFDD" FontSize="18" Click="ButtonAnswerClick" Focusable="False"/>
+		<Button x:Name="buttonSkip" Content="Next >" HorizontalAlignment="Left" Margin="1155,554,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="18" Click="ButtonSkipClick" Focusable="False"/>
+		<Button x:Name="buttonBad" Content="Bad" HorizontalAlignment="Left" Margin="551,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFFFFFDD" Click="ButtonBadClick" FontSize="18" Height="30" Focusable="False"/>
+		<Button x:Name="buttonVeryBad" Content="Very bad" HorizontalAlignment="Left" Margin="426,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFFFDDDD" Click="ButtonVeryBadClick" FontSize="18" Height="30" Focusable="False"/>
+		<Button x:Name="buttonOkay" Content="Okay" HorizontalAlignment="Left" Margin="676,554,0,0" VerticalAlignment="Top" Width="120" Click="ButtonOkayClick" FontSize="18" Height="30" Focusable="False"/>
+		<Button x:Name="buttonGood" Content="Good" HorizontalAlignment="Left" Margin="800,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFDDDDFF" Click="ButtonGoodClick" FontSize="18" Height="30" Focusable="False"/>
+		<Button x:Name="buttonEasy" Content="Easy" HorizontalAlignment="Left" Margin="925,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFDDFFDD" Click="ButtonEasyClick" FontSize="18" Height="30" Focusable="False"/>
 		<Image x:Name="imageCharacter" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="200"/>
 		<TextBlock x:Name="textBlockCharacter" HorizontalAlignment="Center" Text="字" VerticalAlignment="Top" Height="200" Width="200" FontSize="150" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" Margin="10,10,1064,0" TextAlignment="Center" MouseDown="CharacterClick"/>
 		<ScrollViewer x:Name="scrollViewer" HorizontalAlignment="Left" Height="539" Margin="228,10,0,0" VerticalAlignment="Top" Width="1036" VerticalScrollBarVisibility="Auto" >
@@ -24,6 +24,7 @@
 		<Label x:Name="labelUserLvlText" Content="Current lvl: " HorizontalAlignment="Left" Margin="10,224,0,0" VerticalAlignment="Top" FontSize="18" Foreground="#FF555555"/>
 		<Label x:Name="labelItemLvl" Content="XX" HorizontalAlignment="Left" Margin="77,263,0,0" VerticalAlignment="Top" FontSize="18"/>
 		<Label x:Name="labelUserLvl" Content="XX" HorizontalAlignment="Left" Margin="102,224,0,0" VerticalAlignment="Top" FontSize="18"/>
-		<Button x:Name="buttonAnswer_Copy" Content="Details" HorizontalAlignment="Left" Margin="30,409,0,0" VerticalAlignment="Top" Width="160" Height="40" Background="#FFEEEEEE" FontSize="18" Click="ButtonDetailsClick"/>
+		<Button x:Name="buttonDetails" Content="Details" HorizontalAlignment="Left" Margin="10,471,0,0" VerticalAlignment="Top" Width="200" Height="45" Background="#FFEEEEEE" FontSize="18" Click="ButtonDetailsClick" Focusable="False"/>
+		<Button x:Name="buttonPrev" Content="&lt; Prev" HorizontalAlignment="Left" Margin="245,554,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="18" Click="ButtonPrevClick" Focusable="False"/>
 	</Grid>
 </Window>

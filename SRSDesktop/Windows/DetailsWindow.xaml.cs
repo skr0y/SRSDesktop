@@ -1,4 +1,5 @@
-﻿using SRSDesktop.Entities;
+using SRSDesktop.Entities;
+using SRSDesktop.Util;
 using System.Linq;
 using System.Windows;
 

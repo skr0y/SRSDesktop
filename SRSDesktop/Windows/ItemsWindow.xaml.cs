@@ -1,6 +1,7 @@
-﻿using NAudio.Vorbis;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
+using SRSDesktop.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -85,7 +86,7 @@ namespace SRSDesktop.Windows
 
 			if (CurrentItem.Character == null && CurrentItem is Radical radical)
 			{
-				var imageUrl = Utils.Utils.GetResourcesPath() + radical.Image;
+				var imageUrl = Utils.GetResourcesPath() + radical.Image;
 				if (File.Exists(imageUrl))
 				{
 					var uri = new Uri(imageUrl, UriKind.Absolute);
@@ -267,7 +268,7 @@ namespace SRSDesktop.Windows
 				runs = GenerateRuns("Context sentences", string.Join(Environment.NewLine + Environment.NewLine, vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
 				textBlockInfo.Inlines.AddRange(runs);
 
-				var soundPath = Utils.Utils.GetResourcesPath() + "Sound/" + item.Character + ".ogg";
+				var soundPath = Utils.GetResourcesPath() + "Sound/" + item.Character + ".ogg";
 				if (File.Exists(soundPath))
 				{
 					VorbisWaveReader = new VorbisWaveReader(soundPath);

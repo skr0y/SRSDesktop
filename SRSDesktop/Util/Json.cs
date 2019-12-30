@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 
-namespace SRSDesktop.Utils
+namespace SRSDesktop.Util
 {
 	public static class Json
 	{

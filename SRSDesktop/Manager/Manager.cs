@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SRSDesktop.Entities;
-using SRSDesktop.Utils;
+using SRSDesktop.Util;
 
 namespace SRSDesktop.Manager
 {

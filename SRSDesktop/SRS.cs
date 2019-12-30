@@ -1,4 +1,5 @@
-﻿using SRSDesktop.Manager;
+using SRSDesktop.Manager;
+using SRSDesktop.Util;
 
 namespace SRSDesktop
 {
@@ -9,7 +10,7 @@ namespace SRSDesktop
 
 		static SRS()
 		{
-			var fullPath = Utils.Utils.GetResourcesPath();
+			var fullPath = Utils.GetResourcesPath();
 
 			LessonManager = new LessonManager(fullPath);
 			ReviewManager = new ReviewManager(fullPath);

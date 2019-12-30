@@ -1,0 +1,36 @@
+﻿<Window x:Class="SRSDesktop.Windows.DatabaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SRSDesktop.Windows"
+        mc:Ignorable="d"
+        Title="Database" Height="480" Width="800">
+	<Grid>
+		<ListView x:Name="lsvDatabase" HorizontalAlignment="Left" Height="397" Margin="10,42,0,0" VerticalAlignment="Top" Width="612" FontSize="16" MouseDoubleClick="LsvDatabaseMouseDoubleClick">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="Char" DisplayMemberBinding="{Binding Character}" Width="80"/>
+					<GridViewColumn Header="Meaning" DisplayMemberBinding="{Binding Meaning}" Width="200"/>
+				</GridView>
+			</ListView.View>
+		</ListView>
+		<Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" Margin="627,412,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFAEF9A2" Click="BtnConfirmClick" Height="27"/>
+		<TextBox x:Name="tbSearch" HorizontalAlignment="Left" Height="27" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="612" FontSize="16" TextChanged="TextBoxTextChanged"/>
+		<GroupBox Header="Type" HorizontalAlignment="Left" Height="128" Margin="627,10,0,0" VerticalAlignment="Top" Width="155" FontSize="16">
+			<StackPanel>
+				<CheckBox x:Name="chkRadicals" Content="Radicals" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="ChkRadicalsClick"/>
+				<CheckBox x:Name="chkKanji" Content="Kanji" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="ChkKanjiClick"/>
+				<CheckBox x:Name="chkVocab" Content="Vocabs" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="ChkVocabClick"/>
+			</StackPanel>
+		</GroupBox>
+		<GroupBox Header="Status" HorizontalAlignment="Left" Height="128" Margin="627,143,0,0" VerticalAlignment="Top" Width="155" FontSize="16">
+			<StackPanel>
+				<RadioButton x:Name="radAll" Margin="10,10,0,0" Content="All" IsChecked="True" GroupName="radStatus" Click="RadAllClick"/>
+				<RadioButton x:Name="radLearned" Margin="10,10,0,0" Content="Learned" GroupName="radStatus" Click="RadLearnedClick"/>
+				<RadioButton x:Name="radUnknown" Margin="10,10,0,0" Content="Not learned" GroupName="radStatus" Click="RadUnknownClick"/>
+			</StackPanel>
+		</GroupBox>
+		<ComboBox HorizontalAlignment="Left" Margin="627,276,0,0" VerticalAlignment="Top" Width="155" FontSize="16"/>
+	</Grid>
+</Window>

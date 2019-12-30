@@ -117,6 +117,16 @@ namespace SRSDesktop.Windows
 			LoadData();
 		}
 
+		private void ButtonDatabaseClick(object sender, RoutedEventArgs e)
+		{
+			var databaseWindow = new DatabaseWindow();
+
+			if (databaseWindow.ShowDialog() == true)
+			{
+				SRS.ReviewManager.Save();
+			}
+		}
+
 		#endregion
 	}
 }

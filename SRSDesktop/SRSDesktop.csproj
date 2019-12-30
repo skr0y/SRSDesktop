@@ -77,6 +77,10 @@
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\Utils.cs" />
     <Compile Include="Util\Json.cs" />
+    <Page Include="Windows\DatabaseWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\DetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,6 +105,9 @@
     <Compile Include="Entities\SrsLevel.cs" />
     <Compile Include="Entities\UserSpecific.cs" />
     <Compile Include="Entities\Vocab.cs" />
+    <Compile Include="Windows\DatabaseWindow.xaml.cs">
+      <DependentUpon>DatabaseWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DetailsWindow.xaml.cs">
       <DependentUpon>DetailsWindow.xaml</DependentUpon>
     </Compile>

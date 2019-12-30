@@ -28,7 +28,7 @@
 		<Slider x:Name="sliderLessons" HorizontalAlignment="Left" Margin="96,238,0,0" VerticalAlignment="Top" Width="160" Value="10" ValueChanged="SliderLessonsValueChanged" SmallChange="1" LargeChange="10" IsSnapToTickEnabled="True" Minimum="1"/>
 		<Button x:Name="buttonLessons" Content="Lessons" Margin="76,166,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="18" Click="LessonsButtonClick"/>
 		<Button x:Name="buttonStats" Content="Statistics" HorizontalAlignment="Left" Margin="182,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
-		<Button x:Name="buttonDatabase" Content="Database" HorizontalAlignment="Left" Margin="10,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
+		<Button x:Name="buttonDatabase" Content="Database" HorizontalAlignment="Left" Margin="10,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18" Click="ButtonDatabaseClick"/>
 		<ComboBox x:Name="comboReviewsAvailability" HorizontalAlignment="Left" Margin="77,82,0,0" VerticalAlignment="Top" Width="95" 
 			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="3"/>
 		<ComboBox x:Name="comboReviewsType" HorizontalAlignment="Left" Margin="182,82,0,0" VerticalAlignment="Top" Width="95" 

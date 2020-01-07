@@ -16,8 +16,7 @@ namespace SRSDesktop.Manager
 		public int Count { get; private set; }
 		public int TotalCount { get; private set; }
 
-		protected List<Item> Cache { get; set; }
-		protected abstract Func<Item, bool> Selector { get; }
+		protected abstract Predicate<Item> Selector { get; }
 
 		private string ResourcesPath;
 

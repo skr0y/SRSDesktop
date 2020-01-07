@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace SRSDesktop.Entities
 	public class UserSpecific
 	{
 		[JsonIgnore]
-		private static List<Tuple<SrsLevel, TimeSpan, string>> SrsLevelToTimeSpan = new List<Tuple<SrsLevel, TimeSpan, string>>()
+		private static List<Tuple<SrsLevel, TimeSpan, string>> SrsLevelInfo = new List<Tuple<SrsLevel, TimeSpan, string>>()
 		{
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Apprentice, new TimeSpan(4, 0, 0), "4h"),
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Apprentice, new TimeSpan(8, 0, 0), "8h"),
@@ -17,8 +17,8 @@ namespace SRSDesktop.Entities
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Guru, new TimeSpan(6, 23, 0, 0), "7d"),
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Guru, new TimeSpan(13, 23, 0, 0), "14d"),
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Master, new TimeSpan(29, 23, 0, 0), "1m"),
-			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Enlighten, new TimeSpan(119, 23, 0, 0), "4m"),
-			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Burned, new TimeSpan(), "BURN")
+			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Enlighten, new TimeSpan(89, 23, 0, 0), "3m"),
+			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Burned, new TimeSpan(179, 23, 0, 0), "6m")
 		};
 
 		public SrsLevel Srs { get; set; }
@@ -28,15 +28,12 @@ namespace SRSDesktop.Entities
 		public DateTime UnlockedDate { get; set; }
 		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime AvailableDate { get; set; }
-		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime BurnedDate { get; set; }
 
-		public bool Burned { get; set; }
 
 
 		public static Tuple<SrsLevel, TimeSpan, string> GetLevelInfo(int srsLevel)
 		{
-			return SrsLevelToTimeSpan[srsLevel - 1];
+			return SrsLevelInfo[srsLevel - 1];
 		}
 
 
@@ -44,18 +41,12 @@ namespace SRSDesktop.Entities
 		{
 			var now = DateTime.Now;
 
-			SrsNumeric = Math.Max(1, Math.Min(SrsNumeric + levelChange, SrsLevelToTimeSpan.Count));
-			Srs = SrsLevelToTimeSpan[SrsNumeric - 1].Item1;
+			SrsNumeric = Math.Max(1, Math.Min(SrsNumeric + levelChange, SrsLevelInfo.Count));
+			Srs = SrsLevelInfo[SrsNumeric - 1].Item1;
 
 			if (updateTime)
 			{
-				AvailableDate = now + SrsLevelToTimeSpan[SrsNumeric - 1].Item2;
-			}
-
-			if (Srs == SrsLevel.Burned)
-			{
-				Burned = true;
-				BurnedDate = now;
+				AvailableDate = now + SrsLevelInfo[SrsNumeric - 1].Item2;
 			}
 		}
 	}

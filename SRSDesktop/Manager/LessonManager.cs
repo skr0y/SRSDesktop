@@ -1,4 +1,4 @@
-﻿using SRSDesktop.Entities;
+using SRSDesktop.Entities;
 using SRSDesktop.Util;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace SRSDesktop.Manager
 		{
 		}
 
-		protected override Func<Item, bool> Selector => item => item.UserSpecific == null;
+		protected override Predicate<Item> Selector => item => item.UserSpecific == null;
 
 		public override List<Item> Get(int count = 0, OrderByAvailability orderByAvailability = OrderByAvailability.None, OrderByType orderByType = OrderByType.None)
 		{

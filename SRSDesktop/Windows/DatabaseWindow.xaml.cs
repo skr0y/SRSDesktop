@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,10 +19,14 @@ namespace SRSDesktop.Windows
 		{
 			// TODO:
 			//  row color by type
-			//  select by level & user level
+			//  select by user level
 
 			InitializeComponent();
 			Update();
+
+			cbLevel.SelectedValuePath = "Key";
+			cbLevel.DisplayMemberPath = "Value";
+			cbLevel.ItemsSource = Enumerable.Range(0, 60).ToDictionary(k => k, v => v == 0 ? "All" : $"Level {v}"); ;
 		}
 
 
@@ -35,9 +40,11 @@ namespace SRSDesktop.Windows
 		{
 			if (lsvDatabase != null && items != null)
 			{
-				var result = items;
+				var result = items.OrderBy(i => i.Level).ToList();
 
 				if (tbSearch.Text != "") result = result.FindAll(i => i.Meaning.Contains(tbSearch.Text));
+
+				if (cbLevel.SelectedIndex > 0) result = result.FindAll(i => i.Level == ((KeyValuePair<int, string>)cbLevel.SelectedItem).Key);
 
 				if (chkRadicals.IsChecked == false) result = result.FindAll(i => !(i is Radical));
 				if (chkKanji.IsChecked == false) result = result.FindAll(i => !(i is Kanji));
@@ -66,12 +73,24 @@ namespace SRSDesktop.Windows
 
 		private void LsvDatabaseMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			var detailsWindow = new DetailsWindow((Item)lsvDatabase.SelectedItem);
-
+			var item = (Item)lsvDatabase.SelectedItem;
+			if (item == null) return;
+			var detailsWindow = new DetailsWindow(item);
 			if (detailsWindow.ShowDialog() == true)
 			{
-				//Update();
+				lsvDatabase.Items.Refresh();
 			}
+		}
+
+		private void BtnSaveClick(object sender, RoutedEventArgs e)
+		{
+			SRS.ReviewManager.Save();
+			Update();
+		}
+
+		private void BtnCurrLevelClick(object sender, RoutedEventArgs e)
+		{
+			cbLevel.SelectedIndex = SRS.LessonManager.UserLevel;
 		}
 
 		private void TextBoxTextChanged(object sender, TextChangedEventArgs e) => Filter();
@@ -87,5 +106,7 @@ namespace SRSDesktop.Windows
 		private void RadLearnedClick(object sender, RoutedEventArgs e) => Filter();
 
 		private void RadUnknownClick(object sender, RoutedEventArgs e) => Filter();
+
+		private void CbLevelSelectionChanged(object sender, SelectionChangedEventArgs e) => Filter();
 	}
 }

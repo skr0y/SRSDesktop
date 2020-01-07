@@ -10,6 +10,7 @@
 		<ListView x:Name="lsvDatabase" HorizontalAlignment="Left" Height="397" Margin="10,42,0,0" VerticalAlignment="Top" Width="612" FontSize="16" MouseDoubleClick="LsvDatabaseMouseDoubleClick">
 			<ListView.View>
 				<GridView>
+					<GridViewColumn Header="Lvl" DisplayMemberBinding="{Binding Level}" Width="30"/>
 					<GridViewColumn Header="Char" DisplayMemberBinding="{Binding Character}" Width="80"/>
 					<GridViewColumn Header="Meaning" DisplayMemberBinding="{Binding Meaning}" Width="200"/>
 				</GridView>
@@ -31,6 +32,8 @@
 				<RadioButton x:Name="radUnknown" Margin="10,10,0,0" Content="Not learned" GroupName="radStatus" Click="RadUnknownClick"/>
 			</StackPanel>
 		</GroupBox>
-		<ComboBox HorizontalAlignment="Left" Margin="627,276,0,0" VerticalAlignment="Top" Width="155" FontSize="16"/>
+		<ComboBox x:Name="cbLevel" HorizontalAlignment="Left" Margin="627,276,0,0" VerticalAlignment="Top" Width="108" FontSize="16" SelectionChanged="CbLevelSelectionChanged"/>
+		<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="627,380,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFA2D9F9" Click="BtnSaveClick" Height="27"/>
+		<Button x:Name="btnCurrLevel" Content="Curr" HorizontalAlignment="Left" Margin="740,276,0,0" VerticalAlignment="Top" Width="42" FontSize="18" Height="27" Click="BtnCurrLevelClick"/>
 	</Grid>
 </Window>

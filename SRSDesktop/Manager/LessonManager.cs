@@ -1,4 +1,4 @@
-using SRSDesktop.Entities;
+﻿using SRSDesktop.Entities;
 using SRSDesktop.Util;
 using System;
 using System.Collections.Generic;
@@ -12,11 +12,11 @@ namespace SRSDesktop.Manager
 		{
 		}
 
-		protected override Predicate<Item> Selector => item => item.UserSpecific == null;
+		protected override Predicate<Item> Selector => item => item.Learnable;
 
 		public override List<Item> Get(int count = 0, OrderByAvailability orderByAvailability = OrderByAvailability.None, OrderByType orderByType = OrderByType.None)
 		{
-			IEnumerable<Item> result = Load();
+			IEnumerable<Item> result = Cache.FindAll(Selector);
 
 			if (orderByAvailability != OrderByAvailability.None)
 			{

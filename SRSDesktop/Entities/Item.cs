@@ -15,6 +15,9 @@ namespace SRSDesktop.Entities
 		public string[] Meanings => Meaning.Split(new string[] { ", " }, StringSplitOptions.None);
 
 		[JsonIgnore]
+		public bool Learnable;
+
+		[JsonIgnore]
 		public List<Item> Related;
 	}
 }

@@ -1,4 +1,4 @@
-using SRSDesktop.Entities;
+﻿using SRSDesktop.Entities;
 using SRSDesktop.Util;
 using System;
 using System.Collections.Generic;
@@ -14,13 +14,13 @@ namespace SRSDesktop.Manager
 
 		protected override Predicate<Item> Selector => item => item.UserSpecific != null && item.UserSpecific.AvailableDate <= DateTime.Now;
 
-		public override List<Item> Get(int count = 0, OrderByAvailability options = OrderByAvailability.None, OrderByType orderByType = OrderByType.None)
+		public override List<Item> Get(int count = 0, OrderByAvailability orderByAvailability = OrderByAvailability.None, OrderByType orderByType = OrderByType.None)
 		{
-			IEnumerable<Item> result = Load();
+			IEnumerable<Item> result = Cache.FindAll(Selector);
 
-			if (options != OrderByAvailability.None)
+			if (orderByAvailability != OrderByAvailability.None)
 			{
-				switch (options)
+				switch (orderByAvailability)
 				{
 					case OrderByAvailability.Older:
 						result = result.OrderBy(item => item.UserSpecific.AvailableDate);

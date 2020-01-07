@@ -1,23 +1,25 @@
-﻿using SRSDesktop.Entities;
+﻿using NAudio.Vorbis;
+using NAudio.Wave;
+using SRSDesktop.Entities;
 using SRSDesktop.Util;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace SRSDesktop.Windows
 {
 	public partial class DetailsWindow : Window
 	{
-		private readonly Brush radicalBrush = (Brush)new BrushConverter().ConvertFrom("#FFE9F4FF");
-		private readonly Brush kanjiBrush = (Brush)new BrushConverter().ConvertFrom("#FFFF9BFF");
-		private readonly Brush vocabBrush = (Brush)new BrushConverter().ConvertFrom("#FFC79BFF");
-
-		private const int btnRelatedCount = 5;
-
 		private Item Item;
+		private bool Unlock = false;
+		private VorbisWaveReader VorbisWaveReader;
+		private WaveOutEvent WaveOutEvent;
+
+		public List<Item> ToEnqueue;
 
 
 		public DetailsWindow()
@@ -28,11 +30,8 @@ namespace SRSDesktop.Windows
 		public DetailsWindow(Item item) : this()
 		{
 			Item = item;
+			ToEnqueue = new List<Item>();
 			FillDetails();
-
-			// TODO:
-			//  sound
-			//  manually add related items
 		}
 
 
@@ -43,6 +42,9 @@ namespace SRSDesktop.Windows
 			Title = Item.Character ?? Item.Meaning;
 			tbCharacter.Text = Item.Character;
 			tbMeaning.Text = Item.Meaning;
+			lblLevel.Content = Item.Level;
+			chkLearnable.IsChecked = Item.Learnable;
+			chkLearnable.IsEnabled = Item.UserSpecific == null;
 
 			if (Item is Radical radical)
 			{
@@ -50,7 +52,7 @@ namespace SRSDesktop.Windows
 				tbReading.Visibility = Visibility.Hidden;
 				tbReadingExplanation.Visibility = Visibility.Hidden;
 				lblRelated.Margin = new Thickness(lblRelated.Margin.Left, lblRelated.Margin.Top - 145, lblRelated.Margin.Right, lblRelated.Margin.Bottom);
-				grdRelated.Margin = new Thickness(grdRelated.Margin.Left, grdRelated.Margin.Top - 145, grdRelated.Margin.Right, grdRelated.Margin.Bottom);
+				scrRelated.Margin = new Thickness(scrRelated.Margin.Left, scrRelated.Margin.Top - 145, scrRelated.Margin.Right, scrRelated.Margin.Bottom);
 				Height -= 145;
 
 				var buttons = Utils.GenerateItemButtons(radical.Related, grdRelated.Width);
@@ -79,16 +81,17 @@ namespace SRSDesktop.Windows
 				tbReading.Text = vocab.Kana;
 				tbMeaningExplanation.Text = vocab.MeaningExplanation;
 				tbReadingExplanation.Text = vocab.ReadingExplanation;
-				//string.Join(vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
 
-				/*var soundPath = Utils.Utils.GetResourcesPath() + "Sound/" + item.Character + ".ogg";
+				var soundPath = Utils.GetResourcesPath() + "Sound/" + Item.Character + ".ogg";
 				if (File.Exists(soundPath))
 				{
 					VorbisWaveReader = new VorbisWaveReader(soundPath);
 					WaveOutEvent = new WaveOutEvent();
 					WaveOutEvent.Init(VorbisWaveReader);
-					PlaySound();
-				}*/
+				}
+
+				btnSound.Visibility = Visibility.Visible;
+				tbCharacter.Width = 149;
 
 				var buttons = Utils.GenerateItemButtons(vocab.Related, grdRelated.Width);
 				buttons.ForEach(btn => grdRelated.Children.Add(btn));
@@ -96,6 +99,7 @@ namespace SRSDesktop.Windows
 
 			if (Item.UserSpecific != null)
 			{
+				btnUnlock.Visibility = Visibility.Hidden;
 				lblTime.Content = ToFormatString(Item.UserSpecific.AvailableDate - DateTime.Now);
 				lblUnlocked.Content = Item.UserSpecific.UnlockedDate;
 
@@ -107,11 +111,21 @@ namespace SRSDesktop.Windows
 					if (kvPair.Key == Item.UserSpecific.SrsNumeric) cbUserLevel.SelectedItem = kvPair;
 				}
 			}
+			else
+			{
+				lblTime.Visibility = Visibility.Hidden;
+				lblTimeText.Visibility = Visibility.Hidden;
+				lblUnlocked.Visibility = Visibility.Hidden;
+				lblUnlockedText.Visibility = Visibility.Hidden;
+				cbUserLevel.IsEnabled = false;
+				chkResetTime.IsEnabled = false;
+			}
 		}
 
 		private void BtnSaveClick(object sender, RoutedEventArgs e)
 		{
 			Item.Character = tbCharacter.Text;
+			Item.Learnable = chkLearnable.IsChecked.GetValueOrDefault();
 
 			if (Item is Radical radical)
 			{
@@ -126,7 +140,6 @@ namespace SRSDesktop.Windows
 				kanji.Kunyomi = tbKunyomiReading.Text;
 				kanji.Nanori = tbNanoriReading.Text;
 				kanji.ReadingMnemonic = tbReadingExplanation.Text;
-				//kanji.Examples
 			}
 			else if (Item is Vocab vocab)
 			{
@@ -134,7 +147,17 @@ namespace SRSDesktop.Windows
 				vocab.Kana = tbReading.Text;
 				vocab.MeaningExplanation = tbMeaningExplanation.Text;
 				vocab.ReadingExplanation = tbReadingExplanation.Text;
-				//vocab.ContextSentences
+			}
+
+			if (Unlock)
+			{
+				Item.UserSpecific = new UserSpecific();
+				Item.UserSpecific.Item = Item;
+			}
+
+			if (chkQueue.IsChecked == true)
+			{
+				ToEnqueue.Add(Item);
 			}
 
 			if (Item.UserSpecific != null && (int)cbUserLevel.SelectedValue != Item.UserSpecific.SrsNumeric)
@@ -143,6 +166,21 @@ namespace SRSDesktop.Windows
 			}
 
 			DialogResult = true;
+		}
+
+		private void BtnUnlockClick(object sender, RoutedEventArgs e)
+		{
+			Unlock = true;
+
+			btnUnlock.Visibility = Visibility.Hidden;
+			lblTime.Visibility = Visibility.Visible;
+			lblTime.Content = "Now";
+			lblTimeText.Visibility = Visibility.Visible;
+			lblUnlocked.Visibility = Visibility.Visible;
+			lblUnlocked.Content = DateTime.Now;
+			lblUnlockedText.Visibility = Visibility.Visible;
+			cbUserLevel.IsEnabled = true;
+			chkResetTime.IsEnabled = true;
 		}
 
 		private string ToFormatString(TimeSpan timeSpan)
@@ -159,6 +197,23 @@ namespace SRSDesktop.Windows
 			sb.Append($"{minutes}m");
 
 			return sb.ToString();
+		}
+
+		private void BtnSoundClick(object sender, RoutedEventArgs e)
+		{
+			if (WaveOutEvent != null)
+			{
+				WaveOutEvent.Play();
+				VorbisWaveReader.Position = 0;
+			}
+		}
+
+		private void ScrRelatedPreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+		{
+			var scrollviewer = sender as ScrollViewer;
+			if (e.Delta > 0) scrollviewer.LineLeft();
+			else scrollviewer.LineRight();
+			e.Handled = true;
 		}
 	}
 }

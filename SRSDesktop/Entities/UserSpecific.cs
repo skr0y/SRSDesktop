@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,16 @@ namespace SRSDesktop.Entities
 		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime AvailableDate { get; set; }
 
+		[JsonIgnore]
+		public Item Item { get; set; }
 
+
+		public UserSpecific()
+		{
+			Srs = SrsLevel.Apprentice;
+			SrsNumeric = 1;
+			UnlockedDate = AvailableDate = DateTime.Now;
+		}
 
 		public static Tuple<SrsLevel, TimeSpan, string> GetLevelInfo(int srsLevel)
 		{

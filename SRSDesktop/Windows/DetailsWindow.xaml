@@ -9,7 +9,7 @@
 	<Grid>
 		<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="507,10,0,0" VerticalAlignment="Top" Width="115" FontSize="18" Background="#FFCCE8CA" Click="BtnSaveClick" Height="69"/>
 		<ComboBox x:Name="cbUserLevel" HorizontalAlignment="Left" Margin="11,40,0,0" VerticalAlignment="Top" Width="180" FontSize="18"/>
-		<CheckBox x:Name="chkResetTime" Content="Reset time" HorizontalAlignment="Left" Margin="11,75,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<CheckBox x:Name="chkResetTime" Content="Reset time" HorizontalAlignment="Left" Margin="88,75,0,0" VerticalAlignment="Top" FontSize="18"/>
 		<TextBox x:Name="tbMeaning" HorizontalAlignment="Left" Height="30" Margin="10,116,0,0" TextWrapping="Wrap" Text="Meaning" VerticalAlignment="Top" Width="612" FontSize="18"/>
 		<TextBox x:Name="tbMeaningExplanation" HorizontalAlignment="Left" Height="100" Margin="10,151,0,0" TextWrapping="Wrap" Text="Meaning explanation" VerticalAlignment="Top" Width="612" FontSize="18"/>
 		<TextBox x:Name="tbCharacter" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" Text="Character" VerticalAlignment="Top" Width="181" FontSize="18"/>
@@ -18,14 +18,22 @@
 		<TextBox x:Name="tbKunyomiReading" HorizontalAlignment="Left" Height="30" Margin="298,256,0,0" TextWrapping="Wrap" Text="Kunyomi" VerticalAlignment="Top" Width="118" FontSize="18" Visibility="Hidden"/>
 		<TextBox x:Name="tbNanoriReading" HorizontalAlignment="Left" Height="30" Margin="489,256,0,0" TextWrapping="Wrap" Text="Nanori" VerticalAlignment="Top" Width="133" FontSize="18" Visibility="Hidden"/>
 		<TextBox x:Name="tbReadingExplanation" HorizontalAlignment="Left" Height="104" Margin="10,291,0,0" TextWrapping="Wrap" Text="Reading explanation" VerticalAlignment="Top" Width="612" FontSize="18"/>
-		<Label x:Name="lblTime" Content="-" HorizontalAlignment="Left" Margin="321,45,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="lblTime" Content="-" HorizontalAlignment="Left" Margin="321,40,0,0" VerticalAlignment="Top" FontSize="18"/>
 		<Label x:Name="lblRelated" Content="Related: " HorizontalAlignment="Left" Margin="10,401,0,0" VerticalAlignment="Top" FontSize="18"/>
-		<Grid x:Name="grdRelated" HorizontalAlignment="Left" Height="30" Margin="88,401,0,0" VerticalAlignment="Top" Width="529"/>
-		<Label Content="Available:" HorizontalAlignment="Left" Margin="236,45,0,0" VerticalAlignment="Top" FontSize="18"/>
-		<Label Content="Unlocked:" HorizontalAlignment="Left" Margin="232,11,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="lblTimeText" Content="Available:" HorizontalAlignment="Left" Margin="236,40,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="lblUnlockedText" Content="Unlocked:" HorizontalAlignment="Left" Margin="236,6,0,0" VerticalAlignment="Top" FontSize="18"/>
 		<Label x:Name="lblOnyomi" Content="Onyomi:" HorizontalAlignment="Left" Margin="11,251,0,0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
 		<Label x:Name="lblKunyomi" Content="Kunyomi:" HorizontalAlignment="Left" Margin="214,251,0,0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
 		<Label x:Name="lblNanori" Content="Nanori:" HorizontalAlignment="Left" Margin="421,251,0,0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
-		<Label x:Name="lblUnlocked" Content="-" HorizontalAlignment="Left" Margin="321,11,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="lblUnlocked" Content="-" HorizontalAlignment="Left" Margin="321,6,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Button x:Name="btnUnlock" Content="Unlock" HorizontalAlignment="Left" Margin="284,26,0,0" VerticalAlignment="Top" Width="76" FontSize="18" Height="35" Click="BtnUnlockClick"/>
+		<CheckBox x:Name="chkLearnable" Content="Learnable" HorizontalAlignment="Left" Margin="275,74,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Button x:Name="btnSound" Content="🔊" HorizontalAlignment="Left" Margin="164,10,0,0" VerticalAlignment="Top" Width="27" FontSize="14" Height="25" Click="BtnSoundClick" Visibility="Hidden"/>
+		<Label x:Name="lblLevelText" Content="Lvl" HorizontalAlignment="Left" Margin="11,70,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="lblLevel" Content="-" HorizontalAlignment="Left" Margin="42,70,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<CheckBox x:Name="chkQueue" Content="Add to queue" HorizontalAlignment="Left" Margin="501,84,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<ScrollViewer x:Name="scrRelated" HorizontalAlignment="Left" Height="34" Margin="88,401,0,0" VerticalAlignment="Top" Width="534" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" PreviewMouseWheel="ScrRelatedPreviewMouseWheel">
+			<Grid x:Name="grdRelated" Height="34" />
+		</ScrollViewer>
 	</Grid>
 </Window>

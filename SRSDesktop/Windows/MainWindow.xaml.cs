@@ -1,5 +1,6 @@
 ﻿using SRSDesktop.Manager;
 using System;
+using System.Linq;
 using System.Windows;
 
 namespace SRSDesktop.Windows
@@ -9,13 +10,17 @@ namespace SRSDesktop.Windows
 		public MainWindow()
 		{
 			InitializeComponent();
-			LoadData();
+			UpdateControls();
 		}
 
-		private void LoadData()
+
+		private void UpdateControls()
 		{
-			SRS.LessonManager.Update();
-			SRS.ReviewManager.Update();
+			if (sliderReviews != null)
+			{
+				sliderReviews.Maximum = SRS.ReviewManager.Count;
+				sliderReviews.Value = Math.Min(50, sliderReviews.Maximum);
+			}
 
 			if (sliderLessons != null)
 			{
@@ -23,16 +28,10 @@ namespace SRSDesktop.Windows
 				sliderLessons.Value = 20;
 			}
 
-			if (sliderReviews != null)
-			{
-				sliderReviews.Maximum = SRS.ReviewManager.Count;
-				sliderReviews.Value = Math.Min(50, sliderReviews.Maximum);
-			}
-
 			if (progressBar != null)
 			{
 				var total = SRS.LessonManager.TotalCount;
-				var learned = total - SRS.LessonManager.Count;
+				var learned = SRS.LessonManager.GetAll().Count(i => i.UserSpecific != null);
 
 				progressBar.Value = (double)learned / total * 100;
 			}
@@ -48,7 +47,8 @@ namespace SRSDesktop.Windows
 			if (reviewWindow.ShowDialog() == true)
 			{
 				SRS.ReviewManager.Save();
-				LoadData();
+				SRS.ReviewManager.Update();
+				UpdateControls();
 			}
 		}
 
@@ -60,7 +60,24 @@ namespace SRSDesktop.Windows
 			if (lessonWindow.ShowDialog() == true)
 			{
 				SRS.LessonManager.Save();
-				LoadData();
+				SRS.LessonManager.Update();
+				UpdateControls();
+			}
+		}
+
+		private void ButtonUpdateClick(object sender, RoutedEventArgs e)
+		{
+			UpdateControls();
+		}
+
+		private void ButtonDatabaseClick(object sender, RoutedEventArgs e)
+		{
+			var databaseWindow = new DatabaseWindow();
+
+			if (databaseWindow.ShowDialog() == true)
+			{
+				SRS.ReviewManager.Save();
+				UpdateControls();
 			}
 		}
 
@@ -68,6 +85,7 @@ namespace SRSDesktop.Windows
 		{
 			if (buttonReviews != null)
 			{
+				buttonReviews.IsEnabled = e.NewValue > 0;
 				buttonReviews.Content = $"Reviews ({e.NewValue})";
 			}
 		}
@@ -76,6 +94,7 @@ namespace SRSDesktop.Windows
 		{
 			if (buttonLessons != null)
 			{
+				buttonLessons.IsEnabled = e.NewValue > 0;
 				buttonLessons.Content = $"Lessons ({e.NewValue})";
 			}
 		}
@@ -112,21 +131,11 @@ namespace SRSDesktop.Windows
 			}
 		}
 
-		private void ButtonUpdateClick(object sender, RoutedEventArgs e)
-		{
-			LoadData();
-		}
-
-		private void ButtonDatabaseClick(object sender, RoutedEventArgs e)
-		{
-			var databaseWindow = new DatabaseWindow();
-
-			if (databaseWindow.ShowDialog() == true)
-			{
-				SRS.ReviewManager.Save();
-			}
-		}
-
 		#endregion
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			Application.Current.Shutdown();
+		}
 	}
 }

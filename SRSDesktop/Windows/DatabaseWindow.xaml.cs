@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using SRSDesktop.Entities;
+using SRSDesktop.Util;
 
 namespace SRSDesktop.Windows
 {
@@ -42,7 +43,7 @@ namespace SRSDesktop.Windows
 			{
 				var result = items.OrderBy(i => i.Level).ToList();
 
-				if (tbSearch.Text != "") result = result.FindAll(i => i.Meaning.Contains(tbSearch.Text));
+				if (tbSearch.Text != "") result = result.FindAll(i => i.Meaning.Contains(tbSearch.Text) || ReadingSearch(i, tbSearch.Text));
 
 				if (cbLevel.SelectedIndex > 0) result = result.FindAll(i => i.Level == ((KeyValuePair<int, string>)cbLevel.SelectedItem).Key);
 
@@ -55,6 +56,22 @@ namespace SRSDesktop.Windows
 
 				lsvDatabase.ItemsSource = result;
 			}
+		}
+
+		private bool ReadingSearch(Item item, string text)
+		{
+			var kana = text.ToHiragana();
+
+			if (item is Kanji kanji)
+			{
+				return kanji.Onyomi?.Contains(kana) == true || kanji.Kunyomi?.Contains(kana) == true || kanji.Nanori?.Contains(kana) == true;
+			}
+			else if (item is Vocab vocab)
+			{
+				return vocab.Kana.Contains(kana);
+			}
+
+			return false;
 		}
 
 		private void BtnConfirmClick(object sender, RoutedEventArgs e)

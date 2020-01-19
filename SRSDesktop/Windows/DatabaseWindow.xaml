@@ -25,15 +25,16 @@
 				<CheckBox x:Name="chkVocab" Content="Vocabs" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="ChkVocabClick"/>
 			</StackPanel>
 		</GroupBox>
-		<GroupBox Header="Status" HorizontalAlignment="Left" Height="128" Margin="627,143,0,0" VerticalAlignment="Top" Width="155" FontSize="16">
+		<GroupBox Header="Status" HorizontalAlignment="Left" Height="154" Margin="627,143,0,0" VerticalAlignment="Top" Width="155" FontSize="16">
 			<StackPanel>
 				<RadioButton x:Name="radAll" Margin="10,10,0,0" Content="All" IsChecked="True" GroupName="radStatus" Click="RadAllClick"/>
 				<RadioButton x:Name="radLearned" Margin="10,10,0,0" Content="Learned" GroupName="radStatus" Click="RadLearnedClick"/>
 				<RadioButton x:Name="radUnknown" Margin="10,10,0,0" Content="Not learned" GroupName="radStatus" Click="RadUnknownClick"/>
+				<RadioButton x:Name="radLearnable" Margin="10,10,0,0" Content="Can learn" GroupName="radStatus" Click="RadLearnableClick"/>
 			</StackPanel>
 		</GroupBox>
-		<ComboBox x:Name="cbLevel" HorizontalAlignment="Left" Margin="627,276,0,0" VerticalAlignment="Top" Width="108" FontSize="16" SelectionChanged="CbLevelSelectionChanged"/>
+		<ComboBox x:Name="cbLevel" HorizontalAlignment="Left" Margin="627,302,0,0" VerticalAlignment="Top" Width="108" FontSize="16" SelectionChanged="CbLevelSelectionChanged"/>
 		<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="627,380,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFA2D9F9" Click="BtnSaveClick" Height="27"/>
-		<Button x:Name="btnCurrLevel" Content="Curr" HorizontalAlignment="Left" Margin="740,276,0,0" VerticalAlignment="Top" Width="42" FontSize="18" Height="27" Click="BtnCurrLevelClick"/>
+		<Button x:Name="btnCurrLevel" Content="Curr" HorizontalAlignment="Left" Margin="740,302,0,0" VerticalAlignment="Top" Width="42" FontSize="18" Height="27" Click="BtnCurrLevelClick"/>
 	</Grid>
 </Window>

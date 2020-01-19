@@ -53,6 +53,7 @@ namespace SRSDesktop.Windows
 
 				if (radLearned.IsChecked == true) result = result.FindAll(i => i.UserSpecific != null);
 				else if (radUnknown.IsChecked == true) result = result.FindAll(i => i.UserSpecific == null);
+				else if (radLearnable.IsChecked == true) result = result.FindAll(i => i.Learnable);
 
 				lsvDatabase.ItemsSource = result;
 			}

@@ -151,8 +151,7 @@ namespace SRSDesktop.Windows
 
 			if (Unlock)
 			{
-				Item.UserSpecific = new UserSpecific();
-				Item.UserSpecific.Item = Item;
+				Item.UserSpecific = new UserSpecific(Item);
 			}
 
 			if (chkQueue.IsChecked == true)

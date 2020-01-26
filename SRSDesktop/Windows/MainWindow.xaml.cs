@@ -1,4 +1,4 @@
-﻿using SRSDesktop.Manager;
+using SRSDesktop.Manager;
 using System;
 using System.Linq;
 using System.Windows;
@@ -67,6 +67,7 @@ namespace SRSDesktop.Windows
 
 		private void ButtonUpdateClick(object sender, RoutedEventArgs e)
 		{
+			SRS.ReviewManager.Update();
 			UpdateControls();
 		}
 

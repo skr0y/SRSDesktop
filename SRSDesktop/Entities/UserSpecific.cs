@@ -33,11 +33,15 @@ namespace SRSDesktop.Entities
 		public Item Item { get; set; }
 
 
-		public UserSpecific()
+		public UserSpecific() { }
+
+		public UserSpecific(Item item)
 		{
-			Srs = SrsLevel.Apprentice;
+			Item = item;
+			Srs = SrsLevelInfo[0].Item1;
 			SrsNumeric = 1;
-			UnlockedDate = AvailableDate = DateTime.Now;
+			UnlockedDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+			AvailableDate = DateTime.SpecifyKind(DateTime.Now + SrsLevelInfo[0].Item2, DateTimeKind.Utc);
 		}
 
 		public static Tuple<SrsLevel, TimeSpan, string> GetLevelInfo(int srsLevel)
@@ -55,7 +59,7 @@ namespace SRSDesktop.Entities
 
 			if (updateTime)
 			{
-				AvailableDate = now + SrsLevelInfo[SrsNumeric - 1].Item2;
+				AvailableDate = DateTime.SpecifyKind(now + SrsLevelInfo[SrsNumeric - 1].Item2, DateTimeKind.Utc);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-using NAudio.Vorbis;
+﻿using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -137,7 +137,7 @@ namespace SRSDesktop.Windows
 			{
 				if (item.Key.UserSpecific == null)
 				{
-					item.Key.UserSpecific = new UserSpecific();
+					item.Key.UserSpecific = new UserSpecific(item.Key);
 					item.Key.Learnable = false;
 				}
 
@@ -283,7 +283,7 @@ namespace SRSDesktop.Windows
 				{
 					runs = GenerateRuns("Visually similar", string.Join(", ", similar.Select(k => k.Character + " - " + k.Meaning)));
 					textBlockInfo.Inlines.AddRange(runs);
-			}
+				}
 
 				runs = GenerateRuns("Vocabulary examples", string.Join(", ", kanji.Related.OfType<Vocab>().Take(3).Select(v => v.Character + " - " + v.Meanings[0])));
 				textBlockInfo.Inlines.AddRange(runs);

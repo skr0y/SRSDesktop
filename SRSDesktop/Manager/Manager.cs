@@ -1,16 +1,13 @@
-﻿using System;
+﻿using SRSDesktop.Entities;
+using SRSDesktop.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using SRSDesktop.Entities;
-using SRSDesktop.Util;
 
 namespace SRSDesktop.Manager
 {
 	public abstract class Manager
 	{
-		public const int UnlockLevel = 3;
-
 		protected const string RadicalFile = "radicals.json";
 		protected const string KanjiFile = "kanji.json";
 		protected const string VocabFile = "vocabulary.json";
@@ -21,6 +18,7 @@ namespace SRSDesktop.Manager
 		protected static List<Item> Cache { get; set; }
 
 		protected abstract Predicate<Item> Selector { get; }
+		public int UnlockLevel { get; protected set; } = 3;
 		public int UserLevel { get; protected set; }
 
 		private string ResourcesPath;
@@ -58,10 +56,8 @@ namespace SRSDesktop.Manager
 
 			foreach (var kanji in kanjis)
 			{
-				var matches = Regex.Matches(kanji.MeaningMnemonic, @"\[.*?\]").Cast<Match>().Select(m => m.Value.Trim('[', ']').ToLower()).Distinct();
-				var radical = radicals.FirstOrDefault(r => r.Character == kanji.Character);
-				kanji.Related = matches.Select(m => radicals.FirstOrDefault(r => r.Meaning == m && r.Level <= kanji.Level)).Where(m => m != null).Cast<Item>().ToList();
-				if (radical != null && !kanji.Related.Contains(radical)) kanji.Related.Insert(0, radical);
+				kanji.Related = kanji.Radicals.Select(r => radicals.First(rad => rad.Meaning == r)).Cast<Item>().ToList();
+				kanji.Related.AddRange(kanji.Similar.Select(s => kanjis.First(k => k.Character == s)));
 				kanji.Related.AddRange(vocabs.Where(v => v.Related.Contains(kanji)));
 				kanji.Learnable = kanji.UserSpecific == null && kanji.Related.OfType<Radical>().All(r => r.UserSpecific?.SrsNumeric >= UnlockLevel);
 			}
@@ -69,7 +65,8 @@ namespace SRSDesktop.Manager
 			foreach (var radical in radicals)
 			{
 				radical.Related = kanjis.Where(k => k.Related.Contains(radical)).Cast<Item>().ToList();
-				radical.Learnable = radical.UserSpecific == null && (radical.Level == 1 || result.FindAll(i => i.Level == radical.Level - 1).All(i => i.UserSpecific?.SrsNumeric >= UnlockLevel));
+				radical.Learnable = radical.UserSpecific == null && (radical.Level == 1 ||
+					result.FindAll(i => !(i is Vocab) && i.Level == radical.Level - 1).All(i => i.UserSpecific?.SrsNumeric >= UnlockLevel));
 			}
 
 			for (var i = 1; i <= 60; i++)

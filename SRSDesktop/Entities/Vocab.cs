@@ -4,6 +4,8 @@
 	{
 		public string Kana { get; set; }
 
+		public string PartOfSpeech { get; set; }
+
 		public string ReadingExplanation { get; set; }
 		public string MeaningExplanation { get; set; }
 

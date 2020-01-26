@@ -1,4 +1,4 @@
-﻿using NAudio.Vorbis;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -78,7 +79,7 @@ namespace SRSDesktop.Windows
 
 			if (CurrentItem.Character == null && CurrentItem is Radical radical)
 			{
-				var imageUrl = Utils.GetResourcesPath() + radical.Image;
+				var imageUrl = Utils.GetResourcesPath() + "Images\\" + radical.Image.Split('/').Last();
 				if (File.Exists(imageUrl))
 				{
 					var uri = new Uri(imageUrl, UriKind.Absolute);
@@ -259,7 +260,7 @@ namespace SRSDesktop.Windows
 			{
 				runs = GenerateRuns("Meaning", radical.Meaning);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Mnemonic", radical.Mnemonic);
+				runs = GenerateMeaningRuns("Mnemonic", radical.Mnemonic);
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Kanji examples", string.Join(", ", radical.Related.Take(3).Select(k => k.Character + " - " + k.Meanings[0])));
 				textBlockInfo.Inlines.AddRange(runs);
@@ -270,11 +271,21 @@ namespace SRSDesktop.Windows
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateReadingRuns("Reading", kanji);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Meaning hints", kanji.MeaningMnemonic);// + Environment.NewLine + kanji.MeaningHint);
+				runs = GenerateRuns("Radicals", string.Join(" + ", kanji.Related.OfType<Radical>().Select(r => r.Character == null ? r.Meaning : r.Character + " " + r.Meaning)));
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Reading hints", kanji.ReadingMnemonic);// + Environment.NewLine + kanji.ReadingHint);
+				runs = GenerateMeaningRuns("Meaning mnemonic", kanji.MeaningMnemonic);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Examples", string.Join(", ", kanji.Related.OfType<Vocab>().Take(3).Select(v => v.Character + " - " + v.Meanings[0])));
+				runs = GenerateMeaningRuns("Reading mnemonic", kanji.ReadingMnemonic);
+				textBlockInfo.Inlines.AddRange(runs);
+
+				var similar = kanji.Related.OfType<Kanji>();
+				if (similar.Any())
+				{
+					runs = GenerateRuns("Visually similar", string.Join(", ", similar.Select(k => k.Character + " - " + k.Meaning)));
+					textBlockInfo.Inlines.AddRange(runs);
+			}
+
+				runs = GenerateRuns("Vocabulary examples", string.Join(", ", kanji.Related.OfType<Vocab>().Take(3).Select(v => v.Character + " - " + v.Meanings[0])));
 				textBlockInfo.Inlines.AddRange(runs);
 			}
 			else if (item is Vocab vocab)
@@ -283,9 +294,11 @@ namespace SRSDesktop.Windows
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Reading", vocab.Kana);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Meaning explanation", vocab.MeaningExplanation);
+				runs = GenerateRuns("Part of speech", vocab.PartOfSpeech);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Reading explanation", vocab.ReadingExplanation);
+				runs = GenerateMeaningRuns("Meaning explanation", vocab.MeaningExplanation);
+				textBlockInfo.Inlines.AddRange(runs);
+				runs = GenerateMeaningRuns("Reading explanation", vocab.ReadingExplanation);
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateRuns("Context sentences", string.Join(Environment.NewLine + Environment.NewLine, vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
 				textBlockInfo.Inlines.AddRange(runs);
@@ -436,6 +449,43 @@ namespace SRSDesktop.Windows
 			}
 
 			if (kanji.Nanori != null) result.Add(new Run { Text = $"Nanori: {kanji.Nanori}", Foreground = Brushes.DarkGray });
+
+			result.Add(new Run(Environment.NewLine + Environment.NewLine));
+
+			return result;
+		}
+
+		private List<Run> GenerateMeaningRuns(string label, string text)
+		{
+			var result = new List<Run>();
+
+			result.Add(new Run() { Text = label + Environment.NewLine, Foreground = Brushes.Gray });
+
+			var split = Regex.Split(text, @"(\[[^\[\]]+\])").Where(s => !string.IsNullOrEmpty(s));
+			foreach (var s in split)
+			{
+				if (s.StartsWith("["))
+				{
+					var res = s.Trim('[', ']');
+					var fgBrush = (Brush)Brushes.White;
+					var bgBrush = (Brush)Brushes.Gray;
+					if (s[2] == ':')
+					{
+						res = res.Substring(2);
+						switch (s[1])
+						{
+							case 'r': bgBrush = radicalBrush; fgBrush = Brushes.Gray; break;
+							case 'k': bgBrush = kanjiBrush; break;
+							case 'v': bgBrush = vocabBrush; break;
+						}
+					}
+					result.Add(new Run() { Text = res, Foreground = fgBrush, Background = bgBrush });
+				}
+				else
+				{
+					result.Add(new Run(s));
+				}
+			}
 
 			result.Add(new Run(Environment.NewLine + Environment.NewLine));
 

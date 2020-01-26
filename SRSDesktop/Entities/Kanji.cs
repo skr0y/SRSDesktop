@@ -9,9 +9,9 @@
 		public ReadingType ImportantReading { get; set; }
 
 		public string ReadingMnemonic { get; set; }
-		public string ReadingHint { get; set; }
-
 		public string MeaningMnemonic { get; set; }
-		public string MeaningHint { get; set; }
+
+		public string[] Radicals { get; set; }
+		public string[] Similar { get; set; }
 	}
 }

@@ -35,5 +35,6 @@
 		<ScrollViewer x:Name="scrRelated" HorizontalAlignment="Left" Height="34" Margin="88,401,0,0" VerticalAlignment="Top" Width="534" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" PreviewMouseWheel="ScrRelatedPreviewMouseWheel">
 			<Grid x:Name="grdRelated" Height="34" />
 		</ScrollViewer>
+		<Button x:Name="btnNow" Content="Now" HorizontalAlignment="Left" Margin="285,72,0,0" VerticalAlignment="Top" Width="75" FontSize="18" Click="BtnNowClick"/>
 	</Grid>
 </Window>

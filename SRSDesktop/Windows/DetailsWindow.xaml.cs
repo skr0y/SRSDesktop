@@ -16,6 +16,7 @@ namespace SRSDesktop.Windows
 	{
 		private Item Item;
 		private bool Unlock = false;
+		private bool AvailableNow = false;
 		private VorbisWaveReader VorbisWaveReader;
 		private WaveOutEvent WaveOutEvent;
 
@@ -44,7 +45,6 @@ namespace SRSDesktop.Windows
 			tbMeaning.Text = Item.Meaning;
 			lblLevel.Content = Item.Level;
 			chkLearnable.IsChecked = Item.Learnable;
-			chkLearnable.IsEnabled = Item.UserSpecific == null;
 
 			if (Item is Radical radical)
 			{
@@ -82,12 +82,16 @@ namespace SRSDesktop.Windows
 				tbMeaningExplanation.Text = vocab.MeaningExplanation;
 				tbReadingExplanation.Text = vocab.ReadingExplanation;
 
-				var soundPath = Utils.GetResourcesPath() + "Sound/" + Item.Character + ".ogg";
+				var soundPath = Utils.GetResourcesPath() + "Sound/" + Item.Character + "_2.ogg";
 				if (File.Exists(soundPath))
 				{
 					VorbisWaveReader = new VorbisWaveReader(soundPath);
 					WaveOutEvent = new WaveOutEvent();
 					WaveOutEvent.Init(VorbisWaveReader);
+				}
+				else
+				{
+					btnSound.IsEnabled = false;
 				}
 
 				btnSound.Visibility = Visibility.Visible;
@@ -102,6 +106,8 @@ namespace SRSDesktop.Windows
 				btnUnlock.Visibility = Visibility.Hidden;
 				lblTime.Content = ToFormatString(Item.UserSpecific.AvailableDate - DateTime.Now);
 				lblUnlocked.Content = Item.UserSpecific.UnlockedDate;
+				chkLearnable.Visibility = Visibility.Hidden;
+				if ((string)lblTime.Content == "Now") btnNow.Visibility = Visibility.Hidden;
 
 				cbUserLevel.SelectedValuePath = "Key";
 				cbUserLevel.DisplayMemberPath = "Value";
@@ -117,6 +123,7 @@ namespace SRSDesktop.Windows
 				lblTimeText.Visibility = Visibility.Hidden;
 				lblUnlocked.Visibility = Visibility.Hidden;
 				lblUnlockedText.Visibility = Visibility.Hidden;
+				btnNow.Visibility = Visibility.Hidden;
 				cbUserLevel.IsEnabled = false;
 				chkResetTime.IsEnabled = false;
 			}
@@ -149,19 +156,24 @@ namespace SRSDesktop.Windows
 				vocab.ReadingExplanation = tbReadingExplanation.Text;
 			}
 
+			if (Item.UserSpecific != null && (int)cbUserLevel.SelectedValue != Item.UserSpecific.SrsNumeric)
+			{
+				Item.UserSpecific.AddProgress((int)cbUserLevel.SelectedValue - Item.UserSpecific.SrsNumeric, chkResetTime.IsChecked.GetValueOrDefault());
+			}
+
 			if (Unlock)
 			{
 				Item.UserSpecific = new UserSpecific(Item);
 			}
 
+			if (AvailableNow)
+			{
+				Item.UserSpecific.MakeAvailable();
+			}
+
 			if (chkQueue.IsChecked == true)
 			{
 				ToEnqueue.Add(Item);
-			}
-
-			if (Item.UserSpecific != null && (int)cbUserLevel.SelectedValue != Item.UserSpecific.SrsNumeric)
-			{
-				Item.UserSpecific.AddProgress((int)cbUserLevel.SelectedValue - Item.UserSpecific.SrsNumeric, chkResetTime.IsChecked.GetValueOrDefault());
 			}
 
 			DialogResult = true;
@@ -213,6 +225,14 @@ namespace SRSDesktop.Windows
 			if (e.Delta > 0) scrollviewer.LineLeft();
 			else scrollviewer.LineRight();
 			e.Handled = true;
+		}
+
+		private void BtnNowClick(object sender, RoutedEventArgs e)
+		{
+			AvailableNow = true;
+
+			lblTime.Content = "Now";
+			btnNow.IsEnabled = false;
 		}
 	}
 }

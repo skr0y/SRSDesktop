@@ -62,5 +62,10 @@ namespace SRSDesktop.Entities
 				AvailableDate = DateTime.SpecifyKind(now + SrsLevelInfo[SrsNumeric - 1].Item2, DateTimeKind.Utc);
 			}
 		}
+
+		public void MakeAvailable()
+		{
+			AvailableDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+		}
 	}
 }

@@ -74,27 +74,9 @@ namespace SRSDesktop.Windows
 			ClearInputControls();
 			DisableAnswerControls();
 			ClearAnswerTextBlocks();
+			SetItemCharacter();
 			SetItemBackgroundColor();
 			SetItemLvlInfo();
-
-			if (CurrentItem.Character == null && CurrentItem is Radical radical)
-			{
-				var imageUrl = Utils.GetResourcesPath() + "Images\\" + radical.Image.Split('/').Last();
-				if (File.Exists(imageUrl))
-				{
-					var uri = new Uri(imageUrl, UriKind.Absolute);
-					imageCharacter.Source = new BitmapImage(uri);
-				}
-				else
-				{
-					MessageBox.Show(radical.Image + " has no image");
-				}
-			}
-			else
-			{
-				textBlockCharacter.Text = CurrentItem.Character;
-				textBlockCharacter.FontSize = 150 / CurrentItem.Character.Length;
-			}
 
 			if (Mode != ItemsWindowMode.Review)
 			{
@@ -303,7 +285,7 @@ namespace SRSDesktop.Windows
 				runs = GenerateRuns("Context sentences", string.Join(Environment.NewLine + Environment.NewLine, vocab.ContextSentences.Select(cs => cs.Japanese + Environment.NewLine + cs.English)));
 				textBlockInfo.Inlines.AddRange(runs);
 
-				var soundPath = Utils.GetResourcesPath() + "Sound/" + item.Character + ".ogg";
+				var soundPath = Utils.GetResourcesPath() + "Sound/" + item.Character + "_2.ogg";
 				if (File.Exists(soundPath))
 				{
 					VorbisWaveReader = new VorbisWaveReader(soundPath);
@@ -311,6 +293,29 @@ namespace SRSDesktop.Windows
 					WaveOutEvent.Init(VorbisWaveReader);
 					PlaySound();
 				}
+			}
+		}
+
+		private void SetItemCharacter()
+		{
+			if (CurrentItem.Character == null && CurrentItem is Radical radical)
+			{
+				var imageUrl = Utils.GetResourcesPath() + "Images\\" + radical.Image.Split('/').Last();
+				if (File.Exists(imageUrl))
+				{
+					var bitmap = new System.Drawing.Bitmap(imageUrl);
+					Utils.InvertColors(bitmap);
+					imageCharacter.Source = Utils.ToBitmapImage(bitmap);
+				}
+				else
+				{
+					MessageBox.Show(radical.Image + " not found");
+				}
+			}
+			else
+			{
+				textBlockCharacter.Text = CurrentItem.Character;
+				textBlockCharacter.FontSize = 150 / CurrentItem.Character.Length;
 			}
 		}
 
@@ -434,21 +439,21 @@ namespace SRSDesktop.Windows
 
 			result.Add(new Run() { Text = label + Environment.NewLine, Foreground = Brushes.Gray });
 
-			if (kanji.Onyomi != null)
+			if (!string.IsNullOrEmpty(kanji.Onyomi))
 			{
 				var run = new Run($"Onyomi: {kanji.Onyomi}  ");
 				if (kanji.ImportantReading != ReadingType.Onyomi) run.Foreground = Brushes.DarkGray;
 				result.Add(run);
 			}
 
-			if (kanji.Kunyomi != null)
+			if (!string.IsNullOrEmpty(kanji.Kunyomi))
 			{
 				var run = new Run($"Kunyomi: {kanji.Kunyomi}  ");
 				if (kanji.ImportantReading != ReadingType.Kunyomi) run.Foreground = Brushes.DarkGray;
 				result.Add(run);
 			}
 
-			if (kanji.Nanori != null) result.Add(new Run { Text = $"Nanori: {kanji.Nanori}", Foreground = Brushes.DarkGray });
+			if (!string.IsNullOrEmpty(kanji.Nanori)) result.Add(new Run { Text = $"Nanori: {kanji.Nanori}", Foreground = Brushes.DarkGray });
 
 			result.Add(new Run(Environment.NewLine + Environment.NewLine));
 

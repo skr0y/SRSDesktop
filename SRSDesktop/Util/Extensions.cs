@@ -206,7 +206,6 @@ namespace SRSDesktop.Util
 			}
 
 			return result;
-
 		}
 	}
 }

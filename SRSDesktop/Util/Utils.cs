@@ -2,10 +2,14 @@
 using SRSDesktop.Windows;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SRSDesktop.Util
 {
@@ -25,9 +29,9 @@ namespace SRSDesktop.Util
 		{
 			var result = new List<Button>();
 
-			var radicalBrush = (Brush)new BrushConverter().ConvertFrom("#FFE9F4FF");
-			var kanjiBrush = (Brush)new BrushConverter().ConvertFrom("#FFFF9BFF");
-			var vocabBrush = (Brush)new BrushConverter().ConvertFrom("#FFC79BFF");
+			var radicalBrush = (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#FFE9F4FF");
+			var kanjiBrush = (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#FFFF9BFF");
+			var vocabBrush = (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#FFC79BFF");
 
 			var marginX = 0;
 			
@@ -53,6 +57,44 @@ namespace SRSDesktop.Util
 			}
 
 			return result;
+		}
+
+		public static void InvertColors(Bitmap bitmap)
+		{
+			var bitmapRead = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+			var bitmapLength = bitmapRead.Stride * bitmapRead.Height;
+			var bitmapBGRA = new byte[bitmapLength];
+			Marshal.Copy(bitmapRead.Scan0, bitmapBGRA, 0, bitmapLength);
+			bitmap.UnlockBits(bitmapRead);
+
+			for (int i = 0; i < bitmapLength; i += 4)
+			{
+				bitmapBGRA[i] = (byte)(255 - bitmapBGRA[i]);
+				bitmapBGRA[i + 1] = (byte)(255 - bitmapBGRA[i + 1]);
+				bitmapBGRA[i + 2] = (byte)(255 - bitmapBGRA[i + 2]);
+			}
+
+			var bitmapWrite = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+			Marshal.Copy(bitmapBGRA, 0, bitmapWrite.Scan0, bitmapLength);
+			bitmap.UnlockBits(bitmapWrite);
+		}
+
+		public static BitmapImage ToBitmapImage(Bitmap bitmap)
+		{
+			using (var memory = new MemoryStream())
+			{
+				bitmap.Save(memory, ImageFormat.Png);
+				memory.Position = 0;
+
+				var bitmapImage = new BitmapImage();
+				bitmapImage.BeginInit();
+				bitmapImage.StreamSource = memory;
+				bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+				bitmapImage.EndInit();
+				bitmapImage.Freeze();
+
+				return bitmapImage;
+			}
 		}
 	}
 }

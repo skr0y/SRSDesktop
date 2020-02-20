@@ -8,7 +8,7 @@
 		x:Class="SRSDesktop.Windows.MainWindow"
         mc:Ignorable="d"
         Title="SRS" 
-		Height="500" Width="360" Left="500" Top="300"
+		Height="510" Width="358" Left="500" Top="300"
 		ResizeMode="CanMinimize" Icon="/SRSDesktop;component/Resources/icon.png" Closed="Window_Closed">
 	<Window.Resources>
 		<ObjectDataProvider x:Key="orderByAvailability" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
@@ -23,12 +23,12 @@
 		</ObjectDataProvider>
 	</Window.Resources>
 	<Grid>
-		<Button x:Name="buttonReviews" Content="Reviews" Margin="76,37,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="18" Click="ReviewsButtonClick"/>
+		<Button x:Name="buttonReviews" Content="Reviews (10)" Margin="76,37,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="18" Click="ReviewsButtonClick"/>
 		<Slider x:Name="sliderReviews" HorizontalAlignment="Left" Margin="96,109,0,0" VerticalAlignment="Top" Width="160" AutoToolTipPlacement="TopLeft" Value="10" ValueChanged="SliderReviewsValueChanged" SmallChange="1" LargeChange="10" IsSnapToTickEnabled="True" ScrollViewer.HorizontalScrollBarVisibility="Visible"/>
 		<Slider x:Name="sliderLessons" HorizontalAlignment="Left" Margin="96,238,0,0" VerticalAlignment="Top" Width="160" Value="10" ValueChanged="SliderLessonsValueChanged" SmallChange="1" LargeChange="10" IsSnapToTickEnabled="True"/>
-		<Button x:Name="buttonLessons" Content="Lessons" Margin="76,166,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="18" Click="LessonsButtonClick"/>
-		<Button x:Name="buttonStats" Content="Statistics" HorizontalAlignment="Left" Margin="182,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
-		<Button x:Name="buttonDatabase" Content="Database" HorizontalAlignment="Left" Margin="10,318,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18" Click="ButtonDatabaseClick"/>
+		<Button x:Name="buttonLessons" Content="Lessons (10)" Margin="76,166,66,0" VerticalAlignment="Top" Width="200" Height="40" FontSize="18" Click="LessonsButtonClick"/>
+		<Button x:Name="buttonStats" Content="Statistics" HorizontalAlignment="Left" Margin="182,299,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18"/>
+		<Button x:Name="buttonDatabase" Content="Database" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top" Width="150" Height="40" FontSize="18" Click="ButtonDatabaseClick"/>
 		<ComboBox x:Name="comboReviewsAvailability" HorizontalAlignment="Left" Margin="77,82,0,0" VerticalAlignment="Top" Width="95" 
 			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="3"/>
 		<ComboBox x:Name="comboReviewsType" HorizontalAlignment="Left" Margin="182,82,0,0" VerticalAlignment="Top" Width="95" 
@@ -37,11 +37,15 @@
 			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="0"/>
 		<ComboBox x:Name="comboLessonsType" HorizontalAlignment="Left" Margin="182,211,0,0" VerticalAlignment="Top" Width="95"
 			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="0"/>
-		<ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="10" Margin="10,406,0,0" VerticalAlignment="Top" Width="322"/>
+		<ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="10" Margin="10,451,0,0" VerticalAlignment="Top" Width="322"/>
 		<Button x:Name="buttonDecReviewsSlider" Content="-" HorizontalAlignment="Left" Margin="71,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonDecReviewsSliderClick"/>
 		<Button x:Name="buttonIncReviewsSlider" Content="+" HorizontalAlignment="Left" Margin="261,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonIncReviewsSliderClick"/>
 		<Button x:Name="buttonDecLessonsSlider" Content="-" HorizontalAlignment="Left" Margin="71,238,0,0" VerticalAlignment="Top" Width="20" Click="ButtonDecLessonsSliderClick"/>
 		<Button x:Name="buttonIncLessonsSlider" Content="+" HorizontalAlignment="Left" Margin="261,238,0,0" VerticalAlignment="Top" Width="20" Click="ButtonIncLessonsSliderClick"/>
 		<Button x:Name="buttonUpdate" Content="Q" HorizontalAlignment="Left" Margin="302,10,0,0" VerticalAlignment="Top" Width="30" Height="30" FontFamily="Wingdings 3" FontSize="20" Click="ButtonUpdateClick"/>
+		<ProgressBar x:Name="progressBarRadicals" HorizontalAlignment="Left" Height="10" Margin="10,389,0,0" VerticalAlignment="Top" Width="322" Foreground="#FFE9F4FF"/>
+		<ProgressBar x:Name="progressBarKanji" HorizontalAlignment="Left" Height="10" Margin="10,404,0,0" VerticalAlignment="Top" Width="322" Foreground="#FFFF9BFF"/>
+		<ProgressBar x:Name="progressBarVocabs" HorizontalAlignment="Left" Height="10" Margin="10,419,0,0" VerticalAlignment="Top" Width="322" Foreground="#FFC79BFF"/>
+		<Label x:Name="labelLevel" Content="Level 1" HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" FontSize="18"/>
 	</Grid>
 </Window>

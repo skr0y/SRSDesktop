@@ -1,3 +1,4 @@
+﻿using SRSDesktop.Entities;
 using SRSDesktop.Manager;
 using System;
 using System.Linq;
@@ -19,21 +20,45 @@ namespace SRSDesktop.Windows
 			if (sliderReviews != null)
 			{
 				sliderReviews.Maximum = SRS.ReviewManager.Count;
-				sliderReviews.Value = Math.Min(50, sliderReviews.Maximum);
+				sliderReviews.Value = 10;
 			}
 
 			if (sliderLessons != null)
 			{
 				sliderLessons.Maximum = SRS.LessonManager.Count;
-				sliderLessons.Value = 20;
+				sliderLessons.Value = 10;
+			}
+
+			if (labelLevel != null)
+			{
+				labelLevel.Content = $"Level {SRS.LessonManager.UserLevel}";
+			}
+
+			if (progressBarRadicals != null)
+			{
+				var radicals = SRS.LessonManager.GetAll().OfType<Radical>().Where(r => r.Level == SRS.LessonManager.UserLevel);
+				progressBarRadicals.Maximum = radicals.Count();
+				progressBarRadicals.Value = radicals.Count(r => r.UserSpecific?.SrsNumeric > SRS.LessonManager.UnlockLevel);
+			}
+
+			if (progressBarKanji != null)
+			{
+				var kanji = SRS.LessonManager.GetAll().OfType<Kanji>().Where(k => k.Level == SRS.LessonManager.UserLevel);
+				progressBarKanji.Maximum = kanji.Count();
+				progressBarKanji.Value = kanji.Count(r => r.UserSpecific?.SrsNumeric > SRS.LessonManager.UnlockLevel);
+			}
+
+			if (progressBarVocabs != null)
+			{
+				var vocabs = SRS.LessonManager.GetAll().OfType<Vocab>().Where(v => v.Level == SRS.LessonManager.UserLevel);
+				progressBarVocabs.Maximum = vocabs.Count();
+				progressBarVocabs.Value = vocabs.Count(r => r.UserSpecific?.SrsNumeric > SRS.LessonManager.UnlockLevel);
 			}
 
 			if (progressBar != null)
 			{
-				var total = SRS.LessonManager.TotalCount;
-				var learned = SRS.LessonManager.GetAll().Count(i => i.UserSpecific != null);
-
-				progressBar.Value = (double)learned / total * 100;
+				progressBar.Maximum = SRS.LessonManager.TotalCount;
+				progressBar.Value = SRS.LessonManager.GetAll().Count(i => i.UserSpecific != null);
 			}
 		}
 

@@ -16,7 +16,6 @@
 				</GridView>
 			</ListView.View>
 		</ListView>
-		<Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" Margin="627,412,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFAEF9A2" Click="BtnConfirmClick" Height="27"/>
 		<TextBox x:Name="tbSearch" HorizontalAlignment="Left" Height="27" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="612" FontSize="16" TextChanged="TextBoxTextChanged"/>
 		<GroupBox Header="Type" HorizontalAlignment="Left" Height="128" Margin="627,10,0,0" VerticalAlignment="Top" Width="155" FontSize="16">
 			<StackPanel>
@@ -25,16 +24,16 @@
 				<CheckBox x:Name="chkVocab" Content="Vocabs" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="ChkVocabClick"/>
 			</StackPanel>
 		</GroupBox>
-		<GroupBox Header="Status" HorizontalAlignment="Left" Height="154" Margin="627,143,0,0" VerticalAlignment="Top" Width="155" FontSize="16">
-			<StackPanel>
-				<RadioButton x:Name="radAll" Margin="10,10,0,0" Content="All" IsChecked="True" GroupName="radStatus" Click="RadAllClick"/>
-				<RadioButton x:Name="radLearned" Margin="10,10,0,0" Content="Learned" GroupName="radStatus" Click="RadLearnedClick"/>
-				<RadioButton x:Name="radUnknown" Margin="10,10,0,0" Content="Not learned" GroupName="radStatus" Click="RadUnknownClick"/>
-				<RadioButton x:Name="radLearnable" Margin="10,10,0,0" Content="Can learn" GroupName="radStatus" Click="RadLearnableClick"/>
-			</StackPanel>
-		</GroupBox>
-		<ComboBox x:Name="cbLevel" HorizontalAlignment="Left" Margin="627,302,0,0" VerticalAlignment="Top" Width="108" FontSize="16" SelectionChanged="CbLevelSelectionChanged"/>
+		<CheckBox x:Name="chkLearnable" Content="Learnable" HorizontalAlignment="Left" Margin="627,143,0,0" VerticalAlignment="Top" FontSize="16" Checked="ChkLearnableChecked"/>
+		<ComboBox x:Name="cbLevel" HorizontalAlignment="Left" Margin="627,168,0,0" VerticalAlignment="Top" Width="108" FontSize="16" SelectionChanged="CbLevelSelectionChanged" SelectedIndex="0"/>
+		<Button x:Name="btnCurrLevel" Content="Curr" HorizontalAlignment="Left" Margin="740,168,0,0" VerticalAlignment="Top" Width="42" FontSize="16" Height="27" Click="BtnCurrLevelClick"/>
+		<Button x:Name="btnReset" Content="Reset" HorizontalAlignment="Left" Margin="627,348,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFF0B9B9" Click="BtnResetClick" Height="27"/>
 		<Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="627,380,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFA2D9F9" Click="BtnSaveClick" Height="27"/>
-		<Button x:Name="btnCurrLevel" Content="Curr" HorizontalAlignment="Left" Margin="740,302,0,0" VerticalAlignment="Top" Width="42" FontSize="18" Height="27" Click="BtnCurrLevelClick"/>
+		<Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" Margin="627,412,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFAEF9A2" Click="BtnConfirmClick" Height="27"/>
+		<Label x:Name="lblUserLevel" Content="User level:" HorizontalAlignment="Left" Margin="627,200,0,0" VerticalAlignment="Top" FontSize="16"/>
+		<Label x:Name="lblUserLevelValue" Content="0-9" HorizontalAlignment="Left" Margin="709,200,0,0" VerticalAlignment="Top" FontSize="16" Width="59"/>
+		<Slider x:Name="sldMinUserLvl" HorizontalAlignment="Left" Margin="627,236,0,0" VerticalAlignment="Top" Width="155" Maximum="9" SmallChange="1" ValueChanged="SldMinUserLvlValueChanged" IsSnapToTickEnabled="True"/>
+		<Slider x:Name="sldMaxUserLvl" HorizontalAlignment="Left" Margin="627,259,0,0" VerticalAlignment="Top" Width="155" Maximum="9" SmallChange="1" Value="9" ValueChanged="SldMaxUserLvlValueChanged" IsSnapToTickEnabled="True"/>
+		<Button x:Name="btnBelowUnlock" HorizontalAlignment="Left" Margin="627,282,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Content="Below unlock level" Click="BtnBelowUnlockClick"/>
 	</Grid>
 </Window>

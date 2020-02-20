@@ -1,11 +1,10 @@
-﻿using System;
+using SRSDesktop.Entities;
+using SRSDesktop.Util;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using SRSDesktop.Entities;
-using SRSDesktop.Util;
 
 namespace SRSDesktop.Windows
 {
@@ -27,7 +26,9 @@ namespace SRSDesktop.Windows
 
 			cbLevel.SelectedValuePath = "Key";
 			cbLevel.DisplayMemberPath = "Value";
-			cbLevel.ItemsSource = Enumerable.Range(0, 60).ToDictionary(k => k, v => v == 0 ? "All" : $"Level {v}"); ;
+			cbLevel.ItemsSource = Enumerable.Range(0, 60).ToDictionary(k => k, v => v == 0 ? "All" : $"Level {v}");
+
+			tbSearch.Focus();
 		}
 
 
@@ -47,13 +48,14 @@ namespace SRSDesktop.Windows
 
 				if (cbLevel.SelectedIndex > 0) result = result.FindAll(i => i.Level == ((KeyValuePair<int, string>)cbLevel.SelectedItem).Key);
 
+				if (chkLearnable.IsChecked == true) result = result.FindAll(i => i.Learnable);
+
 				if (chkRadicals.IsChecked == false) result = result.FindAll(i => !(i is Radical));
 				if (chkKanji.IsChecked == false) result = result.FindAll(i => !(i is Kanji));
 				if (chkVocab.IsChecked == false) result = result.FindAll(i => !(i is Vocab));
 
-				if (radLearned.IsChecked == true) result = result.FindAll(i => i.UserSpecific != null);
-				else if (radUnknown.IsChecked == true) result = result.FindAll(i => i.UserSpecific == null);
-				else if (radLearnable.IsChecked == true) result = result.FindAll(i => i.Learnable);
+				result = result.FindAll(i => (i.UserSpecific == null && sldMinUserLvl.Value == 0) || 
+					(i.UserSpecific?.SrsNumeric >= sldMinUserLvl.Value && i.UserSpecific?.SrsNumeric <= sldMaxUserLvl.Value));
 
 				lsvDatabase.ItemsSource = result;
 			}
@@ -100,15 +102,50 @@ namespace SRSDesktop.Windows
 			}
 		}
 
+		private void BtnCurrLevelClick(object sender, RoutedEventArgs e)
+		{
+			cbLevel.SelectedIndex = SRS.LessonManager.UserLevel;
+		}
+
 		private void BtnSaveClick(object sender, RoutedEventArgs e)
 		{
 			SRS.ReviewManager.Save();
 			Update();
 		}
 
-		private void BtnCurrLevelClick(object sender, RoutedEventArgs e)
+		private void BtnResetClick(object sender, RoutedEventArgs e)
 		{
-			cbLevel.SelectedIndex = SRS.LessonManager.UserLevel;
+			tbSearch.Text = "";
+			chkRadicals.IsChecked = true;
+			chkKanji.IsChecked = true;
+			chkVocab.IsChecked = true;
+			cbLevel.SelectedIndex = 0;
+		}
+
+		private void SldMinUserLvlValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			if (sldMinUserLvl != null && sldMaxUserLvl != null)
+			{
+				sldMaxUserLvl.Minimum = sldMinUserLvl.Value;
+				lblUserLevelValue.Content = $"{sldMinUserLvl.Value}-{sldMaxUserLvl.Value}";
+				Filter();
+			}
+		}
+
+		private void SldMaxUserLvlValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			if (sldMinUserLvl != null && sldMaxUserLvl != null)
+			{
+				sldMinUserLvl.Maximum = sldMaxUserLvl.Value;
+				lblUserLevelValue.Content = $"{sldMinUserLvl.Value}-{sldMaxUserLvl.Value}";
+				Filter();
+			}
+		}
+
+		private void BtnBelowUnlockClick(object sender, RoutedEventArgs e)
+		{
+			sldMinUserLvl.Value = 1;
+			sldMaxUserLvl.Value = SRS.LessonManager.UnlockLevel;
 		}
 
 		private void TextBoxTextChanged(object sender, TextChangedEventArgs e) => Filter();
@@ -119,12 +156,10 @@ namespace SRSDesktop.Windows
 
 		private void ChkVocabClick(object sender, RoutedEventArgs e) => Filter();
 
-		private void RadAllClick(object sender, RoutedEventArgs e) => Filter();
-
-		private void RadLearnedClick(object sender, RoutedEventArgs e) => Filter();
-
-		private void RadUnknownClick(object sender, RoutedEventArgs e) => Filter();
-
 		private void CbLevelSelectionChanged(object sender, SelectionChangedEventArgs e) => Filter();
+
+		private void CbStatusSelectionChanged(object sender, SelectionChangedEventArgs e) => Filter();
+
+		private void ChkLearnableChecked(object sender, RoutedEventArgs e) => Filter();
 	}
 }

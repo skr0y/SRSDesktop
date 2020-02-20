@@ -8,6 +8,9 @@ namespace SRSDesktop.Entities
 	public class UserSpecific
 	{
 		[JsonIgnore]
+		private const int randomizationPercent = 10;
+
+		[JsonIgnore]
 		private static List<Tuple<SrsLevel, TimeSpan, string>> SrsLevelInfo = new List<Tuple<SrsLevel, TimeSpan, string>>()
 		{
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Apprentice, new TimeSpan(4, 0, 0), "4h"),
@@ -20,6 +23,8 @@ namespace SRSDesktop.Entities
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Enlighten, new TimeSpan(89, 23, 0, 0), "3m"),
 			new Tuple<SrsLevel, TimeSpan, string>(SrsLevel.Burned, new TimeSpan(179, 23, 0, 0), "6m")
 		};
+		[JsonIgnore]
+		private static Random Random = new Random();
 
 		public SrsLevel Srs { get; set; }
 		public int SrsNumeric { get; set; }
@@ -59,7 +64,8 @@ namespace SRSDesktop.Entities
 
 			if (updateTime)
 			{
-				AvailableDate = DateTime.SpecifyKind(now + SrsLevelInfo[SrsNumeric - 1].Item2, DateTimeKind.Utc);
+				var time = new TimeSpan(SrsLevelInfo[SrsNumeric - 1].Item2.Ticks / 100 * (100 + Random.Next(-randomizationPercent, randomizationPercent)));
+				AvailableDate = DateTime.SpecifyKind(now + time, DateTimeKind.Utc);
 			}
 		}
 

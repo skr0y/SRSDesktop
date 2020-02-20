@@ -1,4 +1,4 @@
-﻿using NAudio.Vorbis;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace SRSDesktop.Windows
 {
@@ -154,12 +153,14 @@ namespace SRSDesktop.Windows
 		{
 			buttonAnswer.IsEnabled = true;
 			buttonPrev.IsEnabled = CurrentIndex > 0;
+			buttonSkip.IsEnabled = CurrentIndex < Items.Count - 1;
 		}
 
 		private void DisableInputControls()
 		{
 			buttonAnswer.IsEnabled = false;
 			buttonPrev.IsEnabled = CurrentIndex > 0;
+			buttonSkip.IsEnabled = CurrentIndex < Items.Count - 1;
 		}
 
 		private void EnableAnswerControls()

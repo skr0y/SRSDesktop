@@ -1,4 +1,4 @@
-﻿using NAudio.Vorbis;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -105,6 +105,7 @@ namespace SRSDesktop.Windows
 			{
 				btnUnlock.Visibility = Visibility.Hidden;
 				lblTime.Content = ToFormatString(Item.UserSpecific.AvailableDate - DateTime.Now);
+				lblTime.ToolTip = Item.UserSpecific.AvailableDate;
 				lblUnlocked.Content = Item.UserSpecific.UnlockedDate;
 				chkLearnable.Visibility = Visibility.Hidden;
 				if ((string)lblTime.Content == "Now") btnNow.Visibility = Visibility.Hidden;

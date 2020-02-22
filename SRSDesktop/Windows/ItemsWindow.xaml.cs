@@ -1,4 +1,4 @@
-using NAudio.Vorbis;
+﻿using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -66,7 +66,7 @@ namespace SRSDesktop.Windows
 		{
 			if (CurrentIndex >= Items.Count)
 			{
-				Close();
+				End();
 				return;
 			}
 
@@ -113,7 +113,7 @@ namespace SRSDesktop.Windows
 			}
 			else
 			{
-			CurrentIndex++;
+				CurrentIndex++;
 			}
 
 			WaitForInput();
@@ -124,8 +124,33 @@ namespace SRSDesktop.Windows
 			DisplayAnswer();
 		}
 
-		private void Finish()
+		private void End()
 		{
+			if (LevelChange.Count > 0)
+			{
+				if (!Finish()) return;
+				Summary();
+				DialogResult = true;
+			}
+			else
+			{
+				DialogResult = false;
+			}
+		}
+
+		private bool Finish()
+		{
+			if (Mode == ItemsWindowMode.Lesson)
+			{
+				Mode = ItemsWindowMode.Review;
+				Items = LevelChange.Keys.ToList();
+				LevelChange = new Dictionary<Item, int>();
+				CurrentIndex = 0;
+				WaitForInput();
+
+				return false;
+			}
+
 			foreach (var item in LevelChange)
 			{
 				if (item.Key.UserSpecific == null)
@@ -136,6 +161,8 @@ namespace SRSDesktop.Windows
 
 				item.Key.UserSpecific.AddProgress(item.Value);
 			}
+
+			return true;
 		}
 
 		private void Summary()
@@ -180,6 +207,14 @@ namespace SRSDesktop.Windows
 			if (Mode != ItemsWindowMode.Review) return;
 
 			buttonDetails.IsEnabled = true;
+
+			if (CurrentItem.UserSpecific == null)
+			{
+				buttonOkay.IsEnabled = true;
+				buttonOkay.Content = $"Okay ({UserSpecific.GetLevelInfo(1).Item3})";
+
+				return;
+			}
 
 			var srsNumeric = CurrentItem.UserSpecific.SrsNumeric;
 
@@ -474,6 +509,8 @@ namespace SRSDesktop.Windows
 
 		#endregion
 
+		#region Generate runs
+
 		private List<Run> GenerateRuns(string label, string text)
 		{
 			var result = new List<Run>();
@@ -548,6 +585,8 @@ namespace SRSDesktop.Windows
 			return result;
 		}
 
+		#endregion
+
 		private void DisposeAudio()
 		{
 			VorbisWaveReader?.Dispose();
@@ -556,23 +595,25 @@ namespace SRSDesktop.Windows
 			WaveOutEvent = null;
 		}
 
+		private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (!DialogResult.HasValue)
+			{
+				var result = MessageBox.Show("Save progress?", "Save progress?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+				if (result == MessageBoxResult.Yes)
+				{
+					End();
+				}
+			}
+
+			DisposeAudio();
+		}
+
 
 		private enum State
 		{
 			DisplayAnswer,
 			AwaitInput
-		}
-
-		private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			DisposeAudio();
-
-			if (LevelChange.Count > 0)
-			{
-				Finish();
-				Summary();
-				DialogResult = true;
-			}
 		}
 	}
 

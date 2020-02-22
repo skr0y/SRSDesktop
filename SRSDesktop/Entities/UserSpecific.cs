@@ -8,7 +8,7 @@ namespace SRSDesktop.Entities
 	public class UserSpecific
 	{
 		[JsonIgnore]
-		private const int randomizationPercent = 10;
+		private const int randomizationPercent = 15;
 
 		[JsonIgnore]
 		private static List<Tuple<SrsLevel, TimeSpan, string>> SrsLevelInfo = new List<Tuple<SrsLevel, TimeSpan, string>>()

@@ -34,15 +34,15 @@
 		<ComboBox x:Name="comboReviewsType" HorizontalAlignment="Left" Margin="182,82,0,0" VerticalAlignment="Top" Width="95" 
 			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="2"/>
 		<ComboBox x:Name="comboLessonsAvailability" HorizontalAlignment="Left" Margin="77,211,0,0" VerticalAlignment="Top" Width="95"
-			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="0"/>
+			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="3"/>
 		<ComboBox x:Name="comboLessonsType" HorizontalAlignment="Left" Margin="182,211,0,0" VerticalAlignment="Top" Width="95"
-			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="0"/>
+			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="3"/>
 		<ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="10" Margin="10,451,0,0" VerticalAlignment="Top" Width="322"/>
 		<Button x:Name="buttonDecReviewsSlider" Content="-" HorizontalAlignment="Left" Margin="71,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonDecReviewsSliderClick"/>
 		<Button x:Name="buttonIncReviewsSlider" Content="+" HorizontalAlignment="Left" Margin="261,109,0,0" VerticalAlignment="Top" Width="20" Click="ButtonIncReviewsSliderClick"/>
 		<Button x:Name="buttonDecLessonsSlider" Content="-" HorizontalAlignment="Left" Margin="71,238,0,0" VerticalAlignment="Top" Width="20" Click="ButtonDecLessonsSliderClick"/>
 		<Button x:Name="buttonIncLessonsSlider" Content="+" HorizontalAlignment="Left" Margin="261,238,0,0" VerticalAlignment="Top" Width="20" Click="ButtonIncLessonsSliderClick"/>
-		<Button x:Name="buttonUpdate" Content="Q" HorizontalAlignment="Left" Margin="302,10,0,0" VerticalAlignment="Top" Width="30" Height="30" FontFamily="Wingdings 3" FontSize="20" Click="ButtonUpdateClick"/>
+		<Button x:Name="buttonUpdate" Content="Q" HorizontalAlignment="Left" Margin="302,10,0,0" VerticalAlignment="Top" Width="30" Height="30" FontFamily="Wingdings 3" FontSize="20" Click="ButtonUpdateClick" ToolTip="Refresh"/>
 		<ProgressBar x:Name="progressBarRadicals" HorizontalAlignment="Left" Height="10" Margin="10,389,0,0" VerticalAlignment="Top" Width="322" Foreground="#FFE9F4FF"/>
 		<ProgressBar x:Name="progressBarKanji" HorizontalAlignment="Left" Height="10" Margin="10,404,0,0" VerticalAlignment="Top" Width="322" Foreground="#FFFF9BFF"/>
 		<ProgressBar x:Name="progressBarVocabs" HorizontalAlignment="Left" Height="10" Margin="10,419,0,0" VerticalAlignment="Top" Width="322" Foreground="#FFC79BFF"/>

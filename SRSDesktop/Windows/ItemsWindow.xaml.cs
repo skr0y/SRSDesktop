@@ -104,9 +104,17 @@ namespace SRSDesktop.Windows
 			WaitForInput();
 		}
 
-		private void SkipAnswer()
+		private void SkipAnswer(bool readd = false)
 		{
+			if (readd)
+			{
+				Items.Add(CurrentItem);
+				Items.RemoveAt(CurrentIndex);
+			}
+			else
+			{
 			CurrentIndex++;
+			}
 
 			WaitForInput();
 		}
@@ -157,14 +165,14 @@ namespace SRSDesktop.Windows
 		{
 			buttonAnswer.IsEnabled = true;
 			buttonPrev.IsEnabled = CurrentIndex > 0;
-			buttonSkip.IsEnabled = CurrentIndex < Items.Count - 1;
+			buttonSkip.Content = CurrentIndex < Items.Count - 1 ? "Next >" : "Finish";
 		}
 
 		private void DisableInputControls()
 		{
 			buttonAnswer.IsEnabled = false;
 			buttonPrev.IsEnabled = CurrentIndex > 0;
-			buttonSkip.IsEnabled = CurrentIndex < Items.Count - 1;
+			buttonSkip.Content = CurrentIndex < Items.Count - 1 ? "Next >" : "Finish";
 		}
 
 		private void EnableAnswerControls()
@@ -389,6 +397,11 @@ namespace SRSDesktop.Windows
 		private void ButtonSkipClick(object sender, RoutedEventArgs e)
 		{
 			SkipAnswer();
+		}
+
+		private void ButtonAgainClick(object sender, RoutedEventArgs e)
+		{
+			SkipAnswer(true);
 		}
 
 		private void ButtonVeryBadClick(object sender, RoutedEventArgs e)

@@ -19,6 +19,10 @@ namespace SRSDesktop.Windows
 		private readonly Brush radicalBrush = (Brush)new BrushConverter().ConvertFrom("#FFE9F4FF");
 		private readonly Brush kanjiBrush = (Brush)new BrushConverter().ConvertFrom("#FFFF9BFF");
 		private readonly Brush vocabBrush = (Brush)new BrushConverter().ConvertFrom("#FFC79BFF");
+		private readonly Thickness defaultThickness = new Thickness(1);
+		private readonly Thickness highlightThickness = new Thickness(3);
+		private readonly Brush defaultBorderBrush = SystemColors.ControlDarkDarkBrush;
+		private readonly Brush highlightBorderBrush = SystemColors.HighlightBrush;
 
 		private VorbisWaveReader VorbisWaveReader;
 		private WaveOutEvent WaveOutEvent;
@@ -167,6 +171,8 @@ namespace SRSDesktop.Windows
 		{
 			if (Mode != ItemsWindowMode.Review) return;
 
+			buttonDetails.IsEnabled = true;
+
 			var srsNumeric = CurrentItem.UserSpecific.SrsNumeric;
 
 			if (CurrentItem.UserSpecific.SrsNumeric > 2)
@@ -196,7 +202,7 @@ namespace SRSDesktop.Windows
 				buttonEasy.Content = $"Easy ({UserSpecific.GetLevelInfo(srsNumeric + 2).Item3})";
 			}
 
-			buttonDetails.IsEnabled = true;
+			SetAnswerControlsStyle();
 		}
 
 		private void DisableAnswerControls()
@@ -204,12 +210,43 @@ namespace SRSDesktop.Windows
 			if (Mode != ItemsWindowMode.Review) return;
 
 			buttonVeryBad.IsEnabled = false;
+			buttonVeryBad.Content = "Very bad";
+
 			buttonBad.IsEnabled = false;
+			buttonBad.Content = "Bad";
+
 			buttonOkay.IsEnabled = false;
+			buttonOkay.Content = "Okay";
+
 			buttonGood.IsEnabled = false;
+			buttonGood.Content = "Good";
+
 			buttonEasy.IsEnabled = false;
+			buttonEasy.Content = "Easy";
 
 			buttonDetails.IsEnabled = false;
+
+			SetAnswerControlsStyle();
+		}
+
+		private void SetAnswerControlsStyle()
+		{
+			var levelChange = LevelChange.TryGetValue(CurrentItem, out var value) ? (int?)value : null;
+
+			buttonVeryBad.BorderThickness = levelChange == -2 ? highlightThickness : defaultThickness;
+			buttonVeryBad.BorderBrush = levelChange == -2 ? highlightBorderBrush : defaultBorderBrush;
+
+			buttonBad.BorderThickness = levelChange == -1 ? highlightThickness : defaultThickness;
+			buttonBad.BorderBrush = levelChange == -1 ? highlightBorderBrush : defaultBorderBrush;
+
+			buttonOkay.BorderThickness = levelChange == 0 ? highlightThickness : defaultThickness;
+			buttonOkay.BorderBrush = levelChange == 0 ? highlightBorderBrush : defaultBorderBrush;
+
+			buttonGood.BorderThickness = levelChange == 1 ? highlightThickness : defaultThickness;
+			buttonGood.BorderBrush = levelChange == 1 ? highlightBorderBrush : defaultBorderBrush;
+
+			buttonEasy.BorderThickness = levelChange == 2 ? highlightThickness : defaultThickness;
+			buttonEasy.BorderBrush = levelChange == 2 ? highlightBorderBrush : defaultBorderBrush;
 		}
 
 		private void ShowLessonControls()

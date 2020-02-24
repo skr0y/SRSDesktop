@@ -1,6 +1,7 @@
-using SRSDesktop.Entities;
+﻿using SRSDesktop.Entities;
 using SRSDesktop.Manager;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -8,6 +9,9 @@ namespace SRSDesktop.Windows
 {
 	public partial class MainWindow : Window
 	{
+		private List<Item> nextHourItems;
+
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -15,18 +19,32 @@ namespace SRSDesktop.Windows
 		}
 
 
+		private void Update()
+		{
+			SRS.LessonManager.Update();
+			UpdateControls();
+		}
+
 		private void UpdateControls()
 		{
+			nextHourItems = SRS.LessonManager.GetAll().FindAll(i => i.UserSpecific?.AvailableDate <= DateTime.Now.AddHours(1) && i.UserSpecific?.AvailableDate > DateTime.Now);
+
 			if (sliderReviews != null)
 			{
 				sliderReviews.Maximum = SRS.ReviewManager.Count;
-				sliderReviews.Value = 10;
+				sliderReviews.Value = sliderReviews.Maximum;
 			}
 
 			if (sliderLessons != null)
 			{
 				sliderLessons.Maximum = SRS.LessonManager.Count;
-				sliderLessons.Value = 10;
+				sliderLessons.Value = sliderLessons.Maximum;
+			}
+
+			if (labelNextHour != null)
+			{
+				labelNextHour.Content = nextHourItems.Count;
+				btnNextHourNow.IsEnabled = nextHourItems.Count > 0;
 			}
 
 			if (labelLevel != null)
@@ -72,8 +90,7 @@ namespace SRSDesktop.Windows
 			if (reviewWindow.ShowDialog() == true)
 			{
 				SRS.ReviewManager.Save();
-				SRS.ReviewManager.Update();
-				UpdateControls();
+				Update();
 			}
 		}
 
@@ -85,15 +102,13 @@ namespace SRSDesktop.Windows
 			if (lessonWindow.ShowDialog() == true)
 			{
 				SRS.LessonManager.Save();
-				SRS.LessonManager.Update();
-				UpdateControls();
+				Update();
 			}
 		}
 
 		private void ButtonUpdateClick(object sender, RoutedEventArgs e)
 		{
-			SRS.ReviewManager.Update();
-			UpdateControls();
+			Update();
 		}
 
 		private void ButtonDatabaseClick(object sender, RoutedEventArgs e)
@@ -155,6 +170,13 @@ namespace SRSDesktop.Windows
 			{
 				sliderLessons.Value++;
 			}
+		}
+
+		private void BtnNextHourNowClick(object sender, RoutedEventArgs e)
+		{
+			nextHourItems.ForEach(i => i.UserSpecific.MakeAvailable());
+			SRS.ReviewManager.Save();
+			UpdateControls();
 		}
 
 		#endregion

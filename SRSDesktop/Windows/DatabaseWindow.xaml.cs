@@ -1,4 +1,4 @@
-using SRSDesktop.Entities;
+﻿using SRSDesktop.Entities;
 using SRSDesktop.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace SRSDesktop.Windows
 		{
 			// TODO:
 			//  row color by type
-			//  select by user level
+			//  reading col
 
 			InitializeComponent();
 			Update();
@@ -145,7 +145,7 @@ namespace SRSDesktop.Windows
 		private void BtnBelowUnlockClick(object sender, RoutedEventArgs e)
 		{
 			sldMinUserLvl.Value = 1;
-			sldMaxUserLvl.Value = SRS.LessonManager.UnlockLevel;
+			sldMaxUserLvl.Value = SRS.LessonManager.UnlockLevel - 1;
 		}
 
 		private void TextBoxTextChanged(object sender, TextChangedEventArgs e) => Filter();

@@ -176,8 +176,8 @@ namespace SRSDesktop.Windows
 		{
 			if (WaveOutEvent != null)
 			{
-				WaveOutEvent.Play();
 				VorbisWaveReader.Position = 0;
+				WaveOutEvent.Play();
 			}
 		}
 
@@ -597,7 +597,7 @@ namespace SRSDesktop.Windows
 
 		private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			if (!DialogResult.HasValue)
+			if (!DialogResult.HasValue && LevelChange.Count > 0)
 			{
 				var result = MessageBox.Show("Save progress?", "Save progress?", MessageBoxButton.YesNo, MessageBoxImage.Question);
 				if (result == MessageBoxResult.Yes)

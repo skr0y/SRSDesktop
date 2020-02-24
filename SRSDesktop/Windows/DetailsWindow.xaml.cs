@@ -215,8 +215,8 @@ namespace SRSDesktop.Windows
 		{
 			if (WaveOutEvent != null)
 			{
-				WaveOutEvent.Play();
 				VorbisWaveReader.Position = 0;
+				WaveOutEvent.Play();
 			}
 		}
 

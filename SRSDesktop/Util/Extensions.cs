@@ -7,7 +7,7 @@ namespace SRSDesktop.Util
 {
 	public static class Extensions
 	{
-		public static readonly IDictionary<string, string> RomajiToHiragana = new Dictionary<string, string>
+		private static readonly IDictionary<string, string> RomajiToHiragana = new Dictionary<string, string>
 		{
 			{"a", "あ"},
 			{"i", "い"},
@@ -164,11 +164,10 @@ namespace SRSDesktop.Util
 			{"nn", "ん"},
 		};
 		private static readonly Regex latinRegex = new Regex("[A-Za-z]", RegexOptions.Compiled);
+		private static readonly Random random = new Random();
 
 		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
 		{
-			var random = new Random();
-
 			return source.OrderBy(item => random.Next());
 		}
 

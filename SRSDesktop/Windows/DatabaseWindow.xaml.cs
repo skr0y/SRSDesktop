@@ -54,7 +54,7 @@ namespace SRSDesktop.Windows
 				if (chkKanji.IsChecked == false) result = result.FindAll(i => !(i is Kanji));
 				if (chkVocab.IsChecked == false) result = result.FindAll(i => !(i is Vocab));
 
-				result = result.FindAll(i => (i.UserSpecific == null && sldMinUserLvl.Value == 0) || 
+				result = result.FindAll(i => (i.UserSpecific == null && sldMinUserLvl.Value == 0) ||
 					(i.UserSpecific?.SrsNumeric >= sldMinUserLvl.Value && i.UserSpecific?.SrsNumeric <= sldMaxUserLvl.Value));
 
 				lsvDatabase.ItemsSource = result;
@@ -119,7 +119,10 @@ namespace SRSDesktop.Windows
 			chkRadicals.IsChecked = true;
 			chkKanji.IsChecked = true;
 			chkVocab.IsChecked = true;
+			chkLearnable.IsChecked = false;
 			cbLevel.SelectedIndex = 0;
+			sldMinUserLvl.Value = 0;
+			sldMaxUserLvl.Value = sldMaxUserLvl.Maximum;
 		}
 
 		private void SldMinUserLvlValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -160,6 +163,6 @@ namespace SRSDesktop.Windows
 
 		private void CbStatusSelectionChanged(object sender, SelectionChangedEventArgs e) => Filter();
 
-		private void ChkLearnableChecked(object sender, RoutedEventArgs e) => Filter();
+		private void ChkLearnableClick(object sender, RoutedEventArgs e) => Filter();
 	}
 }

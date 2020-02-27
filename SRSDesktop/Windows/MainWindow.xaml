@@ -32,7 +32,7 @@
 		<ComboBox x:Name="comboReviewsAvailability" HorizontalAlignment="Left" Margin="77,82,0,0" VerticalAlignment="Top" Width="95" 
 			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="3"/>
 		<ComboBox x:Name="comboReviewsType" HorizontalAlignment="Left" Margin="182,82,0,0" VerticalAlignment="Top" Width="95" 
-			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="2"/>
+			ItemsSource="{Binding Source={StaticResource orderByType}}" SelectedIndex="0"/>
 		<ComboBox x:Name="comboLessonsAvailability" HorizontalAlignment="Left" Margin="77,211,0,0" VerticalAlignment="Top" Width="95"
 			ItemsSource="{Binding Source={StaticResource orderByAvailability}}" SelectedIndex="3"/>
 		<ComboBox x:Name="comboLessonsType" HorizontalAlignment="Left" Margin="182,211,0,0" VerticalAlignment="Top" Width="95"

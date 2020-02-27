@@ -41,6 +41,9 @@ namespace SRSDesktop.Manager
 					case OrderByType.RadicalToVocab:
 						result = result.OrderBy(item => item is Radical ? 0 : item is Kanji ? 1 : 2);
 						break;
+					case OrderByType.AscLevel:
+						result = result.OrderBy(item => item.Level);
+						break;
 				}
 			}
 

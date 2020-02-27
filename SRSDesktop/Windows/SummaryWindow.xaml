@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Summary" Height="320" Width="480">
     <Grid x:Name="grid">
-        
-    </Grid>
+		<Label x:Name="lblCorrect" Content="Correct" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
+		<Label x:Name="lblWrong" Content="Wrong" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Top" FontSize="18" Visibility="Hidden"/>
+	</Grid>
 </Window>

@@ -1,4 +1,4 @@
-﻿using NAudio.Vorbis;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -79,7 +79,7 @@ namespace SRSDesktop.Windows
 			ClearAnswerTextBlocks();
 			SetItemCharacter();
 			SetItemBackgroundColor();
-			SetItemLvlInfo();
+			HideItemLvlInfo();
 
 			if (Mode != ItemsWindowMode.Review)
 			{
@@ -93,6 +93,7 @@ namespace SRSDesktop.Windows
 
 			EnableAnswerControls();
 			DisableInputControls();
+			ShowItemLvlInfo();
 			FillAnswerTextBlock(CurrentItem);
 		}
 
@@ -400,18 +401,28 @@ namespace SRSDesktop.Windows
 			}
 		}
 
-		private void SetItemLvlInfo()
+		private void ShowItemLvlInfo()
 		{
+			labelItemLvlText.Visibility = Visibility.Visible;
+			labelItemLvl.Visibility = Visibility.Visible;
 			labelItemLvl.Content = CurrentItem.Level;
-
-			labelUserLvlText.Visibility = CurrentItem.UserSpecific == null ? Visibility.Hidden : Visibility.Visible;
-			labelUserLvl.Visibility = CurrentItem.UserSpecific == null ? Visibility.Hidden : Visibility.Visible;
 
 			if (CurrentItem.UserSpecific != null)
 			{
 				var lvlInfo = UserSpecific.GetLevelInfo(CurrentItem.UserSpecific.SrsNumeric);
+				labelUserLvlText.Visibility = Visibility.Visible;
+				labelUserLvl.Visibility = Visibility.Visible;
 				labelUserLvl.Content = lvlInfo.Item1.ToString() + " " + CurrentItem.UserSpecific.SrsNumeric;
 			}
+		}
+
+		private void HideItemLvlInfo()
+		{
+			labelItemLvlText.Visibility = Visibility.Hidden;
+			labelItemLvl.Visibility = Visibility.Hidden;
+
+			labelUserLvlText.Visibility = Visibility.Hidden;
+			labelUserLvl.Visibility = Visibility.Hidden;
 		}
 
 		private void SetItemBackgroundColor()

@@ -168,8 +168,8 @@ namespace SRSDesktop.Windows
 
 		private void Summary()
 		{
-			var badItems = LevelChange.Where(i => i.Value < 0).Select(i => i.Key);
-			var goodItems = LevelChange.Where(i => i.Value >= 0).Select(i => i.Key);
+			var badItems = LevelChange.Where(i => i.Value < 0 || (i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)).Select(i => i.Key);
+			var goodItems = LevelChange.Where(i => i.Value >= 0 && !(i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)).Select(i => i.Key);
 			new SummaryWindow(badItems, goodItems).ShowDialog();
 		}
 

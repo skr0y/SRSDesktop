@@ -16,7 +16,8 @@
 				</GridView>
 			</ListView.View>
 		</ListView>
-		<TextBox x:Name="tbSearch" HorizontalAlignment="Left" Height="27" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="612" FontSize="16" TextChanged="TextBoxTextChanged"/>
+		<TextBox x:Name="tbSearch" HorizontalAlignment="Left" Height="27" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="546" FontSize="16" TextChanged="TextBoxTextChanged"/>
+		<CheckBox x:Name="chkExact" Content="Exact" HorizontalAlignment="Left" Margin="561,14,0,0" VerticalAlignment="Top" FontSize="18" Click="ChkExactClick"/>
 		<GroupBox Header="Type" HorizontalAlignment="Left" Height="128" Margin="627,10,0,0" VerticalAlignment="Top" Width="155" FontSize="16">
 			<StackPanel>
 				<CheckBox x:Name="chkRadicals" Content="Radicals" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="ChkRadicalsClick"/>
@@ -32,8 +33,12 @@
 		<Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" Margin="627,412,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Background="#FFAEF9A2" Click="BtnConfirmClick" Height="27"/>
 		<Label x:Name="lblUserLevel" Content="User level:" HorizontalAlignment="Left" Margin="627,200,0,0" VerticalAlignment="Top" FontSize="16"/>
 		<Label x:Name="lblUserLevelValue" Content="0-9" HorizontalAlignment="Left" Margin="709,200,0,0" VerticalAlignment="Top" FontSize="16" Width="59"/>
-		<Slider x:Name="sldMinUserLvl" HorizontalAlignment="Left" Margin="627,236,0,0" VerticalAlignment="Top" Width="155" Maximum="9" SmallChange="1" ValueChanged="SldMinUserLvlValueChanged" IsSnapToTickEnabled="True"/>
-		<Slider x:Name="sldMaxUserLvl" HorizontalAlignment="Left" Margin="627,259,0,0" VerticalAlignment="Top" Width="155" Maximum="9" SmallChange="1" Value="9" ValueChanged="SldMaxUserLvlValueChanged" IsSnapToTickEnabled="True"/>
-		<Button x:Name="btnBelowUnlock" HorizontalAlignment="Left" Margin="627,282,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Content="Below unlock level" Click="BtnBelowUnlockClick"/>
+		<Slider x:Name="sldMinUserLvl" HorizontalAlignment="Left" Margin="627,236,0,0" VerticalAlignment="Top" Width="75" Maximum="9" SmallChange="1" ValueChanged="SldMinUserLvlValueChanged" IsSnapToTickEnabled="True"/>
+		<Slider x:Name="sldMaxUserLvl" HorizontalAlignment="Left" Margin="707,236,0,0" VerticalAlignment="Top" Width="75" Maximum="9" SmallChange="1" Value="9" ValueChanged="SldMaxUserLvlValueChanged" IsSnapToTickEnabled="True"/>
+		<Button x:Name="btnBelowUnlock" HorizontalAlignment="Left" Margin="627,259,0,0" VerticalAlignment="Top" Width="155" FontSize="16" Content="Below unlock level" Click="BtnBelowUnlockClick"/>
+		<ComboBox x:Name="cbSort" HorizontalAlignment="Left" Margin="627,289,0,0" VerticalAlignment="Top" Width="155" FontSize="16" SelectionChanged="CbSortSelectionChanged" SelectedIndex="0">
+			<ComboBoxItem Content="By item level"/>
+			<ComboBoxItem Content="By available date"/>
+		</ComboBox>
 	</Grid>
 </Window>

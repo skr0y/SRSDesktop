@@ -42,9 +42,10 @@ namespace SRSDesktop.Windows
 		{
 			if (lsvDatabase != null && items != null)
 			{
-				var result = items.OrderBy(i => i.Level).ToList();
+				var result = items;
 
-				if (tbSearch.Text != "") result = result.FindAll(i => i.Meaning.Contains(tbSearch.Text) || ReadingSearch(i, tbSearch.Text));
+				if (tbSearch.Text != "") result = result.FindAll(i => (chkExact.IsChecked == false && i.Meaning.Contains(tbSearch.Text)) ||
+					i.Meaning == tbSearch.Text || ReadingSearch(i, tbSearch.Text, chkExact.IsChecked == true));
 
 				if (cbLevel.SelectedIndex > 0) result = result.FindAll(i => i.Level == ((KeyValuePair<int, string>)cbLevel.SelectedItem).Key);
 
@@ -57,21 +58,25 @@ namespace SRSDesktop.Windows
 				result = result.FindAll(i => (i.UserSpecific == null && sldMinUserLvl.Value == 0) ||
 					(i.UserSpecific?.SrsNumeric >= sldMinUserLvl.Value && i.UserSpecific?.SrsNumeric <= sldMaxUserLvl.Value));
 
+				if (cbSort.SelectedIndex == 0) result = result.OrderBy(i => i.Level).ToList();
+				else result = result.OrderByDescending(i => i.UserSpecific != null).ThenBy(i => i.UserSpecific?.AvailableDate).ToList();
+
 				lsvDatabase.ItemsSource = result;
 			}
 		}
 
-		private bool ReadingSearch(Item item, string text)
+		private bool ReadingSearch(Item item, string text, bool exact = false)
 		{
 			var kana = text.ToHiragana();
 
 			if (item is Kanji kanji)
 			{
+				if (exact) return kanji.Onyomi == kana || kanji.Kunyomi == kana || kanji.Nanori == kana;
 				return kanji.Onyomi?.Contains(kana) == true || kanji.Kunyomi?.Contains(kana) == true || kanji.Nanori?.Contains(kana) == true;
 			}
 			else if (item is Vocab vocab)
 			{
-				return vocab.Kana.Contains(kana);
+				return exact ? vocab.Kana == kana : vocab.Kana.Contains(kana);
 			}
 
 			return false;
@@ -113,18 +118,6 @@ namespace SRSDesktop.Windows
 			Update();
 		}
 
-		private void BtnResetClick(object sender, RoutedEventArgs e)
-		{
-			tbSearch.Text = "";
-			chkRadicals.IsChecked = true;
-			chkKanji.IsChecked = true;
-			chkVocab.IsChecked = true;
-			chkLearnable.IsChecked = false;
-			cbLevel.SelectedIndex = 0;
-			sldMinUserLvl.Value = 0;
-			sldMaxUserLvl.Value = sldMaxUserLvl.Maximum;
-		}
-
 		private void SldMinUserLvlValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			if (sldMinUserLvl != null && sldMaxUserLvl != null)
@@ -151,7 +144,23 @@ namespace SRSDesktop.Windows
 			sldMaxUserLvl.Value = SRS.LessonManager.UnlockLevel - 1;
 		}
 
+		private void BtnResetClick(object sender, RoutedEventArgs e)
+		{
+			tbSearch.Text = "";
+			chkExact.IsChecked = false;
+			chkRadicals.IsChecked = true;
+			chkKanji.IsChecked = true;
+			chkVocab.IsChecked = true;
+			chkLearnable.IsChecked = false;
+			cbLevel.SelectedIndex = 0;
+			sldMinUserLvl.Value = 0;
+			sldMaxUserLvl.Value = sldMaxUserLvl.Maximum;
+			cbSort.SelectedIndex = 0;
+		}
+
 		private void TextBoxTextChanged(object sender, TextChangedEventArgs e) => Filter();
+
+		private void ChkExactClick(object sender, RoutedEventArgs e) => Filter();
 
 		private void ChkRadicalsClick(object sender, RoutedEventArgs e) => Filter();
 
@@ -164,5 +173,7 @@ namespace SRSDesktop.Windows
 		private void CbStatusSelectionChanged(object sender, SelectionChangedEventArgs e) => Filter();
 
 		private void ChkLearnableClick(object sender, RoutedEventArgs e) => Filter();
+
+		private void CbSortSelectionChanged(object sender, SelectionChangedEventArgs e) => Filter();
 	}
 }

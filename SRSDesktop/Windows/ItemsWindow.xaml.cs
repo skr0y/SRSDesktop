@@ -380,7 +380,7 @@ namespace SRSDesktop.Windows
 
 		private void SetItemCharacter()
 		{
-			if (CurrentItem.Character == null && CurrentItem is Radical radical)
+			if (string.IsNullOrWhiteSpace(CurrentItem.Character) && CurrentItem is Radical radical)
 			{
 				var imageUrl = Utils.GetResourcesPath() + "Images\\" + radical.Image.Split('/').Last();
 				if (File.Exists(imageUrl))
@@ -627,5 +627,4 @@ namespace SRSDesktop.Windows
 			AwaitInput
 		}
 	}
-
 }

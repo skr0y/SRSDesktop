@@ -1,4 +1,4 @@
-using NAudio.Vorbis;
+﻿using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -610,9 +610,17 @@ namespace SRSDesktop.Windows
 		{
 			if (!DialogResult.HasValue && LevelChange.Count > 0)
 			{
-				var result = MessageBox.Show("Save progress?", "Save progress?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+				var isLesson = Mode == ItemsWindowMode.Lesson;
+				var text = isLesson ? "Do a review? Progress can only be saved after doing a review" : "Save progress?";
+				var result = MessageBox.Show(text, "Exit", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+				if (result == MessageBoxResult.Cancel)
+				{
+					e.Cancel = true;
+					return;
+				}
 				if (result == MessageBoxResult.Yes)
 				{
+					if (isLesson) e.Cancel = true;
 					End();
 				}
 			}

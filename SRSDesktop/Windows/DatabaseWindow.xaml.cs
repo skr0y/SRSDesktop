@@ -26,7 +26,7 @@ namespace SRSDesktop.Windows
 
 			cbLevel.SelectedValuePath = "Key";
 			cbLevel.DisplayMemberPath = "Value";
-			cbLevel.ItemsSource = Enumerable.Range(0, 60).ToDictionary(k => k, v => v == 0 ? "All" : $"Level {v}");
+			cbLevel.ItemsSource = Enumerable.Range(0, 61).ToDictionary(k => k, v => v == 0 ? "All" : $"Level {v}");
 
 			tbSearch.Focus();
 		}
@@ -44,8 +44,9 @@ namespace SRSDesktop.Windows
 			{
 				var result = items;
 
-				if (tbSearch.Text != "") result = result.FindAll(i => (chkExact.IsChecked == false && i.Meaning.Contains(tbSearch.Text)) ||
-					i.Meaning == tbSearch.Text || ReadingSearch(i, tbSearch.Text, chkExact.IsChecked == true));
+				if (tbSearch.Text != "") result = result.FindAll(i => (chkExact.IsChecked == false &&
+					(i.Meaning.Contains(tbSearch.Text) || (i.Character != null && i.Character.Contains(tbSearch.Text)))) ||
+					i.Meaning == tbSearch.Text || i.Character == tbSearch.Text || ReadingSearch(i, tbSearch.Text, chkExact.IsChecked == true));
 
 				if (cbLevel.SelectedIndex > 0) result = result.FindAll(i => i.Level == ((KeyValuePair<int, string>)cbLevel.SelectedItem).Key);
 
@@ -61,6 +62,7 @@ namespace SRSDesktop.Windows
 				if (cbSort.SelectedIndex == 0) result = result.OrderBy(i => i.Level).ToList();
 				else result = result.OrderByDescending(i => i.UserSpecific != null).ThenBy(i => i.UserSpecific?.AvailableDate).ToList();
 
+				lblResultsCount.Content = result.Count + " results";
 				lsvDatabase.ItemsSource = result;
 			}
 		}
@@ -156,6 +158,7 @@ namespace SRSDesktop.Windows
 			sldMinUserLvl.Value = 0;
 			sldMaxUserLvl.Value = sldMaxUserLvl.Maximum;
 			cbSort.SelectedIndex = 0;
+			tbSearch.Focus();
 		}
 
 		private void TextBoxTextChanged(object sender, TextChangedEventArgs e) => Filter();

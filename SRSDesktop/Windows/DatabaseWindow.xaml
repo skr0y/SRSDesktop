@@ -40,5 +40,6 @@
 			<ComboBoxItem Content="By item level"/>
 			<ComboBoxItem Content="By available date"/>
 		</ComboBox>
+		<Label x:Name="lblResultsCount" Content="0 results" HorizontalAlignment="Left" Margin="627,317,0,0" VerticalAlignment="Top" Width="155" FontSize="16"/>
 	</Grid>
 </Window>

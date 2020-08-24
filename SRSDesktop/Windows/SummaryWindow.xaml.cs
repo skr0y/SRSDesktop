@@ -10,6 +10,7 @@ namespace SRSDesktop.Windows
 {
 	public partial class SummaryWindow : Window
 	{
+		private const double maxButtons = 300;
 		private const double margin = 20;
 
 
@@ -26,13 +27,15 @@ namespace SRSDesktop.Windows
 			double goodWidth = 0, badWidth = 0;
 			List<Button> goodButtons = null, badButtons = null;
 
-			if (goodItems.Count() > 0)
+			var goodCount = goodItems.Count();
+			if (goodCount > 0)
 			{
 				goodButtons = Utils.GenerateItemButtons(goodItems);
 				goodWidth = CalculateWidth(goodButtons, widthProportion);
 			}
 
-			if (badItems.Count() > 0)
+			var badCount = badItems.Count();
+			if (badCount > 0)
 			{
 				badButtons = Utils.GenerateItemButtons(badItems);
 				badWidth = CalculateWidth(badButtons, widthProportion);
@@ -44,6 +47,7 @@ namespace SRSDesktop.Windows
 			if (goodButtons != null)
 			{
 				lblCorrect.Visibility = Visibility.Visible;
+				lblCorrect.Content = $"{lblCorrect.Content} ({goodCount})";
 				lblCorrect.Margin = new Thickness(lblCorrect.Margin.Left, marginTop, lblCorrect.Margin.Right, lblCorrect.Margin.Bottom);
 				marginTop += 35;
 				SetButtonsMargins(goodButtons, marginTop, width);
@@ -57,6 +61,7 @@ namespace SRSDesktop.Windows
 			if (badButtons != null)
 			{
 				lblWrong.Visibility = Visibility.Visible;
+				lblWrong.Content = $"{lblWrong.Content} ({badCount})";
 				lblWrong.Margin = new Thickness(lblWrong.Margin.Left, marginTop, lblWrong.Margin.Right, lblWrong.Margin.Bottom);
 				marginTop += 35;
 				SetButtonsMargins(badButtons, marginTop, width);

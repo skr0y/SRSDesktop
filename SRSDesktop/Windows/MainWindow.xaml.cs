@@ -1,4 +1,4 @@
-﻿using SRSDesktop.Entities;
+using SRSDesktop.Entities;
 using SRSDesktop.Manager;
 using System;
 using System.Collections.Generic;
@@ -120,6 +120,11 @@ namespace SRSDesktop.Windows
 				SRS.ReviewManager.Save();
 				UpdateControls();
 			}
+		}
+
+		private void buttonStatsClick(object sender, RoutedEventArgs e)
+		{
+			new StatsWindow().ShowDialog();
 		}
 
 		private void SliderReviewsValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

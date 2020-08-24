@@ -1,4 +1,4 @@
-﻿using NAudio.Vorbis;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -24,6 +24,8 @@ namespace SRSDesktop.Windows
 		private readonly Brush defaultBorderBrush = SystemColors.ControlDarkDarkBrush;
 		private readonly Brush highlightBorderBrush = SystemColors.HighlightBrush;
 
+		private TimeSpan TimeSpent;
+		private DateTime TimeActivated;
 		private VorbisWaveReader VorbisWaveReader;
 		private WaveOutEvent WaveOutEvent;
 
@@ -31,7 +33,8 @@ namespace SRSDesktop.Windows
 		private Dictionary<Item, int> LevelChange { get; set; }
 		private int CurrentIndex { get; set; }
 		private Item CurrentItem => Items[CurrentIndex];
-		private ItemsWindowMode Mode { get; set; }
+		private ItemsWindowMode CurrentMode { get; set; }
+		private ItemsWindowMode Mode { get; }
 		private State AppState { get; set; }
 
 		public ItemsWindow()
@@ -44,9 +47,10 @@ namespace SRSDesktop.Windows
 			Items = items;
 			LevelChange = new Dictionary<Item, int>();
 			CurrentIndex = 0;
+			CurrentMode = mode;
 			Mode = mode;
 
-			switch (Mode)
+			switch (CurrentMode)
 			{
 				case ItemsWindowMode.Lesson:
 					ShowLessonControls();
@@ -81,7 +85,7 @@ namespace SRSDesktop.Windows
 			SetItemBackgroundColor();
 			HideItemLvlInfo();
 
-			if (Mode != ItemsWindowMode.Review)
+			if (CurrentMode != ItemsWindowMode.Review)
 			{
 				DisplayAnswer();
 			}
@@ -99,10 +103,11 @@ namespace SRSDesktop.Windows
 
 		private void AcceptAnswer(int levelChange)
 		{
-			LevelChange[CurrentItem] = levelChange;
-			CurrentIndex++;
+			var alreadyAnswered = LevelChange.ContainsKey(CurrentItem);
 
-			WaitForInput();
+			LevelChange[CurrentItem] = levelChange;
+
+			SkipAnswer(levelChange < 0 && !alreadyAnswered);
 		}
 
 		private void SkipAnswer(bool readd = false)
@@ -141,9 +146,9 @@ namespace SRSDesktop.Windows
 
 		private bool Finish()
 		{
-			if (Mode == ItemsWindowMode.Lesson)
+			if (CurrentMode == ItemsWindowMode.Lesson)
 			{
-				Mode = ItemsWindowMode.Review;
+				CurrentMode = ItemsWindowMode.Review;
 				Items = LevelChange.Keys.ToList();
 				LevelChange = new Dictionary<Item, int>();
 				CurrentIndex = 0;
@@ -168,9 +173,19 @@ namespace SRSDesktop.Windows
 
 		private void Summary()
 		{
-			var badItems = LevelChange.Where(i => i.Value < 0 || (i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)).Select(i => i.Key);
+			if (Mode == ItemsWindowMode.Lesson)
+			{
+				var items = LevelChange.Keys;
+				new SummaryWindow(new Item[0], items).ShowDialog();
+				SRS.StatsManager.AddStats((int)TimeSpent.TotalSeconds, items.Count());
+			}
+			else
+			{
+				var badItems = LevelChange.Where(i => i.Value < 0 || (i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)).Select(i => i.Key); // count 1 lvl okay as bad
 			var goodItems = LevelChange.Where(i => i.Value >= 0 && !(i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)).Select(i => i.Key);
 			new SummaryWindow(badItems, goodItems).ShowDialog();
+				SRS.StatsManager.AddStats((int)TimeSpent.TotalSeconds, goodItems.Count(), badItems.Count());
+		}
 		}
 
 		private void PlaySound()
@@ -186,7 +201,7 @@ namespace SRSDesktop.Windows
 
 		private void SetWindowTitle()
 		{
-			Title = $"{Mode.ToString()} [{CurrentIndex + 1}/{Items.Count}]";
+			Title = $"{CurrentMode} [{CurrentIndex + 1}/{Items.Count}]";
 		}
 
 		private void EnableInputControls()
@@ -205,7 +220,7 @@ namespace SRSDesktop.Windows
 
 		private void EnableAnswerControls()
 		{
-			if (Mode != ItemsWindowMode.Review) return;
+			if (CurrentMode != ItemsWindowMode.Review) return;
 
 			buttonDetails.IsEnabled = true;
 
@@ -251,7 +266,7 @@ namespace SRSDesktop.Windows
 
 		private void DisableAnswerControls()
 		{
-			if (Mode != ItemsWindowMode.Review) return;
+			if (CurrentMode != ItemsWindowMode.Review) return;
 
 			buttonVeryBad.IsEnabled = false;
 			buttonVeryBad.Content = "Very bad";
@@ -270,7 +285,7 @@ namespace SRSDesktop.Windows
 
 			buttonDetails.IsEnabled = false;
 
-			SetAnswerControlsStyle();
+			ClearAnswerControlsStyle();
 		}
 
 		private void SetAnswerControlsStyle()
@@ -291,6 +306,12 @@ namespace SRSDesktop.Windows
 
 			buttonEasy.BorderThickness = levelChange == 2 ? highlightThickness : defaultThickness;
 			buttonEasy.BorderBrush = levelChange == 2 ? highlightBorderBrush : defaultBorderBrush;
+		}
+
+		private void ClearAnswerControlsStyle()
+		{
+			buttonVeryBad.BorderThickness = buttonBad.BorderThickness = buttonOkay.BorderThickness = buttonGood.BorderThickness = buttonEasy.BorderThickness = defaultThickness;
+			buttonVeryBad.BorderBrush = buttonBad.BorderBrush = buttonOkay.BorderBrush = buttonGood.BorderBrush = buttonEasy.BorderBrush = defaultBorderBrush;
 		}
 
 		private void ShowLessonControls()
@@ -610,7 +631,7 @@ namespace SRSDesktop.Windows
 		{
 			if (!DialogResult.HasValue && LevelChange.Count > 0)
 			{
-				var isLesson = Mode == ItemsWindowMode.Lesson;
+				var isLesson = CurrentMode == ItemsWindowMode.Lesson;
 				var text = isLesson ? "Do a review? Progress can only be saved after doing a review" : "Save progress?";
 				var result = MessageBox.Show(text, "Exit", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 				if (result == MessageBoxResult.Cancel)
@@ -626,6 +647,16 @@ namespace SRSDesktop.Windows
 			}
 
 			DisposeAudio();
+		}
+
+		private void WindowActivated(object sender, EventArgs e)
+		{
+			TimeActivated = DateTime.Now;
+		}
+
+		private void WindowDeactivated(object sender, EventArgs e)
+		{
+			TimeSpent += DateTime.Now - TimeActivated;
 		}
 
 

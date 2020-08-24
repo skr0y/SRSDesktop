@@ -34,7 +34,7 @@ namespace SRSDesktop.Util
 			var vocabBrush = (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#FFC79BFF");
 
 			var marginX = 0;
-			
+
 			foreach (var item in items)
 			{
 				var button = new Button();
@@ -95,6 +95,26 @@ namespace SRSDesktop.Util
 
 				return bitmapImage;
 			}
+		}
+
+		public static string FormatTime(int seconds)
+		{
+			var minutes = seconds / 60;
+			var result = minutes % 60 + "m";
+
+			var hours = minutes / 60;
+			if (hours > 0)
+			{
+				result = hours % 24 + "h, " + result;
+			}
+
+			var days = hours / 24;
+			if (days > 0)
+			{
+				result = days + "d, " + result;
+			}
+
+			return result;
 		}
 	}
 }

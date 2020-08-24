@@ -4,15 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SRSDesktop.Manager
+namespace SRSDesktop.Manager.ItemManager
 {
-	public class ReviewManager : Manager
+	public class LessonManager : Manager
 	{
-		public ReviewManager(string resourcesPath) : base(resourcesPath)
+		public LessonManager(string resourcesPath) : base(resourcesPath)
 		{
 		}
 
-		protected override Predicate<Item> Selector => item => item.UserSpecific != null && item.UserSpecific.AvailableDate <= DateTime.Now;
+		protected override Predicate<Item> Selector => item => item.Learnable;
 
 		public override List<Item> Get(int count = 0, OrderByAvailability orderByAvailability = OrderByAvailability.None, OrderByType orderByType = OrderByType.None)
 		{
@@ -23,10 +23,10 @@ namespace SRSDesktop.Manager
 				switch (orderByAvailability)
 				{
 					case OrderByAvailability.Older:
-						result = result.OrderBy(item => item.UserSpecific.AvailableDate);
+						result = result.OrderBy(item => item.Level);
 						break;
 					case OrderByAvailability.Recent:
-						result = result.OrderByDescending(item => item.UserSpecific.AvailableDate);
+						result = result.OrderByDescending(item => item.Level);
 						break;
 					case OrderByAvailability.Shuffle:
 						result = result.Shuffle();

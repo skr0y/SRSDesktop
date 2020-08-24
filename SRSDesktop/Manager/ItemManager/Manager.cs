@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SRSDesktop.Manager
+namespace SRSDesktop.Manager.ItemManager
 {
 	public abstract class Manager
 	{
@@ -51,7 +51,7 @@ namespace SRSDesktop.Manager
 			foreach (var vocab in vocabs)
 			{
 				vocab.Related = vocab.Character.Where(chr => chr.IsKanji()).Select(chr => kanjis.First(k => k.Character == chr.ToString())).Cast<Item>().ToList();
-				vocab.Learnable = vocab.UserSpecific == null && vocab.Related.All(r => r.UserSpecific?.SrsNumeric >= UnlockLevel);
+				vocab.Learnable = vocab.UserSpecific == null && vocab.Related.All(r => r.UserSpecific?.SrsNumeric > UnlockLevel);
 			}
 
 			foreach (var kanji in kanjis)

@@ -1,4 +1,5 @@
 using SRSDesktop.Manager;
+using SRSDesktop.Manager.ItemManager;
 using SRSDesktop.Util;
 
 namespace SRSDesktop
@@ -7,6 +8,7 @@ namespace SRSDesktop
 	{
 		public static LessonManager LessonManager { get; private set; }
 		public static ReviewManager ReviewManager { get; private set; }
+		public static StatsManager StatsManager { get; private set; }
 
 		static SRS()
 		{
@@ -14,6 +16,8 @@ namespace SRSDesktop
 
 			LessonManager = new LessonManager(fullPath);
 			ReviewManager = new ReviewManager(fullPath);
+
+			StatsManager = new StatsManager(fullPath);
 		}
 	}
 }

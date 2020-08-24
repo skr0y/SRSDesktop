@@ -75,6 +75,7 @@ namespace SRSDesktop.Windows
 			}
 
 			AppState = State.AwaitInput;
+			TaskbarItemInfo.ProgressValue = (float)CurrentIndex / Items.Count;
 
 			SetWindowTitle();
 			EnableInputControls();
@@ -327,6 +328,7 @@ namespace SRSDesktop.Windows
 		{
 			textBlockCharacter.Text = "";
 			imageCharacter.Source = null;
+			labelSmallCharacter.Content = "";
 		}
 
 		private void ClearAnswerTextBlocks()
@@ -347,7 +349,7 @@ namespace SRSDesktop.Windows
 				textBlockInfo.Inlines.AddRange(runs);
 				runs = GenerateMeaningRuns("Mnemonic", radical.Mnemonic);
 				textBlockInfo.Inlines.AddRange(runs);
-				runs = GenerateRuns("Kanji examples", string.Join(", ", radical.Related.Take(3).Select(k => k.Character + " - " + k.Meanings[0])));
+				runs = GenerateRuns("Kanji examples", string.Join(", ", radical.Related.Take(5).Select(k => k.Character + " - " + k.Meanings[0])));
 				textBlockInfo.Inlines.AddRange(runs);
 			}
 			else if (item is Kanji kanji)
@@ -370,7 +372,7 @@ namespace SRSDesktop.Windows
 					textBlockInfo.Inlines.AddRange(runs);
 				}
 
-				runs = GenerateRuns("Vocabulary examples", string.Join(", ", kanji.Related.OfType<Vocab>().Take(3).Select(v => v.Character + " - " + v.Meanings[0])));
+				runs = GenerateRuns("Vocabulary examples", string.Join(", ", kanji.Related.OfType<Vocab>().Take(5).Select(v => v.Character + " - " + v.Meanings[0])));
 				textBlockInfo.Inlines.AddRange(runs);
 			}
 			else if (item is Vocab vocab)
@@ -419,6 +421,8 @@ namespace SRSDesktop.Windows
 			{
 				textBlockCharacter.Text = CurrentItem.Character;
 				textBlockCharacter.FontSize = 150 / CurrentItem.Character.Length;
+
+				labelSmallCharacter.Content = CurrentItem.Character;
 			}
 		}
 

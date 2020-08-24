@@ -4,7 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Lessons" Height="640" Width="1280" ResizeMode="CanMinimize" WindowStartupLocation="CenterOwner" KeyUp="WindowKeyUp" Closing="WindowClosing">
+        Title="Lessons" Height="640" Width="1280" ResizeMode="CanMinimize" WindowStartupLocation="CenterOwner" KeyUp="WindowKeyUp" Closing="WindowClosing" Deactivated="WindowDeactivated" Activated="WindowActivated">
+	<Window.TaskbarItemInfo>
+		<TaskbarItemInfo ProgressState="Normal"/>
+	</Window.TaskbarItemInfo>
 	<Grid>
 		<Rectangle x:Name="rectItem" HorizontalAlignment="Left" Height="611" VerticalAlignment="Top" Width="223"/>
 		<Rectangle x:Name="rectAnswer" HorizontalAlignment="Left" Height="611" Margin="223,0,0,0" VerticalAlignment="Top" Width="1041"/>
@@ -16,15 +19,16 @@
 		<Button x:Name="buttonOkay" Content="Okay" HorizontalAlignment="Left" Margin="676,554,0,0" VerticalAlignment="Top" Width="120" Click="ButtonOkayClick" FontSize="18" Height="30" Focusable="False"/>
 		<Button x:Name="buttonGood" Content="Good" HorizontalAlignment="Left" Margin="800,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFDDDDFF" Click="ButtonGoodClick" FontSize="18" Height="30" Focusable="False"/>
 		<Button x:Name="buttonEasy" Content="Easy" HorizontalAlignment="Left" Margin="925,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFDDFFDD" Click="ButtonEasyClick" FontSize="18" Height="30" Focusable="False"/>
-		<Image x:Name="imageCharacter" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="200"/>
-		<TextBlock x:Name="textBlockCharacter" HorizontalAlignment="Center" Text="字" VerticalAlignment="Top" Height="200" Width="200" FontSize="150" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" Margin="10,10,1064,0" TextAlignment="Center" MouseDown="CharacterClick"/>
-		<ScrollViewer x:Name="scrollViewer" HorizontalAlignment="Left" Height="539" Margin="228,10,0,0" VerticalAlignment="Top" Width="1036" VerticalScrollBarVisibility="Auto" >
+		<Image x:Name="imageCharacter" HorizontalAlignment="Left" Height="200" Margin="10,44,0,0" VerticalAlignment="Top" Width="200"/>
+		<TextBlock x:Name="textBlockCharacter" HorizontalAlignment="Center" Text="字" VerticalAlignment="Top" Height="200" Width="200" FontSize="150" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" Margin="10,44,1064,0" TextAlignment="Center" MouseDown="CharacterClick"/>
+		<ScrollViewer x:Name="scrollViewer" HorizontalAlignment="Left" Height="539" Margin="228,10,0,0" VerticalAlignment="Top" Width="1036" VerticalScrollBarVisibility="Auto" Focusable="False" >
 			<TextBlock x:Name="textBlockInfo" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Info" VerticalAlignment="Top" FontSize="18"/>
 		</ScrollViewer>
-		<Label x:Name="labelItemLvlText" Content="Item lvl: " HorizontalAlignment="Left" Margin="10,263,0,0" VerticalAlignment="Top" FontSize="18" Foreground="#FF555555"/>
-		<Label x:Name="labelUserLvlText" Content="Current lvl: " HorizontalAlignment="Left" Margin="10,224,0,0" VerticalAlignment="Top" FontSize="18" Foreground="#FF555555"/>
-		<Label x:Name="labelItemLvl" Content="XX" HorizontalAlignment="Left" Margin="77,263,0,0" VerticalAlignment="Top" FontSize="18"/>
-		<Label x:Name="labelUserLvl" Content="XX" HorizontalAlignment="Left" Margin="102,224,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="labelSmallCharacter" Content="XX" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18" Width="200" HorizontalContentAlignment="Center" FontFamily="Arial"/>
+		<Label x:Name="labelItemLvlText" Content="Item lvl: " HorizontalAlignment="Left" Margin="10,288,0,0" VerticalAlignment="Top" FontSize="18" Foreground="#FF555555"/>
+		<Label x:Name="labelUserLvlText" Content="Current lvl: " HorizontalAlignment="Left" Margin="10,249,0,0" VerticalAlignment="Top" FontSize="18" Foreground="#FF555555"/>
+		<Label x:Name="labelItemLvl" Content="XX" HorizontalAlignment="Left" Margin="80,288,0,0" VerticalAlignment="Top" FontSize="18"/>
+		<Label x:Name="labelUserLvl" Content="XX" HorizontalAlignment="Left" Margin="102,249,0,0" VerticalAlignment="Top" FontSize="18"/>
 		<Button x:Name="buttonDetails" Content="Details" HorizontalAlignment="Left" Margin="10,471,0,0" VerticalAlignment="Top" Width="200" Height="45" Background="#FFEEEEEE" FontSize="18" Click="ButtonDetailsClick" Focusable="False"/>
 		<Button x:Name="buttonPrev" Content="&lt; Prev" HorizontalAlignment="Left" Margin="245,554,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="18" Click="ButtonPrevClick" Focusable="False"/>
 	</Grid>

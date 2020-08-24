@@ -1,4 +1,4 @@
-using SRSDesktop.Entities;
+﻿using SRSDesktop.Entities;
 using SRSDesktop.Manager;
 using System;
 using System.Collections.Generic;
@@ -32,19 +32,39 @@ namespace SRSDesktop.Windows
 			if (sliderReviews != null)
 			{
 				sliderReviews.Maximum = SRS.ReviewManager.Count;
-				sliderReviews.Value = sliderReviews.Maximum;
+				sliderReviews.Value = SRS.ConfigManager.Config.DefaultReviewSlider;
 			}
 
 			if (sliderLessons != null)
 			{
 				sliderLessons.Maximum = SRS.LessonManager.Count;
-				sliderLessons.Value = sliderLessons.Maximum;
+				sliderLessons.Value = SRS.ConfigManager.Config.DefaultLessonSlider;
 			}
 
 			if (labelNextHour != null)
 			{
 				labelNextHour.Content = nextHourItems.Count;
 				btnNextHourNow.IsEnabled = nextHourItems.Count > 0;
+			}
+
+			if (comboReviewsAvailability != null)
+			{
+				comboReviewsAvailability.SelectedItem = SRS.ConfigManager.Config.DefaultReviewOrderByAvailability;
+			}
+
+			if (comboReviewsType != null)
+			{
+				comboReviewsType.SelectedItem = SRS.ConfigManager.Config.DefaultReviewOrderByType;
+			}
+
+			if (comboLessonsAvailability != null)
+			{
+				comboLessonsAvailability.SelectedItem = SRS.ConfigManager.Config.DefaultLessonOrderByAvailability;
+			}
+
+			if (comboLessonsType != null)
+			{
+				comboLessonsType.SelectedItem = SRS.ConfigManager.Config.DefaultLessonOrderByType;
 			}
 
 			if (labelLevel != null)

@@ -9,6 +9,7 @@ namespace SRSDesktop
 		public static LessonManager LessonManager { get; private set; }
 		public static ReviewManager ReviewManager { get; private set; }
 		public static StatsManager StatsManager { get; private set; }
+		public static ConfigManager ConfigManager { get; private set; }
 
 		static SRS()
 		{
@@ -18,6 +19,7 @@ namespace SRSDesktop
 			ReviewManager = new ReviewManager(fullPath);
 
 			StatsManager = new StatsManager(fullPath);
+			ConfigManager = new ConfigManager(fullPath);
 		}
 	}
 }

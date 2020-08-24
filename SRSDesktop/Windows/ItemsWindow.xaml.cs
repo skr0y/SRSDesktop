@@ -530,8 +530,10 @@ namespace SRSDesktop.Windows
 
 		private void WindowKeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.Key == Key.Enter)
+			switch (e.Key)
 			{
+				case Key.Enter:
+				case Key.Space:
 				if (AppState == State.AwaitInput)
 				{
 					Answer();
@@ -540,6 +542,25 @@ namespace SRSDesktop.Windows
 				{
 					PlaySound();
 				}
+					break;
+				case Key.Tab:
+					SkipAnswer(true);
+					break;
+				case Key.D1:
+					AcceptAnswer(-2);
+					break;
+				case Key.D2:
+					AcceptAnswer(-1);
+					break;
+				case Key.D3:
+					AcceptAnswer(0);
+					break;
+				case Key.D4:
+					AcceptAnswer(1);
+					break;
+				case Key.D5:
+					AcceptAnswer(2);
+					break;
 			}
 		}
 

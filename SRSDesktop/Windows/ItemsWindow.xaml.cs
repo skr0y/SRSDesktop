@@ -1,4 +1,4 @@
-using NAudio.Vorbis;
+﻿using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -23,6 +23,7 @@ namespace SRSDesktop.Windows
 		private readonly Thickness highlightThickness = new Thickness(3);
 		private readonly Brush defaultBorderBrush = SystemColors.ControlDarkDarkBrush;
 		private readonly Brush highlightBorderBrush = SystemColors.HighlightBrush;
+		private readonly string[] buttonText = new string[] { "Very bad", "Bad", "Again", "Good", "Easy" };
 
 		private TimeSpan TimeSpent;
 		private DateTime TimeActivated;
@@ -104,11 +105,20 @@ namespace SRSDesktop.Windows
 
 		private void AcceptAnswer(int levelChange)
 		{
-			var alreadyAnswered = LevelChange.ContainsKey(CurrentItem);
+			var alreadyRepeated = LevelChange.ContainsKey(CurrentItem) && LevelChange[CurrentItem] <= 0;
+			var readd = levelChange == 0 || (levelChange < 0 && !alreadyRepeated);
 
-			LevelChange[CurrentItem] = levelChange;
+			if (levelChange != 0 || Mode == ItemsWindowMode.Lesson)
+			{
+				LevelChange[CurrentItem] = levelChange;
+			}
 
-			SkipAnswer(levelChange < 0 && !alreadyAnswered);
+			if (Mode == ItemsWindowMode.Lesson)
+			{
+				readd = levelChange < 0;
+			}
+
+			SkipAnswer(readd);
 		}
 
 		private void SkipAnswer(bool readd = false)
@@ -153,6 +163,8 @@ namespace SRSDesktop.Windows
 				Items = LevelChange.Keys.ToList();
 				LevelChange = new Dictionary<Item, int>();
 				CurrentIndex = 0;
+
+				ShowLessonReviewControls();
 				WaitForInput();
 
 				return false;
@@ -166,7 +178,15 @@ namespace SRSDesktop.Windows
 					item.Key.Learnable = false;
 				}
 
-				item.Key.UserSpecific.AddProgress(item.Value);
+				var value = item.Value;
+				if (value < 0) value++;
+
+				item.Key.UserSpecific.AddProgress(value);
+
+				if (value <= 0 && item.Key.UserSpecific.SrsNumeric >= 3)
+				{
+					item.Key.UserSpecific.Again();
+				}
 			}
 
 			return true;
@@ -182,11 +202,11 @@ namespace SRSDesktop.Windows
 			}
 			else
 			{
-				var badItems = LevelChange.Where(i => i.Value < 0 || (i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)).Select(i => i.Key); // count 1 lvl okay as bad
-			var goodItems = LevelChange.Where(i => i.Value >= 0 && !(i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)).Select(i => i.Key);
-			new SummaryWindow(badItems, goodItems).ShowDialog();
+				var badItems = LevelChange.Where(i => i.Value <= 0/* || (i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)*/).Select(i => i.Key); // count 1 lvl okay as bad
+				var goodItems = LevelChange.Where(i => i.Value > 0/* && !(i.Key.UserSpecific?.SrsNumeric == 1 && i.Value == 0)*/).Select(i => i.Key);
+				new SummaryWindow(badItems, goodItems).ShowDialog();
 				SRS.StatsManager.AddStats((int)TimeSpent.TotalSeconds, goodItems.Count(), badItems.Count());
-		}
+			}
 		}
 
 		private void PlaySound()
@@ -223,12 +243,22 @@ namespace SRSDesktop.Windows
 		{
 			if (CurrentMode != ItemsWindowMode.Review) return;
 
+			var index = 0;
+
 			buttonDetails.IsEnabled = true;
 
-			if (CurrentItem.UserSpecific == null)
+			if (Mode == ItemsWindowMode.Lesson)
 			{
+				index = 2;
+
+				buttonBad.IsEnabled = true;
+				buttonBad.Content = $"{buttonText[index++]}";
+
 				buttonOkay.IsEnabled = true;
-				buttonOkay.Content = $"Okay ({UserSpecific.GetLevelInfo(1).Item3})";
+				buttonOkay.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(1).Item3})";
+
+				buttonGood.IsEnabled = true;
+				buttonGood.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(2).Item3})";
 
 				return;
 			}
@@ -238,28 +268,24 @@ namespace SRSDesktop.Windows
 			if (CurrentItem.UserSpecific.SrsNumeric > 2)
 			{
 				buttonVeryBad.IsEnabled = true;
-				buttonVeryBad.Content = $"Very bad ({UserSpecific.GetLevelInfo(srsNumeric - 2).Item3})";
+				buttonVeryBad.Content = $"{buttonText[index]}";
 			}
 
-			if (CurrentItem.UserSpecific.SrsNumeric > 1)
-			{
-				buttonBad.IsEnabled = true;
-				buttonBad.Content = $"Bad ({UserSpecific.GetLevelInfo(srsNumeric - 1).Item3})";
-			}
+			index++;
+
+			buttonBad.IsEnabled = true;
+			buttonBad.Content = $"{buttonText[index++]}";
 
 			buttonOkay.IsEnabled = true;
-			buttonOkay.Content = $"Okay ({UserSpecific.GetLevelInfo(srsNumeric).Item3})";
+			buttonOkay.Content = $"{buttonText[index++]}";
 
-			if (CurrentItem.UserSpecific.SrsNumeric < 9)
-			{
-				buttonGood.IsEnabled = true;
-				buttonGood.Content = $"Good ({UserSpecific.GetLevelInfo(srsNumeric + 1).Item3})";
-			}
+			buttonGood.IsEnabled = true;
+			buttonGood.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(srsNumeric + 1).Item3})";
 
 			if (CurrentItem.UserSpecific.SrsNumeric < 8)
 			{
 				buttonEasy.IsEnabled = true;
-				buttonEasy.Content = $"Easy ({UserSpecific.GetLevelInfo(srsNumeric + 2).Item3})";
+				buttonEasy.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(srsNumeric + 2).Item3})";
 			}
 
 			SetAnswerControlsStyle();
@@ -268,21 +294,25 @@ namespace SRSDesktop.Windows
 		private void DisableAnswerControls()
 		{
 			if (CurrentMode != ItemsWindowMode.Review) return;
+			var index = Mode == ItemsWindowMode.Lesson ? 1 : 0;
 
 			buttonVeryBad.IsEnabled = false;
-			buttonVeryBad.Content = "Very bad";
+			buttonVeryBad.Content = buttonText[index++];
 
 			buttonBad.IsEnabled = false;
-			buttonBad.Content = "Bad";
+			buttonBad.Content = buttonText[index++];
 
 			buttonOkay.IsEnabled = false;
-			buttonOkay.Content = "Okay";
+			buttonOkay.Content = buttonText[index++];
 
 			buttonGood.IsEnabled = false;
-			buttonGood.Content = "Good";
+			buttonGood.Content = buttonText[index++];
 
-			buttonEasy.IsEnabled = false;
-			buttonEasy.Content = "Easy";
+			if (Mode != ItemsWindowMode.Lesson)
+			{
+				buttonEasy.IsEnabled = false;
+				buttonEasy.Content = buttonText[index++];
+			}
 
 			buttonDetails.IsEnabled = false;
 
@@ -324,6 +354,12 @@ namespace SRSDesktop.Windows
 			buttonEasy.Visibility = Visibility.Hidden;
 		}
 
+		private void ShowLessonReviewControls()
+		{
+			buttonBad.Visibility = Visibility.Visible;
+			buttonGood.Visibility = Visibility.Visible;
+		}
+
 		private void ClearInputControls()
 		{
 			textBlockCharacter.Text = "";
@@ -334,7 +370,6 @@ namespace SRSDesktop.Windows
 		private void ClearAnswerTextBlocks()
 		{
 			textBlockInfo.Text = "";
-			scrollViewer.ScrollToTop();
 
 			DisposeAudio();
 		}
@@ -342,6 +377,8 @@ namespace SRSDesktop.Windows
 		private void FillAnswerTextBlock(Item item)
 		{
 			List<Run> runs;
+
+			scrollViewer.ScrollToTop();
 
 			if (item is Radical radical)
 			{
@@ -470,11 +507,6 @@ namespace SRSDesktop.Windows
 			SkipAnswer();
 		}
 
-		private void ButtonAgainClick(object sender, RoutedEventArgs e)
-		{
-			SkipAnswer(true);
-		}
-
 		private void ButtonVeryBadClick(object sender, RoutedEventArgs e)
 		{
 			AcceptAnswer(-2);
@@ -534,14 +566,14 @@ namespace SRSDesktop.Windows
 			{
 				case Key.Enter:
 				case Key.Space:
-				if (AppState == State.AwaitInput)
-				{
-					Answer();
-				}
-				else if (AppState == State.DisplayAnswer)
-				{
-					PlaySound();
-				}
+					if (AppState == State.AwaitInput)
+					{
+						Answer();
+					}
+					else if (AppState == State.DisplayAnswer)
+					{
+						PlaySound();
+					}
 					break;
 				case Key.Tab:
 					SkipAnswer(true);

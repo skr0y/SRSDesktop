@@ -12,7 +12,6 @@
 		<Rectangle x:Name="rectItem" HorizontalAlignment="Left" Height="611" VerticalAlignment="Top" Width="223"/>
 		<Rectangle x:Name="rectAnswer" HorizontalAlignment="Left" Height="611" Margin="223,0,0,0" VerticalAlignment="Top" Width="1041"/>
 		<Button x:Name="buttonAnswer" Content="Answer" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="200" Height="63" Background="#FFDDFFDD" FontSize="18" Click="ButtonAnswerClick" Focusable="False"/>
-		<Button x:Name="buttonAgain" Content="Q" FontFamily="Wingdings 3" HorizontalAlignment="Left" Margin="1120,554,0,0" VerticalAlignment="Top" Width="30" Height="30" FontSize="18" Click="ButtonAgainClick" Focusable="False" ToolTip="Move to the end"/>
 		<Button x:Name="buttonSkip" Content="Next >" HorizontalAlignment="Left" Margin="1155,554,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="18" Click="ButtonSkipClick" Focusable="False"/>
 		<Button x:Name="buttonBad" Content="Bad" HorizontalAlignment="Left" Margin="551,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFFFFFDD" Click="ButtonBadClick" FontSize="18" Height="30" Focusable="False"/>
 		<Button x:Name="buttonVeryBad" Content="Very bad" HorizontalAlignment="Left" Margin="426,554,0,0" VerticalAlignment="Top" Width="120" Background="#FFFFDDDD" Click="ButtonVeryBadClick" FontSize="18" Height="30" Focusable="False"/>

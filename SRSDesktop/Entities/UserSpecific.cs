@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -51,7 +51,7 @@ namespace SRSDesktop.Entities
 
 		public static Tuple<SrsLevel, TimeSpan, string> GetLevelInfo(int srsLevel)
 		{
-			return SrsLevelInfo[srsLevel - 1];
+			return SrsLevelInfo[Math.Min(Math.Max(0, srsLevel - 1), SrsLevelInfo.Count - 1)];
 		}
 
 
@@ -67,6 +67,11 @@ namespace SRSDesktop.Entities
 				var time = new TimeSpan(SrsLevelInfo[SrsNumeric - 1].Item2.Ticks / 100 * (100 + Random.Next(-randomizationPercent, randomizationPercent)));
 				AvailableDate = DateTime.SpecifyKind(now + time, DateTimeKind.Utc);
 			}
+		}
+
+		public void Again()
+		{
+			AvailableDate = DateTime.SpecifyKind(DateTime.Now.AddMinutes(SRS.ConfigManager.Config.AgainInterval), DateTimeKind.Utc);
 		}
 
 		public void MakeAvailable()

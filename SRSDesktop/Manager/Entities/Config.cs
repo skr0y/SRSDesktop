@@ -1,4 +1,4 @@
-﻿namespace SRSDesktop.Manager.Entities
+namespace SRSDesktop.Manager.Entities
 {
 	public class Config
 	{
@@ -13,6 +13,7 @@
 		public int StatDayStart { get; private set; }
 
 		public int AgainInterval { get; private set; }
+		public int RandomizationPercent { get; internal set; }
 
 
 		public Config(string configPath)
@@ -27,6 +28,7 @@
 
 			StatDayStart = 8;
 			AgainInterval = 18 * 60;
+			RandomizationPercent = 15;
 		}
 	}
 }

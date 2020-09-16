@@ -1,4 +1,4 @@
-﻿using NAudio.Vorbis;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -255,10 +255,10 @@ namespace SRSDesktop.Windows
 				buttonBad.Content = $"{buttonText[index++]}";
 
 				buttonOkay.IsEnabled = true;
-				buttonOkay.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(1).Item3})";
+				buttonOkay.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(1).TimeString})";
 
 				buttonGood.IsEnabled = true;
-				buttonGood.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(2).Item3})";
+				buttonGood.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(2).TimeString})";
 
 				return;
 			}
@@ -280,12 +280,12 @@ namespace SRSDesktop.Windows
 			buttonOkay.Content = $"{buttonText[index++]}";
 
 			buttonGood.IsEnabled = true;
-			buttonGood.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(srsNumeric + 1).Item3})";
+			buttonGood.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(srsNumeric + 1).TimeString})";
 
 			if (CurrentItem.UserSpecific.SrsNumeric < 8)
 			{
 				buttonEasy.IsEnabled = true;
-				buttonEasy.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(srsNumeric + 2).Item3})";
+				buttonEasy.Content = $"{buttonText[index++]} ({UserSpecific.GetLevelInfo(srsNumeric + 2).TimeString})";
 			}
 
 			SetAnswerControlsStyle();
@@ -474,7 +474,7 @@ namespace SRSDesktop.Windows
 				var lvlInfo = UserSpecific.GetLevelInfo(CurrentItem.UserSpecific.SrsNumeric);
 				labelUserLvlText.Visibility = Visibility.Visible;
 				labelUserLvl.Visibility = Visibility.Visible;
-				labelUserLvl.Content = lvlInfo.Item1.ToString() + " " + CurrentItem.UserSpecific.SrsNumeric;
+				labelUserLvl.Content = lvlInfo.SrsLevel.ToString() + " " + CurrentItem.UserSpecific.SrsNumeric;
 			}
 		}
 

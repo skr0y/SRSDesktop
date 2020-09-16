@@ -112,7 +112,7 @@ namespace SRSDesktop.Windows
 
 				cbUserLevel.SelectedValuePath = "Key";
 				cbUserLevel.DisplayMemberPath = "Value";
-				foreach (var kvPair in Enumerable.Range(1, 9).ToDictionary(k => k, v => $"{UserSpecific.GetLevelInfo(v).Item1} {v}"))
+				foreach (var kvPair in Enumerable.Range(1, 9).ToDictionary(k => k, v => $"{UserSpecific.GetLevelInfo(v).SrsLevel} {v}"))
 				{
 					cbUserLevel.Items.Add(kvPair);
 					if (kvPair.Key == Item.UserSpecific.SrsNumeric) cbUserLevel.SelectedItem = kvPair;

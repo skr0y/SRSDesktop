@@ -18,7 +18,7 @@ namespace SRSDesktop.Manager.ItemManager
 		protected static List<Item> Cache { get; set; }
 
 		protected abstract Predicate<Item> Selector { get; }
-		public int UnlockLevel { get; protected set; } = 4;
+		public int UnlockLevel { get; protected set; } = 3;
 		public int UserLevel { get; protected set; }
 
 		private string ResourcesPath;

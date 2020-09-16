@@ -1,4 +1,4 @@
-using NAudio.Vorbis;
+﻿using NAudio.Vorbis;
 using NAudio.Wave;
 using SRSDesktop.Entities;
 using SRSDesktop.Util;
@@ -562,37 +562,46 @@ namespace SRSDesktop.Windows
 
 		private void WindowKeyUp(object sender, KeyEventArgs e)
 		{
-			switch (e.Key)
+			if (AppState == State.AwaitInput)
 			{
-				case Key.Enter:
-				case Key.Space:
-					if (AppState == State.AwaitInput)
-					{
+				switch (e.Key)
+				{
+					case Key.Enter:
+					case Key.Space:
 						Answer();
-					}
-					else if (AppState == State.DisplayAnswer)
-					{
+						break;
+					case Key.Tab:
+						SkipAnswer(true);
+						break;
+				}
+			}
+			else if (AppState == State.DisplayAnswer)
+			{
+				switch (e.Key)
+				{
+					case Key.Enter:
+					case Key.Space:
 						PlaySound();
-					}
-					break;
-				case Key.Tab:
-					SkipAnswer(true);
-					break;
-				case Key.D1:
-					AcceptAnswer(-2);
-					break;
-				case Key.D2:
-					AcceptAnswer(-1);
-					break;
-				case Key.D3:
-					AcceptAnswer(0);
-					break;
-				case Key.D4:
-					AcceptAnswer(1);
-					break;
-				case Key.D5:
-					AcceptAnswer(2);
-					break;
+						break;
+					case Key.Tab:
+						SkipAnswer(true);
+						break;
+					case Key.D1:
+						AcceptAnswer(-2);
+						break;
+					case Key.D2:
+						AcceptAnswer(-1);
+						break;
+					case Key.D3:
+						AcceptAnswer(0);
+						break;
+					case Key.D4:
+						AcceptAnswer(1);
+						break;
+					case Key.D5:
+						AcceptAnswer(2);
+						break;
+				}
 			}
 		}
 
